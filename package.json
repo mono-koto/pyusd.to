@@ -25,7 +25,8 @@
     "react-dom": "^18.2.0",
     "stream-browserify": "^3.0.0",
     "tailwind-merge": "^2.0.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "wouter": "^2.12.1"
   },
   "devDependencies": {
     "@types/node": "^20.8.10",
