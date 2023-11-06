@@ -1,3 +1,5 @@
+import { TokenCombobox } from "@/components/TokenComboBox";
+import { TokenSelect } from "@/components/TokenSelect";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,8 +10,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-// import { GetQuotePage } from "./quote";
 
 export default function Pay() {
   return (
@@ -20,14 +20,17 @@ export default function Pay() {
         <CardDescription>Send any token to …</CardDescription>
       </CardHeader>
       <CardContent>
-        <form>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Amount</Label>
-              <Input id="amount" placeholder="0.1 ETH" />
+        <div className="flex flex-row space-x-4">
+          <TokenCombobox />
+          <TokenSelect />
+          <form>
+            <div className="grid w-full items-center gap-4">
+              <div className="flex flex-col space-y-1.5">
+                <Input id="amount" placeholder="0.1 ETH" />
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button variant="outline">Cancel</Button>
