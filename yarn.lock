@@ -990,6 +990,17 @@
     "@babel/runtime" "^7.13.10"
     "@radix-ui/react-primitive" "1.0.3"
 
+"@radix-ui/react-avatar@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-avatar/-/react-avatar-1.0.4.tgz#de9a5349d9e3de7bbe990334c4d2011acbbb9623"
+  integrity sha512-kVK2K7ZD3wwj3qhle0ElXhOjbezIgyl2hVvgwfIdexL3rN6zJmy5AqqIf+D31lxVppdzV8CjAfZ6PklkmInZLw==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/react-context" "1.0.1"
+    "@radix-ui/react-primitive" "1.0.3"
+    "@radix-ui/react-use-callback-ref" "1.0.1"
+    "@radix-ui/react-use-layout-effect" "1.0.1"
+
 "@radix-ui/react-compose-refs@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-compose-refs/-/react-compose-refs-1.0.0.tgz#37595b1f16ec7f228d698590e78eeed18ff218ae"
@@ -2785,6 +2796,11 @@ body-parser@^1.16.0:
     raw-body "2.5.2"
     type-is "~1.6.18"
     unpipe "1.0.0"
+
+boring-avatars@^1.10.1:
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/boring-avatars/-/boring-avatars-1.10.1.tgz#0e40811043cb3412bee38a0b6ca14f85fcdb0d2b"
+  integrity sha512-WcgHDeLrazCR03CDPEvCchLsUecZAZvs4F6FnMiGlTEjyQQf15Q5TRl4EUaAQ1dacvhPq7lC9EOTWkCojQ6few==
 
 borsh@^0.7.0:
   version "0.7.0"

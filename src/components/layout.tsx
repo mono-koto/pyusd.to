@@ -10,7 +10,7 @@ export default function MainLayout({
     <>
       <Helmet>
         <title>Fluffy Clouds</title>
-        <link rel="canonical" href="https://www.tacobell.com/" />
+        {/* <link rel="canonical" href="https://www.tacobell.com/" /> */}
       </Helmet>
 
       <div className="min-h-screen h-full flex flex-col justify-between p-5 gap-4">
@@ -22,16 +22,10 @@ export default function MainLayout({
           <ConnectButton />
         </nav>
 
-        <main className="container mx-auto">{children}</main>
+        <main className="container mx-auto max-w-xl">{children}</main>
         <footer className="text-center text-sm">
-          <a
-            href="https://github.com/mono-koto/radiant-saga"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Created by <a href="https://mono-koto.com/">Mono Koto</a> +{" "}
-            <a href="https://www.gardenlabs.xyz/">Garden Labs</a>
-          </a>
+          Created by <a href="https://mono-koto.com/">Mono Koto</a> +{" "}
+          <a href="https://www.gardenlabs.xyz/">Garden Labs</a>
         </footer>
       </div>
     </>

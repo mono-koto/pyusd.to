@@ -7,13 +7,14 @@ import {
   OrderQuoteSideKindSell,
   OrderQuoteSideKindBuy,
 } from "@cowprotocol/cow-sdk";
+import { useQuote } from "@/hooks/useCowswap";
 // import { useWeb3Info } from "../../hooks/useWeb3Info";
 // import { JsonContent } from "../../components/jsonContent";
 // import { useCurrentChainId } from "../../hooks/useCurrentChainId";
 // import { ResultContent } from "../../components/resultContent";
 
-const orderBookApi = new OrderBookApi();
-const chainId = 1;
+// const orderBookApi = new OrderBookApi();
+// const chainId = 1;
 
 export function GetQuotePage() {
   const account = "0x8A37ab849Dd795c0CA1979b7fcA24F90Be95d618";
@@ -32,48 +33,42 @@ export function GetQuotePage() {
     // kind: OrderQuoteSideKindSell.SELL,
   };
 
-  console.log(input);
+  const quote = useQuote(input);
+  console.log(quote);
 
-  useEffect(() => {
-    orderBookApi.context.chainId = chainId;
-  }, [chainId]);
+  // console.log(input);
 
-  const getQuote = useCallback(
-    (event: FormEvent) => {
-      event.preventDefault();
+  // useEffect(() => {
+  //   orderBookApi.context.chainId = chainId;
+  // }, [chainId]);
 
-      if (!input) return;
+  // const getQuote = useCallback(
+  //   (event: FormEvent) => {
+  //     event.preventDefault();
 
-      setOutput("Loading...");
+  //     if (!input) return;
 
-      orderBookApi
-        .getQuote(input)
-        .then((output) => {
-          console.log(output);
-          setOutput(output);
-        })
-        .catch((error) => {
-          console.error(error);
-          setOutput(error.toString());
-        });
-    },
-    [input]
-  );
+  //     setOutput("Loading...");
+
+  //     orderBookApi
+  //       .getQuote(input)
+  //       .then((output) => {
+  //         console.log(output);
+  //         setOutput(output);
+  //       })
+  //       .catch((error) => {
+  //         console.error(error);
+  //         setOutput(error.toString());
+  //       });
+  //   },
+  //   [input]
+  // );
 
   return (
     <div>
-      <div className="form">
-        <div>
-          <h1>Order:</h1>
-          {JSON.stringify(input)}
-        </div>
-
-        <div>
-          <button onClick={getQuote}>Get quote</button>
-        </div>
+      <div className="whitespace-pre">
+        <div>{JSON.stringify(quote)}</div>
       </div>
-
-      {JSON.stringify(output)}
     </div>
   );
 }

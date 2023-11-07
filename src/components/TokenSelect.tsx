@@ -23,18 +23,23 @@ import {
 import { CheckIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { CommandList } from "./ui/command";
+import { TokenDisplay } from "./TokenDisplay";
 
-function TokenDisplay({ token }: { token: TokenListToken }) {
+function TokenListDisplay({ token }: { token: TokenListToken }) {
   return (
     <div className="flex flex-row items-center space-x-2">
       <img src={token.logoURI} className="w-6 h-6" />
-      <span>{token.symbol}</span>
+      <div>
+        <div>{token.symbol}</div>
+        <div className="text-sm">{token.address}</div>
+      </div>
     </div>
   );
 }
 
 export function TokenSelect() {
   const tokens = useTokens();
+  const [open, setOpen] = useState(false);
   const [value, setValue] = useState<TokenListToken | undefined>();
 
   const defaultValue = useMemo(
@@ -42,14 +47,19 @@ export function TokenSelect() {
     [tokens]
   );
 
+  const onSelect = (token: TokenListToken) => {
+    setOpen(false);
+    setValue(token);
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="h-fit rounded-xl">
+        <Button className="h-fit rounded-xl p bg-pink-600 hover:bg-pink-500">
           <TokenDisplay token={value || defaultValue} />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="">
         <DialogHeader>
           <DialogTitle>Select Token</DialogTitle>
           <DialogDescription>
@@ -57,28 +67,32 @@ export function TokenSelect() {
           </DialogDescription>
         </DialogHeader>
 
-        <Command>
-          <CommandInput placeholder="Search tokens..." className="h-9" />
+        <Command className="space-y-4">
+          <CommandInput
+            placeholder="Search tokens..."
+            className="h-9 w-full p-2"
+          />
           <CommandEmpty>No tokens found.</CommandEmpty>
           <CommandList>
-            {tokens.map((token) => (
-              <CommandItem
-                key={token.address}
-                value={`${token.address} ${token.name} ${token.symbol}`}
-                onSelect={() => {
-                  setValue(token);
-                  // setOpen(false);
-                }}
-              >
-                <TokenDisplay token={token} />
-                <CheckIcon
-                  className={cn(
-                    "ml-auto h-4 w-4",
-                    value === token ? "opacity-100" : "opacity-0"
-                  )}
-                />
-              </CommandItem>
-            ))}
+            <CommandGroup>
+              {tokens.map((token) => (
+                <CommandItem
+                  key={token.address}
+                  value={`${token.address} ${token.name} ${token.symbol}`}
+                  onSelect={() => {
+                    onSelect(token);
+                  }}
+                >
+                  <TokenListDisplay token={token} />
+                  {/* <CheckIcon
+                    className={cn(
+                      "ml-auto h-4 w-4",
+                      value === token ? "opacity-100" : "opacity-0"
+                    )}
+                  /> */}
+                </CommandItem>
+              ))}
+            </CommandGroup>
           </CommandList>
           {/* <CommandGroup className="scroll-auto">
             {tokens.map((token) => (

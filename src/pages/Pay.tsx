@@ -1,41 +1,43 @@
-import { TokenCombobox } from "@/components/TokenComboBox";
+import BlockscannerLink from "@/components/BlockscannerLink";
+import EnsAvatar from "@/components/EnsAvatar";
+import PayForm from "@/components/PayForm";
 import { TokenSelect } from "@/components/TokenSelect";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { useEns } from "@/hooks/useEns";
+import { Label } from "@radix-ui/react-label";
+import { useParams } from "wouter";
 
 export default function Pay() {
+  const params = useParams();
+  const recipient = params.address;
+
+  const ens = useEns(recipient);
+  console.log(ens.data);
+
   return (
     <Card>
-      {/* <GetQuotePage /> */}
       <CardHeader>
-        <CardTitle>PYUSD Inbox</CardTitle>
-        <CardDescription>Send any token to …</CardDescription>
+        <CardTitle className="flex flex-row gap-4 items-center">
+          <EnsAvatar address={recipient} size={60} />
+          <div className="space-y-1">
+            <div>{ens.data.name}</div>
+            <div className="text-foreground text-sm font-normal">
+              <BlockscannerLink address={ens.data.address} />
+            </div>
+          </div>
+        </CardTitle>
+        {/* <CardDescription>{ens.data.address}</CardDescription> */}
       </CardHeader>
       <CardContent>
-        <div className="flex flex-row space-x-4">
-          <TokenCombobox />
-          <TokenSelect />
-          <form>
-            <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Input id="amount" placeholder="0.1 ETH" />
-              </div>
-            </div>
-          </form>
-        </div>
+        <PayForm recipient={recipient} />
       </CardContent>
-      <CardFooter className="flex justify-between">
-        <Button variant="outline">Cancel</Button>
-        <Button>Send</Button>
-      </CardFooter>
     </Card>
   );
 }
