@@ -1,12 +1,8 @@
 import standardTokensMainnet from "cowswap-token-lists/src/public/CowSwap.json";
 import standardTokensGoerli from "cowswap-token-lists/src/public/CowSwapGoerli.json";
-import additionalstandardTokensGoerli from "../assets/additional-token-list-goerli.json";
-import additionalTokensMainnet from "../assets/additional-token-list-mainnet.json";
-import popularTokens from "../assets/popular-token-symbols.json";
 import { goerli, mainnet } from "viem/chains";
 import { useChainId } from "wagmi";
-
-const popularTokenSymbols = new Set(popularTokens);
+import additionalTokensMainnet from "../assets/additional-token-list-mainnet.json";
 
 const tokensMainnet = [
   ...additionalTokensMainnet.tokens,

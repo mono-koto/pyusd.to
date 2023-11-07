@@ -1,6 +1,7 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { Suspense } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "wouter";
+
 export default function MainLayout({
   children,
 }: {
@@ -18,7 +19,6 @@ export default function MainLayout({
           <div className="text-2xl flex flex-row gap-4 items-center">
             <div></div>
           </div>
-
           <ConnectButton />
         </nav>
 

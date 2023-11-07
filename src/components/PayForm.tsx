@@ -2,7 +2,6 @@ import { TokenSelect } from "@/components/TokenSelect";
 import { useEns } from "@/hooks/useEns";
 import { Label } from "@radix-ui/react-label";
 import { Button } from "./ui/button";
-import { TokenDisplay } from "./TokenDisplay";
 
 interface PayFormProps {
   recipient?: string;
@@ -10,7 +9,6 @@ interface PayFormProps {
 
 export default function PayForm({ recipient }: PayFormProps) {
   const ens = useEns(recipient);
-  console.log(ens.data);
 
   return (
     <form className="flex flex-col gap-4">
@@ -36,7 +34,7 @@ export default function PayForm({ recipient }: PayFormProps) {
             className="w-full text-4xl h-12 border-none focus:ring-0 focus:outline-none"
           />
           <Button className="h-fit rounded-xl p bg-pink-600 hover:bg-pink-500">
-            <TokenDisplay token={value || defaultValue} />
+            {/* <TokenDisplay token={} /> */}
           </Button>
         </div>
         <div className="text-sm text-right">

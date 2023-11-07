@@ -19,15 +19,6 @@ import {
 } from "@/components/ui/popover";
 import { TokenListToken, useTokens } from "@/hooks/useTokens";
 
-function TokenItem(token: TokenListToken) {
-  return (
-    <CommandItem value={token.address}>
-      {token.name}
-      <img src={token.logoURI} className="w-4 h-4" />
-    </CommandItem>
-  );
-}
-
 function TokenDisplay({ token }: { token: TokenListToken }) {
   return (
     <div className="flex flex-row space-x-2">

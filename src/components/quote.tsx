@@ -1,13 +1,5 @@
-import { FormEvent, useCallback, useEffect, useState } from "react";
-import {
-  OrderQuoteRequest,
-  OrderQuoteResponse,
-  OrderBookApi,
-  OrderQuoteSide,
-  OrderQuoteSideKindSell,
-  OrderQuoteSideKindBuy,
-} from "@cowprotocol/cow-sdk";
 import { useQuote } from "@/hooks/useCowswap";
+import { OrderQuoteRequest, OrderQuoteSideKindBuy } from "@cowprotocol/cow-sdk";
 // import { useWeb3Info } from "../../hooks/useWeb3Info";
 // import { JsonContent } from "../../components/jsonContent";
 // import { useCurrentChainId } from "../../hooks/useCurrentChainId";
@@ -18,9 +10,6 @@ import { useQuote } from "@/hooks/useCowswap";
 
 export function GetQuotePage() {
   const account = "0x8A37ab849Dd795c0CA1979b7fcA24F90Be95d618";
-
-  // const [input, setInput] = useState<OrderQuoteRequest | null>(null);
-  const [output, setOutput] = useState<OrderQuoteResponse | string>("");
 
   const input: OrderQuoteRequest = {
     sellToken: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",

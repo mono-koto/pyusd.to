@@ -1,21 +1,21 @@
-// app/providers.tsx
-"use client";
-
 import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
 
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { goerli, mainnet } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { alchemyProvider } from "@wagmi/core/providers/alchemy";
+
 import { HelmetProvider } from "react-helmet-async";
+import CustomAvatar from "./CustomAvatar";
+
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     mainnet,
     ...(import.meta.env.VITE_ENABLE_TESTNETS === "true" ? [goerli] : []),
   ],
   [
-    alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_API_KEY! }),
+    alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_API_KEY as string }),
     publicProvider(),
   ]
 );
@@ -39,7 +39,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <HelmetProvider context={helmetContext}>
       <WagmiConfig config={wagmiConfig}>
-        <RainbowKitProvider chains={chains}>{children}</RainbowKitProvider>
+        <RainbowKitProvider chains={chains} avatar={CustomAvatar}>
+          {children}
+        </RainbowKitProvider>
       </WagmiConfig>
     </HelmetProvider>
   );

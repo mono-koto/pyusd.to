@@ -1,8 +1,6 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEns } from "@/hooks/useEns";
-import clsx from "clsx";
 
-import BoringAvatar from "boring-avatars";
+import CustomAvatar from "./CustomAvatar";
 
 export default function EnsAvatar({
   address,
@@ -13,20 +11,13 @@ export default function EnsAvatar({
 }) {
   const ens = useEns(address);
   size = size || 40;
+  console.log(ens.data, ens.isSuccess);
 
   return (
-    <Avatar
-      className={clsx(
-        ens.isLoading && "animate-pulse",
-        `w-[${size}px] h-[${size}px]`
-      )}
-    >
-      <AvatarImage src={ens.data.avatar || ""} />
-      <AvatarFallback>
-        {ens.data.address && (
-          <BoringAvatar size={size} name={ens.data.address} variant="marble" />
-        )}
-      </AvatarFallback>
-    </Avatar>
+    <CustomAvatar
+      address={ens.data.address || ""}
+      ensImage={ens.data.avatar}
+      size={size}
+    />
   );
 }

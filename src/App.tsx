@@ -1,15 +1,17 @@
 import { Route, Router, Switch } from "wouter";
 
 import { useHashLocation } from "./hooks/useHashLocation";
-import About from "./pages/About";
-import Pay from "./pages/Pay";
-import Home from "./pages/Home";
 import MainLayout from "./components/layout";
+import React from "react";
+
+const Providers = React.lazy(() => import("./components/providers.tsx"));
+const Home = React.lazy(() => import("./pages/Home"));
+const About = React.lazy(() => import("./pages/About"));
+const Pay = React.lazy(() => import("./pages/Pay"));
 
 function App() {
   return (
-    <>
-      {/* <div className="flex flex-col items-center justify-center min-h-screen py-2"> */}
+    <Providers>
       <MainLayout>
         <Router hook={useHashLocation}>
           <Switch>
@@ -19,8 +21,7 @@ function App() {
           </Switch>
         </Router>
       </MainLayout>
-      {/* </div> */}
-    </>
+    </Providers>
   );
 }
 

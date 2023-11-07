@@ -8,22 +8,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 import { TokenListToken, useTokens } from "@/hooks/useTokens";
-import { cn } from "@/lib/utils";
 import {
   Command,
-  CommandInput,
   CommandEmpty,
   CommandGroup,
+  CommandInput,
   CommandItem,
 } from "cmdk";
-import { CheckIcon } from "lucide-react";
 import { useMemo, useState } from "react";
-import { CommandList } from "./ui/command";
 import { TokenDisplay } from "./TokenDisplay";
+import { CommandList } from "./ui/command";
 
 function TokenListDisplay({ token }: { token: TokenListToken }) {
   return (

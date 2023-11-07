@@ -1,4 +1,4 @@
-import { isAddress } from "viem";
+import { getAddress, isAddress } from "viem";
 import { useEnsAddress, useEnsAvatar, useEnsName } from "wagmi";
 
 interface EnsRecord {
@@ -9,15 +9,11 @@ interface EnsRecord {
 
 export const useEns = (addressOrEns: string | undefined) => {
   const isAddr = isAddress(addressOrEns || "");
-  console.log(addressOrEns);
-  console.log(isAddr);
 
   const ensName = useEnsName({
     address: addressOrEns as `0x${string}`,
     enabled: isAddr,
   });
-
-  console.log("ensAvatar enabled", isAddr ? ensName.data !== null : true);
 
   const ensAvatar = useEnsAvatar({
     name: isAddr ? ensName.data : addressOrEns,
@@ -29,8 +25,6 @@ export const useEns = (addressOrEns: string | undefined) => {
     enabled: !isAddr && Boolean(addressOrEns),
   });
 
-  console.log(ensAddress.data, ensAddress.status);
-
   if (isAddr) {
     if (ensName.isSuccess) {
       return {
@@ -38,7 +32,7 @@ export const useEns = (addressOrEns: string | undefined) => {
         data: {
           name: ensName.data,
           avatar: ensAvatar.data,
-          address: addressOrEns,
+          address: getAddress(addressOrEns!),
         } as EnsRecord,
       };
     } else {
@@ -47,7 +41,7 @@ export const useEns = (addressOrEns: string | undefined) => {
         data: {
           name: null,
           avatar: null,
-          address: addressOrEns,
+          address: getAddress(addressOrEns!),
         } as EnsRecord,
       };
     }
