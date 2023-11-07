@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -21,19 +20,11 @@ import { useMemo, useState } from "react";
 import { TokenDisplay } from "./TokenDisplay";
 import { CommandList } from "./ui/command";
 
-function TokenListDisplay({ token }: { token: TokenListToken }) {
-  return (
-    <div className="flex flex-row items-center space-x-2">
-      <img src={token.logoURI} className="w-6 h-6" />
-      <div>
-        <div>{token.symbol}</div>
-        <div className="text-sm">{token.address}</div>
-      </div>
-    </div>
-  );
+interface TokenSelectProps {
+  onChange: (token: TokenListToken) => void;
 }
 
-export function TokenSelect() {
+export function TokenSelect({ onChange }: TokenSelectProps) {
   const tokens = useTokens();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<TokenListToken | undefined>();
@@ -46,12 +37,15 @@ export function TokenSelect() {
   const onSelect = (token: TokenListToken) => {
     setOpen(false);
     setValue(token);
+    if (token !== value) {
+      onChange(token);
+    }
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="h-fit rounded-xl p bg-pink-600 hover:bg-pink-500">
+        <Button className="h-fit rounded-xl p bg-primary">
           <TokenDisplay token={value || defaultValue} />
         </Button>
       </DialogTrigger>
@@ -73,6 +67,7 @@ export function TokenSelect() {
             <CommandGroup>
               {tokens.map((token) => (
                 <CommandItem
+                  className=" hover:bg-primary hover:text-primary-foreground p-1 transition-colors duration-75 cursor-pointer"
                   key={token.address}
                   value={`${token.address} ${token.name} ${token.symbol}`}
                   onSelect={() => {
@@ -80,64 +75,24 @@ export function TokenSelect() {
                   }}
                 >
                   <TokenListDisplay token={token} />
-                  {/* <CheckIcon
-                    className={cn(
-                      "ml-auto h-4 w-4",
-                      value === token ? "opacity-100" : "opacity-0"
-                    )}
-                  /> */}
                 </CommandItem>
               ))}
             </CommandGroup>
           </CommandList>
-          {/* <CommandGroup className="scroll-auto">
-            {tokens.map((token) => (
-              <CommandItem
-                key={token.address}
-                value={`${token.address} ${token.name} ${token.symbol}`}
-                onSelect={() => {
-                  setValue(token);
-                  // setOpen(false);
-                }}
-              >
-                <TokenDisplay token={token} />
-                <CheckIcon
-                  className={cn(
-                    "ml-auto h-4 w-4",
-                    value === token ? "opacity-100" : "opacity-0"
-                  )}
-                />
-              </CommandItem>
-            ))}
-          </CommandGroup> */}
         </Command>
-
-        {/* <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input
-              id="name"
-              defaultValue="Pedro Duarte"
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Username
-            </Label>
-            <Input
-              id="username"
-              defaultValue="@peduarte"
-              className="col-span-3"
-            />
-          </div>
-        </div> */}
-        <DialogFooter>
-          <Button type="submit">Select</Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+}
+
+function TokenListDisplay({ token }: { token: TokenListToken }) {
+  return (
+    <div className="flex flex-row items-center space-x-2">
+      <img src={token.logoURI} className="w-6 h-6" />
+      <div>
+        <div>{token.symbol}</div>
+        <div className="text-sm">{token.address}</div>
+      </div>
+    </div>
   );
 }

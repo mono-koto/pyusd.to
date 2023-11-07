@@ -1,5 +1,3 @@
-import { useQuote } from "@/hooks/useCowswap";
-import { OrderQuoteRequest, OrderQuoteSideKindBuy } from "@cowprotocol/cow-sdk";
 // import { useWeb3Info } from "../../hooks/useWeb3Info";
 // import { JsonContent } from "../../components/jsonContent";
 // import { useCurrentChainId } from "../../hooks/useCurrentChainId";
@@ -9,21 +7,21 @@ import { OrderQuoteRequest, OrderQuoteSideKindBuy } from "@cowprotocol/cow-sdk";
 // const chainId = 1;
 
 export function GetQuotePage() {
-  const account = "0x8A37ab849Dd795c0CA1979b7fcA24F90Be95d618";
+  // const account = "0x8A37ab849Dd795c0CA1979b7fcA24F90Be95d618";
 
-  const input: OrderQuoteRequest = {
-    sellToken: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
-    buyToken: "0x6c3ea9036406852006290770bedfcaba0e23a0e8",
-    from: account,
-    receiver: account,
-    buyAmountAfterFee: (100 * 10 ** 6).toString(),
-    kind: OrderQuoteSideKindBuy.BUY,
-    // sellAmountBeforeFee: (0.1 * 10 ** 18).toString(),
-    // kind: OrderQuoteSideKindSell.SELL,
-  };
+  // const input: OrderQuoteRequest = {
+  //   sellToken: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  //   buyToken: "0x6c3ea9036406852006290770bedfcaba0e23a0e8",
+  //   from: account,
+  //   receiver: account,
+  //   buyAmountAfterFee: (100 * 10 ** 6).toString(),
+  //   kind: OrderQuoteSideKindBuy.BUY,
+  //   // sellAmountBeforeFee: (0.1 * 10 ** 18).toString(),
+  //   // kind: OrderQuoteSideKindSell.SELL,
+  // };
 
-  const quote = useQuote(input);
-  console.log(quote);
+  // const quote = useQuote(input);
+  // console.log(quote);
 
   // console.log(input);
 
@@ -56,7 +54,7 @@ export function GetQuotePage() {
   return (
     <div>
       <div className="whitespace-pre">
-        <div>{JSON.stringify(quote)}</div>
+        {/* <div>{JSON.stringify(quote)}</div> */}
       </div>
     </div>
   );

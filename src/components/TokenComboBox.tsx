@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { ChevronRightIcon, CheckIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -49,7 +49,7 @@ export function TokenCombobox() {
           className="w-[300px] justify-between h-fit"
         >
           <TokenDisplay token={value || defaultValue} />
-          <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronRightIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0 overflow-scroll">

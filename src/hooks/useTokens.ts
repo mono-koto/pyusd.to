@@ -6,7 +6,7 @@ import additionalTokensMainnet from "../assets/additional-token-list-mainnet.jso
 
 const tokensMainnet = [
   ...additionalTokensMainnet.tokens,
-  ...standardTokensMainnet.tokens,
+  ...standardTokensMainnet.tokens.filter((token) => token.chainId === 1),
 ].sort((a, b) => {
   if (a.symbol < b.symbol) {
     return -1;

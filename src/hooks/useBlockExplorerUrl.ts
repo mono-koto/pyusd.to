@@ -1,4 +1,4 @@
-import { useNetwork } from "wagmi";
+import { useNetwork, usePublicClient } from "wagmi";
 
 export type UrlKind =
   | "address"
@@ -13,10 +13,11 @@ type Options = {
 };
 
 export const useBlockExplorerUrl = ({ id, kind }: Options) => {
-  const network = useNetwork();
-  const blockExplorer = network.chain?.blockExplorers?.default;
+  const chain = usePublicClient().chain;
+
+  const blockExplorer = chain?.blockExplorers?.default;
   const url = blockExplorer
-    ? `${network.chain?.blockExplorers?.default.url}/${kind}/${id}`
+    ? `${chain?.blockExplorers?.default.url}/${kind}/${id}`
     : undefined;
   return {
     blockExplorer,

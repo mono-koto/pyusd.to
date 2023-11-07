@@ -1,6 +1,7 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Suspense } from "react";
 import { Helmet } from "react-helmet-async";
+import SuspenseFallback from "./SuspenseFallback";
 
 export default function MainLayout({
   children,
@@ -22,7 +23,10 @@ export default function MainLayout({
           <ConnectButton />
         </nav>
 
-        <main className="container mx-auto max-w-xl">{children}</main>
+        <main className="container mx-auto max-w-xl">
+          <Suspense fallback={<SuspenseFallback />}>{children}</Suspense>
+        </main>
+
         <footer className="text-center text-sm">
           Created by <a href="https://mono-koto.com/">Mono Koto</a> +{" "}
           <a href="https://www.gardenlabs.xyz/">Garden Labs</a>

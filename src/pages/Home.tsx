@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ChevronRight } from "lucide-react";
+import { ChevronRightIcon } from "lucide-react";
 import { useState } from "react";
 import { isAddress } from "viem";
 import { navigate } from "wouter/use-location";
@@ -79,7 +79,7 @@ export default function Home() {
                   size="icon"
                   className="disabled:opacity-50"
                 >
-                  <ChevronRight className="h-4 w-4" />
+                  <ChevronRightIcon className="h-4 w-4" />
                 </Button>
               </div>
             </div>

@@ -8,6 +8,7 @@ import { alchemyProvider } from "@wagmi/core/providers/alchemy";
 
 import { HelmetProvider } from "react-helmet-async";
 import CustomAvatar from "./CustomAvatar";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
@@ -35,15 +36,19 @@ const wagmiConfig = createConfig({
 
 const helmetContext = {};
 
+const queryClient = new QueryClient();
+
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <HelmetProvider context={helmetContext}>
-      <WagmiConfig config={wagmiConfig}>
-        <RainbowKitProvider chains={chains} avatar={CustomAvatar}>
-          {children}
-        </RainbowKitProvider>
-      </WagmiConfig>
-    </HelmetProvider>
+    <QueryClientProvider client={queryClient}>
+      <HelmetProvider context={helmetContext}>
+        <WagmiConfig config={wagmiConfig}>
+          <RainbowKitProvider chains={chains} avatar={CustomAvatar}>
+            {children}
+          </RainbowKitProvider>
+        </WagmiConfig>
+      </HelmetProvider>
+    </QueryClientProvider>
   );
 }
 

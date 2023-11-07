@@ -11,7 +11,6 @@ export default function EnsAvatar({
 }) {
   const ens = useEns(address);
   size = size || 40;
-  console.log(ens.data, ens.isSuccess);
 
   return (
     <CustomAvatar

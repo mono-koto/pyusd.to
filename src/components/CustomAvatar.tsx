@@ -13,8 +13,6 @@ export default function CustomAvatar({
 }) {
   size = size || 40;
 
-  console.log(address, ensImage, size);
-
   if (address && !isAddress(address)) {
     console.error("Bad address provided");
   }
@@ -28,8 +26,7 @@ export default function CustomAvatar({
           alt={`ENS avatar of ${address}`}
           height={size}
           width={size}
-          onError={(e) => {
-            console.log(e);
+          onError={() => {
             setUseFallback(true);
           }}
         />
