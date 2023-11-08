@@ -1,4 +1,4 @@
-import { useNetwork, usePublicClient } from "wagmi";
+import { usePublicClient } from "wagmi";
 
 export type UrlKind =
   | "address"
