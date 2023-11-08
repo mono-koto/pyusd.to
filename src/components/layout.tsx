@@ -1,7 +1,10 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { motion } from "framer-motion";
 import { Suspense } from "react";
 import { Helmet } from "react-helmet-async";
+import { PayPalDocsDialogButton } from "./PayPalDocsDialogButton";
 import SuspenseFallback from "./SuspenseFallback";
+import { Card, CardDescription, CardHeader } from "./ui/card";
 
 export default function MainLayout({
   children,
@@ -28,8 +31,22 @@ export default function MainLayout({
         </main>
 
         <footer className="text-center text-sm">
-          Created by <a href="https://mono-koto.com/">Mono Koto</a> +{" "}
-          <a href="https://www.gardenlabs.xyz/">Garden Labs</a>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5, rotateZ: -5 }}
+            animate={{ opacity: 100, scale: 1, rotateZ: 0 }}
+            transition={{ delay: 1, bounce: 0.6, type: "spring" }}
+            className="inline-block"
+          >
+            <Card className="text-center inline-block">
+              <CardHeader className="p-4">
+                {/* <CardTitle className="text-lg">PayPal user?</CardTitle> */}
+                <CardDescription className="flex flex-row gap-3 items-center ">
+                  PayPal user?
+                  <PayPalDocsDialogButton />
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </motion.div>
         </footer>
       </div>
     </>

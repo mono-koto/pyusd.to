@@ -50,42 +50,44 @@ export default function Home() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>pyusd.to</CardTitle>
-        <CardDescription>
-          Pay with any token. Receiver gets PYUSD.
-        </CardDescription>
-      </CardHeader>
-      <form onSubmit={handleSubmit}>
-        <CardContent className="space-y-2">
-          <div className="grid w-full items-center gap-4">
-            <div className="space-y-1">
-              <Label htmlFor="name">Who are we paying?</Label>
-              <div className="flex w-full md:max-w-md items-center space-x-2">
-                <Input
-                  id="amount"
-                  placeholder="ENS or Public Key"
-                  value={value}
-                  onInput={onInput}
-                  spellCheck={false}
-                  autoCapitalize="off"
-                  autoCorrect="off"
-                  required
-                />
-                <Button
-                  type="submit"
-                  variant="outline"
-                  size="icon"
-                  className="disabled:opacity-50"
-                >
-                  <ChevronRightIcon className="h-4 w-4" />
-                </Button>
+    <div className="flex flex-col gap-8 items-center">
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>pyusd.to</CardTitle>
+          <CardDescription>
+            Pay with any token. Receiver gets PYUSD.
+          </CardDescription>
+        </CardHeader>
+        <form onSubmit={handleSubmit}>
+          <CardContent className="space-y-2">
+            <div className="grid w-full items-center gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Who is getting paid?</Label>
+                <div className="flex w-full md:max-w-md items-center space-x-2">
+                  <Input
+                    id="amount"
+                    placeholder="ENS or Public Key, e.g. vitalik.eth"
+                    value={value}
+                    onInput={onInput}
+                    spellCheck={false}
+                    autoCapitalize="off"
+                    autoCorrect="off"
+                    required
+                  />
+                  <Button
+                    type="submit"
+                    size="icon"
+                    variant="outline"
+                    className="disabled:opacity-50"
+                  >
+                    <ChevronRightIcon className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        </CardContent>
-      </form>
-    </Card>
+          </CardContent>
+        </form>
+      </Card>
+    </div>
   );
 }

@@ -61,3 +61,7 @@
     @apply bg-background text-foreground clouds min-h-screen;
   }
 }
+
+a {
+  @apply text-primary;
+}

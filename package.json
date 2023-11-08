@@ -29,6 +29,7 @@
     "cowswap-token-lists": "cowprotocol/token-lists",
     "cross-fetch": "^3.x",
     "ethers": "^5.7.2",
+    "framer-motion": "^10.16.4",
     "ipfs-only-hash": "^4.x",
     "lucide-react": "^0.292.0",
     "multiformats": "^9.x",
