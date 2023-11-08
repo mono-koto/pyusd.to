@@ -58,7 +58,7 @@
   body,
   #root,
   [data-rk] {
-    @apply bg-background text-foreground clouds min-h-screen;
+    @apply bg-background text-foreground terrain min-h-screen;
   }
 }
 
