@@ -1,5 +1,10 @@
 import "@rainbow-me/rainbowkit/styles.css";
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import {
+  darkTheme,
+  getDefaultWallets,
+  lightTheme,
+  RainbowKitProvider,
+} from "@rainbow-me/rainbowkit";
 
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { goerli, mainnet } from "wagmi/chains";
@@ -9,6 +14,7 @@ import { alchemyProvider } from "@wagmi/core/providers/alchemy";
 import { HelmetProvider } from "react-helmet-async";
 import CustomAvatar from "./CustomAvatar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProvider, useTheme } from "./ThemeProvider";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
@@ -40,15 +46,28 @@ const queryClient = new QueryClient();
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <QueryClientProvider client={queryClient}>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <HelmetProvider context={helmetContext}>
-        <WagmiConfig config={wagmiConfig}>
-          <RainbowKitProvider chains={chains} avatar={CustomAvatar}>
-            {children}
-          </RainbowKitProvider>
-        </WagmiConfig>
+        <QueryClientProvider client={queryClient}>
+          <Web3Providers>{children}</Web3Providers>
+        </QueryClientProvider>
       </HelmetProvider>
-    </QueryClientProvider>
+    </ThemeProvider>
+  );
+}
+
+function Web3Providers({ children }: { children: React.ReactNode }) {
+  const rainbowTheme = useTheme().theme === "dark" ? darkTheme() : lightTheme();
+  return (
+    <WagmiConfig config={wagmiConfig}>
+      <RainbowKitProvider
+        chains={chains}
+        avatar={CustomAvatar}
+        theme={rainbowTheme}
+      >
+        {children}
+      </RainbowKitProvider>
+    </WagmiConfig>
   );
 }
 

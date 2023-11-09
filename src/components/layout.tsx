@@ -5,6 +5,7 @@ import { Helmet } from "react-helmet-async";
 import { PayPalDocsDialogButton } from "./PayPalDocsDialogButton";
 import SuspenseFallback from "./SuspenseFallback";
 import { Card, CardDescription, CardHeader } from "./ui/card";
+import { ThemeToggle } from "./ThemeToggle";
 
 export default function MainLayout({
   children,
@@ -15,7 +16,6 @@ export default function MainLayout({
     <>
       <Helmet>
         <title>Fluffy Clouds</title>
-        {/* <link rel="canonical" href="https://www.tacobell.com/" /> */}
       </Helmet>
 
       <div className="min-h-screen h-full flex flex-col justify-between p-5 gap-4">
@@ -23,7 +23,10 @@ export default function MainLayout({
           <div className="text-2xl flex flex-row gap-4 items-center">
             <div></div>
           </div>
-          <ConnectButton />
+          <div className="flex flex-row gap-4 items-center">
+            <ConnectButton />
+            <ThemeToggle />
+          </div>
         </nav>
 
         <main className="container mx-auto max-w-xl">

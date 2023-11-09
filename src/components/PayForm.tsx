@@ -133,7 +133,7 @@ export default function PayForm({
             placeholder="0.0"
             value={sellAmount.toString()}
             onChange={onSellAmountChange}
-            className="text-4xl h-12 border-none focus:ring-0 focus:outline-none"
+            className="text-4xl h-12 border-none focus:ring-0 focus:outline-none bg-transparent"
           />
           <TokenSelect onChange={handleTokenChange} />
         </div>
@@ -155,7 +155,7 @@ export default function PayForm({
               placeholder="0.0"
               value={buyAmount}
               onChange={onBuyAmountChange}
-              className="text-4xl h-12 border-none focus:ring-0 focus:outline-none"
+              className="text-4xl h-12 border-none focus:ring-0 focus:outline-none bg-transparent"
             />
           </div>
           <img
