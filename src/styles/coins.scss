@@ -1,0 +1,195 @@
+@import url("https://fonts.googleapis.com/css?family=Sanchez");
+
+body {
+  background: #629e99;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.euro {
+  --face: #0066ff;
+  --sign: #c49a44;
+  --circle: #c49a44;
+  --side: #dbb765;
+  --slide: #c49a44;
+}
+
+.dollar {
+  --face: #c0c9d2;
+  --sign: #e9eff5;
+  --circle: #d6dee4;
+  --side: #a0aab4;
+  --slide: #c0c9d2;
+}
+
+.yen {
+  --face: #fcd6bd;
+  --sign: #df9061;
+  --circle: #f0ae84;
+  --side: #f4b389;
+  --slide: #df9061;
+}
+
+.bitcoin {
+  --face: #ffd9b3;
+  --sign: #c49a44;
+  --circle: #c49a44;
+  --side: #dbb765;
+  --slide: #c49a44;
+}
+
+.pound {
+  --face: #ccffcc;
+  --sign: #009933;
+  --circle: #669999;
+  --side: #99ff99;
+  --slide: #669999;
+}
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 10em;
+  height: 10em;
+  position: relative;
+  perspective: 500px;
+  // box-shadow: 0 11em 3em -2em rgba(0, 0, 0, 0.2);
+  margin: 2em;
+  transform: translateZ(-0.4em);
+}
+
+.coin {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform-style: preserve-3d;
+}
+
+.dollar {
+  animation: spinDollar 40s -1s linear infinite;
+}
+
+.euro {
+  animation: spinEuro 18s -3s linear infinite;
+}
+
+.yen {
+  animation: spinYen 22s -5s linear infinite;
+}
+
+.bitcoin {
+  animation: spinYen 24s -7s linear infinite;
+}
+
+.pound {
+  animation: spinYen 24s -7s linear infinite;
+}
+
+.face {
+  border-radius: 5em;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  background: var(--face);
+}
+
+.front {
+  transform: translate3d(0, 0, 0.4em) rotateY(0);
+}
+
+.back {
+  transform: rotateY(180deg) translate3d(0, 0, 0.4em);
+}
+
+.symbol {
+  position: absolute;
+  color: var(--sign);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 5em;
+  font-family: Sanchez, sans-serif;
+}
+
+.euro .symbol {
+  padding-right: 0.1em;
+}
+
+.circle {
+  border-radius: 5em;
+  border: 0.35em dashed var(--circle);
+  width: 8em;
+  height: 8em;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+
+.side {
+  width: 0.8em;
+  height: 1.61em;
+  background: var(--side);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  backface-visibility: hidden;
+  border-top: 0.2em solid var(--slide);
+  border-bottom: 0.2em solid var(--slide);
+}
+
+@for $i from 1 through 20 {
+  figure:nth-of-type(#{$i}) {
+    transform: translate3d(-50%, -50%, 0)
+      rotateY(90deg)
+      rotateX(($i - 1) * 18deg)
+      translateZ(4.9em);
+  }
+}
+
+@keyframes spinDollar {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+  50% {
+    transform: rotateX(45deg) rotateY(5 * 360deg) rotateZ(180deg);
+  }
+  100% {
+    transform: rotateX(0deg) rotateY(10 * 360deg) rotateZ(0deg);
+  }
+}
+
+@keyframes spinEuro {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+  50% {
+    transform: rotateX(5 * 360deg) rotateY(45deg) rotateZ(25deg);
+  }
+  100% {
+    transform: rotateX(10 * 360deg) rotateY(0deg) rotateZ(0deg);
+  }
+}
+
+@keyframes spinYen {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+  50% {
+    transform: rotateX(45deg) rotateY(-5 * 360deg) rotateZ(180deg);
+  }
+  100% {
+    transform: rotateX(0deg) rotateY(-10 * 360deg) rotateZ(0deg);
+  }
+}

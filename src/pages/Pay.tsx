@@ -7,6 +7,7 @@ import { useParams } from "wouter";
 import { Loader2, CookieIcon } from "lucide-react";
 import { Address } from "viem";
 import { useAccount } from "wagmi";
+import PayLayout from "@/components/PayLayout";
 
 export default function Pay() {
   const account = useAccount();
@@ -34,47 +35,49 @@ export default function Pay() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex flex-row gap-4 items-center">
-          <EnsAvatar address={recipient} size={60} />
-          <div className="space-y-1">
-            {ens.data.name ? (
-              <>
-                <div>{ens.data.name}</div>
-                <div className="text-foreground text-sm font-normal">
-                  <BlockscannerLink address={ens.data.address} />
+    <PayLayout>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex flex-row items-center gap-4">
+            <EnsAvatar address={recipient} size={60} />
+            <div className="space-y-1">
+              {ens.data.name ? (
+                <>
+                  <div>{ens.data.name}</div>
+                  <div className="text-sm font-normal text-foreground">
+                    <BlockscannerLink address={ens.data.address} />
+                  </div>
+                </>
+              ) : (
+                <div className="font-normal text-foreground">
+                  <BlockscannerLink
+                    address={recipient || ens.data.address}
+                    short
+                  />
                 </div>
-              </>
-            ) : (
-              <div className="text-foreground font-normal">
-                <BlockscannerLink
-                  address={recipient || ens.data.address}
-                  short
-                />
-              </div>
-            )}
-          </div>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <PayForm
-          receiver={ens.data.address as Address}
-          from={account.address}
-          buyToken={{
-            address: "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8",
-            decimals: 6,
-            name: "PayPal USD",
-            symbol: "PYUSD",
-          }}
-          initialSellToken={{
-            address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
-            decimals: 18,
-            name: "Wrapped Ether",
-            symbol: "WETH",
-          }}
-        />
-      </CardContent>
-    </Card>
+              )}
+            </div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <PayForm
+            receiver={ens.data.address as Address}
+            from={account.address}
+            buyToken={{
+              address: "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8",
+              decimals: 6,
+              name: "PayPal USD",
+              symbol: "PYUSD",
+            }}
+            initialSellToken={{
+              address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+              decimals: 18,
+              name: "Wrapped Ether",
+              symbol: "WETH",
+            }}
+          />
+        </CardContent>
+      </Card>
+    </PayLayout>
   );
 }

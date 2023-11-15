@@ -1,8 +1,8 @@
 import { Route, Router, Switch } from "wouter";
 
 import { useHashLocation } from "./hooks/useHashLocation";
-import MainLayout from "./components/layout";
-import React from "react";
+import MainLayout from "./components/MainLayout.tsx";
+import React, { Suspense } from "react";
 
 const Providers = React.lazy(() => import("./components/providers.tsx"));
 const Home = React.lazy(() => import("./pages/Home"));
@@ -13,13 +13,15 @@ function App() {
   return (
     <Providers>
       <MainLayout>
-        <Router hook={useHashLocation}>
-          <Switch>
-            <Route path="/" component={Home} />
-            <Route path="/about" component={About} />
-            <Route path="/:address" component={Pay} />
-          </Switch>
-        </Router>
+        <Suspense fallback={null}>
+          <Router hook={useHashLocation}>
+            <Switch>
+              <Route path="/" component={Home} />
+              <Route path="/about" component={About} />
+              <Route path="/:address" component={Pay} />
+            </Switch>
+          </Router>
+        </Suspense>
       </MainLayout>
     </Providers>
   );

@@ -58,10 +58,14 @@
   body,
   #root,
   [data-rk] {
-    @apply bg-background text-foreground terrain min-h-screen;
+    @apply bg-background text-foreground  min-h-screen;
   }
 }
 
 a {
   @apply text-primary;
+}
+
+h2 {
+  @apply text-3xl font-thin;
 }
