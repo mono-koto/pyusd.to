@@ -1,9 +1,9 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Helmet } from "react-helmet-async";
-import { ThemeToggle } from "./ThemeToggle";
-import { Toaster } from "./ui/toaster";
-import { PayPalDocsDialogButton } from "./PayPalDocsDialogButton";
-import { Card, CardHeader, CardDescription } from "./ui/card";
+import { ThemeToggle } from "../ThemeToggle";
+import { Toaster } from "../ui/toaster";
+import { PayPalDocsDialogButton } from "../PayPalDocsDialogButton";
+import { Card, CardHeader, CardDescription } from "../ui/card";
 import { motion } from "framer-motion";
 
 export default function MainLayout({
@@ -14,14 +14,16 @@ export default function MainLayout({
   return (
     <>
       <Helmet>
-        <title>vampyusd</title>
+        <title>PYUSD.to</title>
       </Helmet>
 
       <div className="flex h-full min-h-screen flex-col justify-between gap-4">
         <div>
           <nav className="items-top flex flex-row justify-between bg-accent p-4">
             <div className="flex flex-row items-center gap-4 text-2xl">
-              <div className="whitespace-nowrap text-4xl">PYUSD.to</div>
+              <div className="whitespace-nowrap text-4xl">
+                PYUSD<span className="text-primary">.to</span>
+              </div>
             </div>
             <div className="flex flex-row items-center gap-4">
               <ConnectButton />
@@ -33,7 +35,7 @@ export default function MainLayout({
         </div>
         <Toaster />
 
-        <footer className="text-center text-sm">
+        <footer className="mb-6 text-center text-sm">
           <motion.div
             initial={{ opacity: 0, scale: 0.5, rotateZ: -5 }}
             animate={{ opacity: 100, scale: 1, rotateZ: 0 }}

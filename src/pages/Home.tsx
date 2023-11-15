@@ -1,26 +1,12 @@
-import { GetLink } from "@/components/GetLink";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { useToast } from "@/components/ui/use-toast";
-import { useCanonicalSlug } from "@/hooks/useCanonicalSlug";
-import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { Copy } from "lucide-react";
-import { useAccount } from "wagmi";
+import { HomeGetPaidCard } from "@/home/HomeGetPaidCard";
+import { HomePayCard } from "@/home/HomePayCard";
 import dogeImage from "../assets/img/doge-computer.png";
 import hachathonImage from "../assets/img/hackathon_transparent.png";
 import convoImage from "../assets/img/pyusd-convo-bg-mdjrny-2.jpg";
 import heroImage from "../assets/img/pyusd-hero-bg-mdjrny.jpeg";
 
 export default function Home() {
-  const account = useAccount();
-  const modal = useConnectModal();
-
-  const canonicalSlug = useCanonicalSlug(account.address);
-  const baseUrl = "https://pyusd.to/#/";
-  const url = canonicalSlug.data ? baseUrl + canonicalSlug.data : baseUrl;
-  const { toast } = useToast();
-
   return (
     <>
       <div
@@ -46,42 +32,15 @@ export default function Home() {
         </div>
       </div>
 
-      <Separator className="my-6" />
-
-      <GetLink />
-      <div className="m-auto flex w-full flex-row justify-center p-6">
-        {!account.isConnected && (
-          <Button className="text-md p-6" onClick={modal.openConnectModal}>
-            Create and share your link
-          </Button>
-        )}
-        {account.isConnected && (
-          <div
-            className="space-y-2 hover:cursor-pointer"
-            onClick={() => {
-              navigator.clipboard.writeText(url);
-              toast({
-                description:
-                  "Your unique address has been copied to your clipboard.",
-                duration: 5000,
-              });
-            }}
-          >
-            <p>Your unique address:</p>
-            <div className="relative">
-              <Input
-                spellCheck={false}
-                readOnly
-                size={60}
-                className="bg-opacity-20 text-center  ring-offset-0
-                  focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0
-                  "
-                value={url}
-              />
-              <Copy className=" absolute right-2 top-1/2 -translate-y-1/2 " />
-            </div>
+      <div className="container m-auto my-6 max-w-4xl">
+        <div className="flex flex-col items-stretch justify-stretch gap-4 md:flex-row">
+          <div className="flex-1">
+            <HomePayCard />
           </div>
-        )}
+          <div className="flex-1">
+            <HomeGetPaidCard />
+          </div>
+        </div>
       </div>
 
       <Separator className="my-6" />
@@ -92,7 +51,7 @@ export default function Home() {
         </div>
 
         <div className="py-8 pl-8">
-          <div className="flex flex-row items-center gap-8 bg-no-repeat  align-bottom ">
+          <div className="container mx-auto flex max-w-5xl flex-row flex-wrap items-center gap-8  bg-no-repeat align-bottom md:flex-nowrap ">
             <div className="flex flex-row items-start gap-4 text-xl  ">
               <span className=" flex-0 flex aspect-square h-10 w-10 items-center justify-center rounded-full border border-foreground">
                 1
@@ -106,18 +65,18 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <img className="h-[300px]" src={hachathonImage} />
+            <img className="max-h-[300px] min-h-[100px]" src={hachathonImage} />
           </div>
         </div>
         <div
-          className="flex w-full  flex-col items-center justify-end bg-cover bg-center bg-no-repeat p-8 px-8 sm:min-h-[400px]"
+          className="flex w-full flex-col items-center justify-end bg-cover bg-center bg-no-repeat p-8 px-8 sm:min-h-[400px]"
           style={{
             backgroundImage: `url(${convoImage})`,
           }}
         >
-          <div className="flex flex-row items-center gap-8 align-bottom">
-            <div className="flex flex-row items-start gap-4 text-xl  ">
-              <span className=" flex-0 flex aspect-square h-10 w-10 items-center justify-center rounded-full border border-white  text-white">
+          <div className="container mx-auto flex max-w-5xl flex-row items-center gap-8 align-bottom">
+            <div className="mt-20 flex flex-row items-start gap-4 text-xl">
+              <span className="flex-0 flex aspect-square h-10 w-10 items-center justify-center rounded-full border border-white  text-white">
                 2
               </span>
               <div className="w-2/3 space-y-2 text-white">
@@ -132,10 +91,10 @@ export default function Home() {
           </div>
         </div>
         <div className="px-8">
-          <div className="flex flex-row items-center gap-8 align-bottom">
-            <img src={dogeImage} className="w-1/3" />
+          <div className="container mx-auto flex max-w-5xl flex-row flex-wrap items-center gap-8 align-bottom md:flex-nowrap ">
+            <img src={dogeImage} className="max-h-[250px] min-h-[100px]" />
             <div className="flex flex-row items-start gap-4 text-xl  ">
-              <span className=" flex-0 flex aspect-square h-10 w-10 items-center justify-center rounded-full border border-foreground">
+              <span className="flex-0 flex aspect-square h-10 w-10 items-center justify-center rounded-full border border-foreground">
                 3
               </span>
               <div className="space-y-2">

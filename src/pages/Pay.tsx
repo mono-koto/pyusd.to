@@ -7,7 +7,7 @@ import { useParams } from "wouter";
 import { Loader2, CookieIcon } from "lucide-react";
 import { Address } from "viem";
 import { useAccount } from "wagmi";
-import PayLayout from "@/components/PayLayout";
+import CardLayout from "@/components/layout/CardLayout";
 
 export default function Pay() {
   const account = useAccount();
@@ -35,7 +35,7 @@ export default function Pay() {
   }
 
   return (
-    <PayLayout>
+    <CardLayout>
       <Card>
         <CardHeader>
           <CardTitle className="flex flex-row items-center gap-4">
@@ -78,6 +78,6 @@ export default function Pay() {
           />
         </CardContent>
       </Card>
-    </PayLayout>
+    </CardLayout>
   );
 }

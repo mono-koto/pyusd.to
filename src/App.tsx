@@ -1,7 +1,7 @@
 import { Route, Router, Switch } from "wouter";
 
 import { useHashLocation } from "./hooks/useHashLocation";
-import MainLayout from "./components/MainLayout.tsx";
+import MainLayout from "./components/layout/MainLayout.tsx";
 import React, { Suspense } from "react";
 
 const Providers = React.lazy(() => import("./components/providers.tsx"));

@@ -4,7 +4,6 @@ import { isAddress } from "viem";
 import { navigate } from "wouter/use-location";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { Label } from "./ui/label";
 
 interface FormElements extends HTMLFormControlsCollection {
   amount: HTMLInputElement;
@@ -44,7 +43,7 @@ export default function EnterAddress() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Label htmlFor="name">Who is getting paid?</Label>
+      {/* <Label htmlFor="name">Who is getting paid?</Label> */}
       <div className="flex w-full items-center space-x-2 md:max-w-md">
         <Input
           id="amount"
@@ -59,7 +58,7 @@ export default function EnterAddress() {
         <Button
           type="submit"
           size="icon"
-          variant="outline"
+          variant="secondary"
           className="disabled:opacity-50"
         >
           <ChevronRightIcon className="h-4 w-4" />
