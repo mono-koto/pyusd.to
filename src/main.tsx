@@ -1,10 +1,15 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+// import SuspenseFallback from "./components/SuspenseFallback.tsx";
+import App from "./App.tsx";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+// const App = React.lazy(() => import("./App.tsx"));
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
+    {/* <Suspense fallback={<SuspenseFallback />}> */}
     <App />
-  </React.StrictMode>,
-)
+    {/* </Suspense> */}
+  </React.StrictMode>
+);
