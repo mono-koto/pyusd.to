@@ -5,12 +5,17 @@ import { Toaster } from "../ui/toaster";
 import { PayPalDocsDialogButton } from "../PayPalDocsDialogButton";
 import { Card, CardHeader, CardDescription } from "../ui/card";
 import { motion } from "framer-motion";
+import { navigate } from "wouter/use-location";
 
 export default function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const goHome = () => {
+    navigate("/");
+  };
+
   return (
     <>
       <Helmet>
@@ -21,7 +26,10 @@ export default function MainLayout({
         <div>
           <nav className="items-top flex flex-row justify-between bg-accent p-4">
             <div className="flex flex-row items-center gap-4 text-2xl">
-              <div className="whitespace-nowrap text-4xl">
+              <div
+                className="cursor-pointer whitespace-nowrap font-sans text-3xl font-light"
+                onClick={goHome}
+              >
                 PYUSD<span className="text-primary">.to</span>
               </div>
             </div>

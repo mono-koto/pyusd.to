@@ -112,11 +112,19 @@ export function GetLink() {
           {currentContent === "paypal" && (
             <div className="space-y-6">
               <h2>Here's how to get your wallet address</h2>
-              <img
-                src={payPalGif}
-                className="rounded-md border-2 border-muted"
-              />
-              <div></div>
+              <div className="flex flex-row flex-wrap-reverse gap-4">
+                <img
+                  src={payPalGif}
+                  className="rounded-md border-2 border-muted"
+                />
+                <div>
+                  <h3>1. Log in to your PayPal account</h3>
+                  <h3>2. Click on "Wallet"</h3>
+                  <h3>3. Click on "Crypto"</h3>
+                  <h3>4. Click on "PYUSD"</h3>
+                  <h3>5. Click on "Copy Address"</h3>
+                </div>
+              </div>
             </div>
           )}
           {currentContent === "my-wallet" && (

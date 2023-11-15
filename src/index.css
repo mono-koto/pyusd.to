@@ -58,7 +58,7 @@
   body,
   #root,
   [data-rk] {
-    @apply bg-background text-foreground  min-h-screen;
+    @apply min-h-screen bg-background  text-foreground;
   }
 }
 
@@ -68,4 +68,7 @@ a {
 
 h2 {
   @apply text-3xl font-thin;
+}
+h3 {
+  @apply font-semibold;
 }
