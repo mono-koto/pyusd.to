@@ -1,4 +1,3 @@
-import { getAddress } from "viem";
 import { useEns } from "./useEns";
 
 export const useCanonicalSlug = (addressOrEns: string | undefined) => {

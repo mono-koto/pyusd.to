@@ -5,7 +5,7 @@ import { Toaster } from "./ui/toaster";
 import { PayPalDocsDialogButton } from "./PayPalDocsDialogButton";
 import { Card, CardHeader, CardDescription } from "./ui/card";
 import { motion } from "framer-motion";
-import Coin from "./Coin";
+
 export default function MainLayout({
   children,
 }: {

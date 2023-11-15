@@ -5,6 +5,9 @@ interface CoinProps {
   logoUrl?: string;
 }
 
+/***
+ * Experimental component to show a coin with a logo on the back.
+ */
 export default ({ logoUrl }: CoinProps) => {
   const otherToken = logoUrl || pyusd;
 
@@ -20,7 +23,7 @@ export default ({ logoUrl }: CoinProps) => {
           </div>
           {Array(20)
             .fill(0)
-            .map((v, i) => {
+            .map((_, i) => {
               return <figure className="side" key={i}></figure>;
             })}
         </div>
