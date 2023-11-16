@@ -36,7 +36,7 @@
     "ipfs-only-hash": "^4.x",
     "lucide-react": "^0.292.0",
     "multiformats": "^9.x",
-    "next": "14.0.2",
+    "next": "^14.0.3",
     "next-themes": "^0.2.1",
     "react": "^18",
     "react-dom": "^18",
@@ -45,10 +45,13 @@
     "stream-browserify": "^3.0.0",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
-    "viem": "^1.18.3",
-    "wagmi": "^1.4.5",
+    "viem": "^1.19.3",
+    "wagmi": "^1.4.7",
     "wouter": "^2.12.1",
     "zod": "^3.22.4"
+  },
+  "peerDependencies": {
+    "pino-pretty": "^10.2.3"
   },
   "devDependencies": {
     "@types/node": "^20",
