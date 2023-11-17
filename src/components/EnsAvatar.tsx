@@ -1,3 +1,4 @@
+"use client";
 import { useEns } from "@/hooks/useEns";
 
 import CustomAvatar from "./CustomAvatar";

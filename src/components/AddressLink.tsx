@@ -1,3 +1,4 @@
+"use client";
 import { Address } from "viem";
 import BlockscannerLink from "./BlockscannerLink";
 import { useEns } from "@/hooks/useEns";

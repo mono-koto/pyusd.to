@@ -1,3 +1,5 @@
+"use client";
+
 import { TokenSelect } from "@/components/TokenSelect";
 import { QuoteOptions, useQuote } from "@/hooks/useCowswap";
 import {

@@ -1,3 +1,4 @@
+"use client";
 import BoringAvatar from "boring-avatars";
 import { useState } from "react";
 import { isAddress } from "viem";
@@ -19,7 +20,7 @@ export default function CustomAvatar({
 
   const [useFallback, setUseFallback] = useState(false);
   return (
-    <div className="rounded-full overflow-clip">
+    <div className='rounded-full overflow-clip'>
       {!useFallback && ensImage ? (
         <img
           src={ensImage || ""}
@@ -31,7 +32,7 @@ export default function CustomAvatar({
           }}
         />
       ) : (
-        <BoringAvatar size={size} name={address} variant="marble" />
+        <BoringAvatar size={size} name={address} variant='marble' />
       )}
     </div>
   );

@@ -1,3 +1,5 @@
+"use client";
+
 // import { useWeb3Info } from "../../hooks/useWeb3Info";
 // import { JsonContent } from "../../components/jsonContent";
 // import { useCurrentChainId } from "../../hooks/useCurrentChainId";
@@ -53,7 +55,7 @@ export function GetQuotePage() {
 
   return (
     <div>
-      <div className="whitespace-pre">
+      <div className='whitespace-pre'>
         {/* <div>{JSON.stringify(quote)}</div> */}
       </div>
     </div>
