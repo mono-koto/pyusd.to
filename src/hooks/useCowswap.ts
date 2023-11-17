@@ -61,10 +61,20 @@ export function useQuote(quoteOptions: QuoteOptions) {
 
   const quote = useQuery({
     queryKey: queryKey,
-    queryFn: () => {
+    queryFn: async () => {
       console.log('quoteOptions', quoteOptions);
+      console.log('chain', orderBookApi.context.chainId);
       const request = orderQuoteRequest(quoteOptions);
-      return orderBookApi.getQuote(request);
+      try {
+        return await orderBookApi.getQuote(request);
+      } catch (error: any) {
+        const e = {
+          name: error.body?.errorType || 'Quote Error',
+          message: error.body?.description,
+        };
+        console.error(e);
+        throw e;
+      }
     },
     staleTime: 1000 * 50,
     enabled: validQuoteRequest(quoteOptions),

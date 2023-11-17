@@ -1,13 +1,5 @@
 [
   {
-    "symbol": "PYUSD-TEST",
-    "name": "Mock PYUSD (Goerli)",
-    "address": "0x07865c6E87B9F70255377e024ace6630C1Eaa37F",
-    "decimals": 6,
-    "chainId": 5,
-    "logoURI": "https://www.paypalobjects.com/devdoc/coin-PYUSD.svg"
-  },
-  {
     "name": "Gnosis",
     "chainId": 5,
     "symbol": "GNO",

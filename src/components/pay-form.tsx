@@ -58,6 +58,14 @@ export default function PayForm({
   });
 
   useEffect(() => {
+    if (quote.isError) {
+      if (quote.data?.quote.kind === (OrderQuoteSideKindBuy.BUY as string)) {
+        setSellAmount('');
+      } else {
+        setBuyAmount('');
+      }
+    }
+
     if (!quote.isSuccess) return;
 
     if (quote.data.quote.kind === (OrderQuoteSideKindBuy.BUY as string)) {
@@ -133,7 +141,6 @@ export default function PayForm({
           </span>
         </div>
       </div>
-
       <div className="border-gray flex flex-col rounded-xl border p-2">
         <div className="flex flex-row items-center justify-between">
           <div className="flex-1">
@@ -149,7 +156,7 @@ export default function PayForm({
             />
           </div>
           <img
-            src="https://www.paypalobjects.com/devdoc/coin-PYUSD.svg"
+            src={buyToken.logoURI}
             height={50}
             width={50}
             className="flex-0"
@@ -168,12 +175,14 @@ export default function PayForm({
             BigInt(quote.data?.quote.feeAmount || '0'),
             sellToken.decimals
           )
-        ).toFixed(2)}
-        {/* <Loader2 className="animate-spin duration-1000 w-4 h-4" />
-        <span>Updating quote&hellip;</span> */}
+        ).toFixed(sellToken.decimals)}
       </div>
-
       <PayButton quote={quote} />
+      {quote.isError && (
+        <div className="text-sm text-red-500">
+          {(quote.error as any).message || 'Unknown error'}
+        </div>
+      )}
     </form>
   );
 }

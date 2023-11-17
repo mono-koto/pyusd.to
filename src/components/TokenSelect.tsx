@@ -78,7 +78,7 @@ export function TokenSelect({ onChange }: TokenSelectProps) {
               {tokens.map((token) => (
                 <CommandItem
                   className=" cursor-pointer p-1 transition-colors duration-75 hover:bg-primary hover:text-primary-foreground"
-                  key={token.address}
+                  key={[token.address, token.symbol].join('-')}
                   value={`${token.address} ${token.name} ${token.symbol}`}
                   onSelect={() => {
                     onSelect(token);
