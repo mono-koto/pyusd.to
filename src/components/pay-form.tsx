@@ -1,34 +1,27 @@
-"use client";
+'use client';
 
-import { TokenSelect } from "@/components/TokenSelect";
-import { QuoteOptions, useQuote } from "@/hooks/useCowswap";
+import { TokenSelect } from '@/components/TokenSelect';
+import { QuoteOptions, useQuote } from '@/hooks/useCowswap';
 import {
   OrderQuoteResponse,
   OrderQuoteSideKindBuy,
   OrderQuoteSideKindSell,
-} from "@cowprotocol/cow-sdk";
-import { Label } from "@radix-ui/react-label";
-import { UseQueryResult } from "@tanstack/react-query";
-import { useDebounce } from "@uidotdev/usehooks";
-import clsx from "clsx";
-import { Loader2 } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
-import { Address, formatUnits, pad, parseUnits } from "viem";
-import { useBalance } from "wagmi";
-import { Button } from "./ui/button";
-import AddressLink from "./AddressLink";
-import { TokenListToken } from "@/hooks/useTokens";
-
-interface Token {
-  address: Address;
-  decimals: number;
-  name: string;
-  symbol: string;
-}
+} from '@cowprotocol/cow-sdk';
+import { Label } from '@radix-ui/react-label';
+import { UseQueryResult } from '@tanstack/react-query';
+import { useDebounce } from '@uidotdev/usehooks';
+import clsx from 'clsx';
+import { Loader2 } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+import { Address, formatUnits, pad, parseUnits } from 'viem';
+import { useBalance } from 'wagmi';
+import { Button } from './ui/button';
+import AddressLink from './AddressLink';
+import { TokenDetails } from '@/models';
 
 interface PayFormProps {
-  initialSellToken: Token;
-  buyToken: Token;
+  initialSellToken: TokenDetails;
+  buyToken: TokenDetails;
   from?: Address;
   receiver: Address;
 }
@@ -39,14 +32,14 @@ export default function PayForm({
   from,
   receiver,
 }: PayFormProps) {
-  const [sellToken, setSellToken] = useState<Token>(initialSellToken);
-  const [sellAmount, setSellAmount] = useState("");
-  const [buyAmount, setBuyAmount] = useState("");
+  const [sellToken, setSellToken] = useState<TokenDetails>(initialSellToken);
+  const [sellAmount, setSellAmount] = useState('');
+  const [buyAmount, setBuyAmount] = useState('');
 
   const quoteBaseOptions = {
     sellToken: sellToken.address,
     buyToken: buyToken.address,
-    from: from || pad("0x0", { size: 20 }),
+    from: from || pad('0x0', { size: 20 }),
     receiver: receiver,
   };
 
@@ -70,7 +63,7 @@ export default function PayForm({
     if (quote.data.quote.kind === (OrderQuoteSideKindBuy.BUY as string)) {
       const sellAmount = Number(
         formatUnits(
-          BigInt(quote.data?.quote.sellAmount || ""),
+          BigInt(quote.data?.quote.sellAmount || ''),
           sellToken.decimals
         )
       ).toFixed(sellToken.decimals < 8 ? 2 : 4);
@@ -78,7 +71,7 @@ export default function PayForm({
     } else {
       const buyAmount = Number(
         formatUnits(
-          BigInt(quote.data?.quote.buyAmount || ""),
+          BigInt(quote.data?.quote.buyAmount || ''),
           buyToken.decimals
         )
       ).toFixed(buyToken.decimals < 8 ? 2 : 4);
@@ -112,72 +105,67 @@ export default function PayForm({
     [quoteBaseOptions, buyToken.decimals]
   );
 
-  const handleTokenChange = useCallback((token: TokenListToken) => {
-    // setOrderOptions({
-    //   ...quoteBaseOptions,
-    //   kind: OrderQuoteSideKindBuy.BUY,
-    //   buyAmountAfterFee: parseUnits(buyAmount, buyToken.decimals).toString(),
-    // });
-    setSellToken({
-      address: token.address as Address,
-      decimals: token.decimals,
-      name: token.name,
-      symbol: token.symbol,
+  const handleTokenChange = useCallback((token: TokenDetails) => {
+    setOrderOptions({
+      ...quoteBaseOptions,
+      kind: OrderQuoteSideKindBuy.BUY,
+      buyAmountAfterFee: parseUnits(buyAmount, buyToken.decimals).toString(),
     });
+    setSellToken(token);
   }, []);
 
   return (
-    <form className='flex flex-col gap-4'>
-      <div className='rounded-xl border-gray border p-2 flex flex-col'>
-        <Label className='text-sm'>You pay</Label>
-        <div className='flex flex-row justify-stretch'>
+    <form className="flex flex-col gap-4">
+      <div className="border-gray flex flex-col rounded-xl border p-2">
+        <Label className="text-sm">You pay</Label>
+        <div className="flex flex-row justify-stretch">
           <input
-            placeholder='0.0'
+            placeholder="0.0"
             value={sellAmount.toString()}
             onChange={onSellAmountChange}
-            className='text-4xl h-12 border-none focus:ring-0 focus:outline-none bg-transparent'
+            className="h-12 w-full border-none bg-transparent text-4xl focus:outline-none focus:ring-0 "
           />
           <TokenSelect onChange={handleTokenChange} />
         </div>
-        <div className='text-sm text-right'>
-          <span className='text-gray-500'>
+        <div className="text-right text-sm">
+          <span className="text-gray-500">
             Your balance: {sellTokenBalance.data?.formatted}
           </span>
         </div>
       </div>
 
-      <div className='rounded-xl border-gray border p-2 flex flex-col'>
-        <div className='flex flex-row justify-between items-center'>
-          <div>
-            <Label className='text-sm'>
+      <div className="border-gray flex flex-col rounded-xl border p-2">
+        <div className="flex flex-row items-center justify-between">
+          <div className="flex-1">
+            <Label className="text-sm">
               <AddressLink address={receiver} /> will receive:
             </Label>
 
             <input
-              placeholder='0.0'
+              placeholder="0.0"
               value={buyAmount}
               onChange={onBuyAmountChange}
-              className='text-4xl h-12 border-none focus:ring-0 focus:outline-none bg-transparent'
+              className="h-12 w-full border-none bg-transparent text-4xl focus:outline-none focus:ring-0"
             />
           </div>
           <img
-            src='https://www.paypalobjects.com/devdoc/coin-PYUSD.svg'
+            src="https://www.paypalobjects.com/devdoc/coin-PYUSD.svg"
             height={50}
             width={50}
-            className='mr-2'
+            className="flex-0"
           />
         </div>
       </div>
       <div
         className={clsx(
-          "transition-opacity duration-200 flex flex-row gap-2 text-sm items-center opacity-0",
-          quote.data && "opacity-100"
+          'flex flex-row items-center gap-2 text-sm opacity-0 transition-opacity duration-200',
+          quote.data && 'opacity-100'
         )}
       >
-        Fee:{" "}
+        Fee:{' '}
         {Number(
           formatUnits(
-            BigInt(quote.data?.quote.feeAmount || "0"),
+            BigInt(quote.data?.quote.feeAmount || '0'),
             sellToken.decimals
           )
         ).toFixed(2)}
@@ -193,16 +181,16 @@ export default function PayForm({
 function PayButton({ quote }: { quote: UseQueryResult<OrderQuoteResponse> }) {
   if (quote.isFetching) {
     return (
-      <Button className='h-fit' disabled>
-        <Loader2 className='animate-spin duration-1000 w-4 h-4' />
+      <Button className="h-fit" disabled>
+        <Loader2 className="h-4 w-4 animate-spin duration-1000" />
         &nbsp; Updating quote
       </Button>
     );
   } else {
     return (
-      <Button className='h-fit' disabled={!quote.isSuccess}>
+      <Button className="h-fit" disabled={!quote.isSuccess}>
         <img
-          src='https://www.paypalobjects.com/devdoc/coin-PYUSD.svg'
+          src="https://www.paypalobjects.com/devdoc/coin-PYUSD.svg"
           height={20}
           width={20}
         />

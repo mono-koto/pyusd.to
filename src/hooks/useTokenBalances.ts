@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { useAlchemy } from "./useAlchemy";
+import { useQuery } from '@tanstack/react-query';
+import { useAlchemy } from './useAlchemy';
 
 type UseTokenBalancesOptions = {
   tokenAddresses?: string[];
@@ -13,7 +13,7 @@ export const useTokenBalances = ({
   const alchemy = useAlchemy();
   return useQuery({
     queryKey: [
-      "alchemy-token-balances",
+      'alchemy-token-balances',
       alchemy.config.network,
       tokenAddresses,
       ownerAddress,
@@ -23,10 +23,13 @@ export const useTokenBalances = ({
         ownerAddress!,
         tokenAddresses
       );
-      return result.tokenBalances.reduce((acc, tokenBalance) => {
-        acc[tokenBalance.contractAddress] = tokenBalance.tokenBalance;
-        return acc;
-      }, {} as Record<string, string | null>);
+      return result.tokenBalances.reduce(
+        (acc, tokenBalance) => {
+          acc[tokenBalance.contractAddress] = tokenBalance.tokenBalance;
+          return acc;
+        },
+        {} as Record<string, string | null>
+      );
     },
     enabled: Boolean(ownerAddress),
   });

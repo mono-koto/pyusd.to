@@ -3,17 +3,17 @@ import {
   OrderQuoteRequest,
   OrderQuoteSideKindBuy,
   OrderQuoteSideKindSell,
-} from "@cowprotocol/cow-sdk";
-import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
-import { Address, useChainId } from "wagmi";
+} from '@cowprotocol/cow-sdk';
+import { useQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
+import { Address, useChainId } from 'wagmi';
 
 export interface QuoteOptions {
   from: Address;
   receiver: Address;
   sellToken: Address;
   buyToken: Address;
-  kind: "buy" | "sell";
+  kind: 'buy' | 'sell';
   sellAmountBeforeFee?: string;
   buyAmountAfterFee?: string;
 }
@@ -23,10 +23,10 @@ function validQuoteRequest(quoteOptions: QuoteOptions): boolean {
     return false;
   }
 
-  if (quoteOptions.kind == "buy") {
+  if (quoteOptions.kind == 'buy') {
     const amount = quoteOptions.buyAmountAfterFee;
     return Boolean(amount && Number(amount) !== 0);
-  } else if (quoteOptions.kind == "sell") {
+  } else if (quoteOptions.kind == 'sell') {
     const amount = quoteOptions.sellAmountBeforeFee;
     return Boolean(amount && Number(amount) !== 0);
   } else {
@@ -35,7 +35,7 @@ function validQuoteRequest(quoteOptions: QuoteOptions): boolean {
 }
 
 function orderQuoteRequest(quoteOptions: QuoteOptions): OrderQuoteRequest {
-  if (quoteOptions.kind == "buy") {
+  if (quoteOptions.kind == 'buy') {
     return {
       ...quoteOptions,
       kind: OrderQuoteSideKindBuy.BUY,
@@ -57,12 +57,12 @@ export function useQuote(quoteOptions: QuoteOptions) {
     [chainId]
   );
 
-  const queryKey = ["cowswap-get-quote", chainId, quoteOptions];
+  const queryKey = ['cowswap-get-quote', chainId, quoteOptions];
 
   const quote = useQuery({
     queryKey: queryKey,
     queryFn: () => {
-      console.log("quoteOptions", quoteOptions);
+      console.log('quoteOptions', quoteOptions);
       const request = orderQuoteRequest(quoteOptions);
       return orderBookApi.getQuote(request);
     },
@@ -72,7 +72,7 @@ export function useQuote(quoteOptions: QuoteOptions) {
   });
 
   if (quote.isSuccess) {
-    console.log("quote", quote.data);
+    console.log('quote', quote.data);
   }
 
   return quote;

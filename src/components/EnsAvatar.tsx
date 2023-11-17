@@ -1,7 +1,7 @@
-"use client";
-import { useEns } from "@/hooks/useEns";
+'use client';
+import { useEns } from '@/hooks/useEns';
 
-import CustomAvatar from "./CustomAvatar";
+import CustomAvatar from './CustomAvatar';
 
 export default function EnsAvatar({
   address,
@@ -15,7 +15,7 @@ export default function EnsAvatar({
 
   return (
     <CustomAvatar
-      address={ens.data.address || ""}
+      address={ens.data.address || ''}
       ensImage={ens.data.avatar}
       size={size}
     />

@@ -1,5 +1,5 @@
-import { Address, getAddress, isAddress } from "viem";
-import { useEnsAddress, useEnsAvatar, useEnsName } from "wagmi";
+import { Address, getAddress, isAddress } from 'viem';
+import { useEnsAddress, useEnsAvatar, useEnsName } from 'wagmi';
 
 interface EnsRecord {
   name: string | null;
@@ -8,21 +8,24 @@ interface EnsRecord {
 }
 
 export const useEns = (addressOrEns: string | undefined) => {
-  const isAddr = isAddress(addressOrEns || "");
+  const isAddr = isAddress(addressOrEns || '');
 
   const ensName = useEnsName({
     address: addressOrEns as `0x${string}`,
     enabled: isAddr,
+    chainId: 1,
   });
 
   const ensAvatar = useEnsAvatar({
     name: isAddr ? ensName.data : addressOrEns,
     enabled: isAddr ? ensName.data !== null : true,
+    chainId: 1,
   });
 
   const ensAddress = useEnsAddress({
     name: addressOrEns,
     enabled: !isAddr && Boolean(addressOrEns),
+    chainId: 1,
   });
 
   if (isAddr) {

@@ -1,11 +1,11 @@
-import { usePublicClient } from "wagmi";
+import { usePublicClient } from 'wagmi';
 
 export type UrlKind =
-  | "address"
-  | "transaction"
-  | "token"
-  | "contract"
-  | "block";
+  | 'address'
+  | 'transaction'
+  | 'token'
+  | 'contract'
+  | 'block';
 
 type Options = {
   id: string;

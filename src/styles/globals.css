@@ -56,7 +56,7 @@
   body,
   #root,
   [data-rk] {
-    @apply bg-background text-foreground  min-h-screen;
+    @apply min-h-screen bg-background  text-foreground;
   }
 }
 
