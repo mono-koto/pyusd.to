@@ -1,3 +1,5 @@
+"use client";
+
 import ClientProviders from "./client-providers";
 import { ThemeProvider } from "./theme-provider";
 

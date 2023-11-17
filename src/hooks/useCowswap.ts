@@ -62,11 +62,13 @@ export function useQuote(quoteOptions: QuoteOptions) {
   const quote = useQuery({
     queryKey: queryKey,
     queryFn: () => {
+      console.log("quoteOptions", quoteOptions);
       const request = orderQuoteRequest(quoteOptions);
       return orderBookApi.getQuote(request);
     },
     staleTime: 1000 * 50,
     enabled: validQuoteRequest(quoteOptions),
+    retry: 0,
   });
 
   if (quote.isSuccess) {

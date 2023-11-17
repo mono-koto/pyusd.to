@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { ChevronRightIcon } from "lucide-react";
 import { useState } from "react";
 import { isAddress } from "viem";
+import { useRouter } from "next/navigation";
 
 interface FormElements extends HTMLFormControlsCollection {
   amount: HTMLInputElement;
@@ -26,11 +27,12 @@ function isValidEnsName(name: string) {
 }
 
 export default function Home() {
+  const router = useRouter();
   const [value, setValue] = useState<string>("");
 
   function handleSubmit(event: React.FormEvent<UsernameFormElement>) {
     event.preventDefault();
-    navigate("/#/" + event.currentTarget.elements.amount.value);
+    router.push("/" + event.currentTarget.elements.amount.value);
   }
 
   const onInput = (event: React.ChangeEvent<HTMLInputElement>) => {

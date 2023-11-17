@@ -1,10 +1,10 @@
-import { getAddress, isAddress } from "viem";
+import { Address, getAddress, isAddress } from "viem";
 import { useEnsAddress, useEnsAvatar, useEnsName } from "wagmi";
 
 interface EnsRecord {
   name: string | null;
   avatar: string | null;
-  address: string;
+  address: Address;
 }
 
 export const useEns = (addressOrEns: string | undefined) => {

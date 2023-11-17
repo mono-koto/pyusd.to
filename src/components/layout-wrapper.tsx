@@ -1,6 +1,4 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { Suspense } from "react";
-import SuspenseFallback from "./SuspenseFallback";
 import { ThemeToggle } from "./ThemeToggle";
 
 export default function MainLayout({
@@ -21,9 +19,7 @@ export default function MainLayout({
           </div>
         </nav>
 
-        <main className='container mx-auto max-w-xl'>
-          <Suspense fallback={<SuspenseFallback />}>{children}</Suspense>
-        </main>
+        <main className='container mx-auto max-w-xl'>{children}</main>
 
         <footer className='text-center text-sm'></footer>
       </div>
