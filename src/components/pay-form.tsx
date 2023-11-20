@@ -18,7 +18,11 @@ import { useBalance } from 'wagmi';
 import { Button } from './ui/button';
 import AddressLink from './AddressLink';
 import { TokenDetails } from '@/models';
-import { RouteParams, useUniswapRoute } from '@/hooks/useUniswap';
+import {
+  RouteParams,
+  UniswapRouteResult,
+  useUniswapRoute,
+} from '@/hooks/useUniswap';
 import { produce } from 'immer';
 import { useTokenDetails } from '@/hooks/useTokenDetails';
 
@@ -194,27 +198,31 @@ export default function PayForm({
           </>
         )}
       </div>
-      {/* <PayButton quote={quote} />
-      {quote.isError && (
+      <PayButton routeResult={uniswapRoute} />
+      {uniswapRoute.isError && (
         <div className="text-sm text-red-500">
-          {(quote.error as any).message || 'Unknown error'}
+          {(uniswapRoute.error as any).message || 'Unknown error'}
         </div>
-      )} */}
+      )}
     </form>
   );
 }
 
-function PayButton({ quote }: { quote: UseQueryResult<OrderQuoteResponse> }) {
-  if (quote.isFetching) {
+function PayButton({
+  routeResult,
+}: {
+  routeResult: UseQueryResult<UniswapRouteResult>;
+}) {
+  if (routeResult.isFetching) {
     return (
       <Button className="h-fit" disabled>
         <Loader2 className="h-4 w-4 animate-spin duration-1000" />
-        &nbsp; Updating quote
+        &nbsp; Updating routeResult
       </Button>
     );
   } else {
     return (
-      <Button className="h-fit" disabled={!quote.isSuccess}>
+      <Button className="h-fit" disabled={!routeResult.isSuccess}>
         <img
           src="https://www.paypalobjects.com/devdoc/coin-PYUSD.svg"
           height={20}

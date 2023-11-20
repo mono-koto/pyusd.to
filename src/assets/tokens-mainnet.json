@@ -1,5 +1,14 @@
 [
   {
+    "symbol": "ETH",
+    "name": "Ether",
+    "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+    "decimals": 18,
+    "chainId": 1,
+    "logoURI": "/ethereum-eth.svg",
+    "isNative": true
+  },
+  {
     "symbol": "PYUSD",
     "name": "PayPal USD",
     "address": "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8",

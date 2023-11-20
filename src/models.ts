@@ -7,4 +7,5 @@ export interface TokenDetails {
   decimals: number;
   chainId: number;
   logoURI: string;
+  isNative?: boolean;
 }

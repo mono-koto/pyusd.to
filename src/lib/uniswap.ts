@@ -1,7 +1,6 @@
 import {
   AlphaRouter,
   AlphaRouterConfig,
-  IMulticallProvider,
   OnChainQuoteProvider,
   SwapOptionsSwapRouter02,
   SwapRoute,
@@ -12,8 +11,8 @@ import {
   TradeType,
   CurrencyAmount,
   Percent,
-  Token,
   ChainId,
+  Currency,
 } from '@uniswap/sdk-core';
 import { ethers } from 'ethers';
 import { Address } from 'viem';
@@ -38,8 +37,8 @@ type TokenPermit = {
 type RouteOptions = {
   router: AlphaRouter;
   recipient: Address;
-  tokenIn: Token;
-  tokenOut: Token;
+  tokenIn: Currency;
+  tokenOut: Currency;
   amount: bigint;
   tradeType: TradeType;
   inputTokenPermit?: TokenPermit;
