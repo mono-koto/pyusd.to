@@ -16,8 +16,6 @@ export default function PayPage({ recipient }: { recipient: string }) {
   const account = useAccount();
 
   const { initialSellTokenAddress, buyTokenAddress, tokenList } = useConfig();
-  const initialSellToken = useTokenDetails(initialSellTokenAddress);
-  const buyToken = useTokenDetails(buyTokenAddress);
 
   const ens = useEns(recipient);
 
@@ -64,14 +62,12 @@ export default function PayPage({ recipient }: { recipient: string }) {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {initialSellToken.data && buyToken.data && (
-          <PayForm
-            receiver={ens.data.address as Address}
-            from={account.address}
-            buyToken={buyToken.data}
-            initialSellToken={initialSellToken.data}
-          />
-        )}
+        <PayForm
+          receiver={ens.data.address as Address}
+          from={account.address}
+          buyToken={buyTokenAddress}
+          sellToken={initialSellTokenAddress}
+        />
       </CardContent>
     </Card>
   );

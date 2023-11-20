@@ -8,6 +8,7 @@ import {
 } from '@rainbow-me/rainbowkit';
 
 import { alchemyProvider } from '@wagmi/core/providers/alchemy';
+import { infuraProvider } from 'wagmi/providers/infura';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { goerli, mainnet } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
@@ -25,6 +26,9 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     alchemyProvider({
       apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY as string,
+    }),
+    infuraProvider({
+      apiKey: process.env.NEXT_PUBLIC_INFURA_PROJECT_ID as string,
     }),
     publicProvider(),
   ]

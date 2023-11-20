@@ -1,14 +1,17 @@
 import { backupTokenUri } from '@/lib/token';
 import { TokenDetails } from '@/models';
+import { useMemo } from 'react';
 import { Address } from 'viem';
 import { useChainId, useToken } from 'wagmi';
 import useConfig from './useConfig';
-import { useMemo } from 'react';
 
-export function useTokenDetails(address: Address): {
+export interface TokenDetailsResult {
   data: TokenDetails | undefined;
   status: 'success' | 'error' | 'loading' | 'idle';
-} {
+}
+
+/// Consult local token list details before going out to network
+export function useTokenDetails(address?: Address): TokenDetailsResult {
   const chainId = useChainId();
   const tokenList = useConfig().tokenList;
   const tokenMap = useMemo(
@@ -19,7 +22,7 @@ export function useTokenDetails(address: Address): {
     [tokenList]
   );
 
-  const tokenDetails = tokenMap.get(address);
+  const tokenDetails = address && tokenMap.get(address.toLowerCase());
 
   const tokenQuery = useToken({
     address,
@@ -36,7 +39,7 @@ export function useTokenDetails(address: Address): {
       data: {
         ...tokenQuery.data,
         chainId,
-        logoURI: backupTokenUri(address),
+        logoURI: address ? backupTokenUri(address) : '', // TODO: use a placeholder image
       },
       status: 'success',
     };

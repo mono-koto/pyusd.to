@@ -62,8 +62,8 @@ export function useQuote(quoteOptions: QuoteOptions) {
   const quote = useQuery({
     queryKey: queryKey,
     queryFn: async () => {
-      console.log('quoteOptions', quoteOptions);
-      console.log('chain', orderBookApi.context.chainId);
+      // console.log('quoteOptions', quoteOptions);
+      // console.log('chain', orderBookApi.context.chainId);
       const request = orderQuoteRequest(quoteOptions);
       try {
         return await orderBookApi.getQuote(request);
@@ -77,13 +77,13 @@ export function useQuote(quoteOptions: QuoteOptions) {
       }
     },
     staleTime: 1000 * 50,
-    enabled: validQuoteRequest(quoteOptions),
+    enabled: false,
     retry: 0,
   });
 
-  if (quote.isSuccess) {
-    console.log('quote', quote.data);
-  }
+  // if (quote.isSuccess) {
+  //   console.log('quote', quote.data);
+  // }
 
   return quote;
 }

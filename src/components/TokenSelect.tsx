@@ -21,8 +21,12 @@ import {
 } from 'cmdk';
 import { useMemo, useState } from 'react';
 import { CommandList } from './ui/command';
+import { Address, isAddress } from 'viem';
+import { useToken } from 'wagmi';
+import { useTokenDetails } from '@/hooks/useTokenDetails';
 
 interface TokenSelectProps {
+  defaultToken?: Address;
   onChange: (token: TokenDetails) => void;
 }
 
@@ -39,8 +43,15 @@ function TokenDisplay({ token }: { token: TokenDetails | undefined }) {
   }
 }
 
-export function TokenSelect({ onChange }: TokenSelectProps) {
+export function TokenSelect({ defaultToken, onChange }: TokenSelectProps) {
   const tokens = useTokens();
+  const [commandInputValue, setCommandInputValue] = useState('');
+  const [currentToken, setCurrentToken] = useState<Address | undefined>(
+    defaultToken
+  );
+
+  const currentTokenDetails = useTokenDetails(currentToken);
+
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<TokenDetails | undefined>();
 
@@ -52,11 +63,18 @@ export function TokenSelect({ onChange }: TokenSelectProps) {
     }
   };
 
+  const onCommandInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCommandInputValue(e.target.value);
+    if (isAddress(e.target.value)) {
+      setCurrentToken(e.target.value);
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="p h-fit rounded-xl bg-primary">
-          <TokenDisplay token={value} />
+          <TokenDisplay token={currentTokenDetails.data} />
         </Button>
       </DialogTrigger>
       <DialogContent className="">
@@ -71,6 +89,8 @@ export function TokenSelect({ onChange }: TokenSelectProps) {
           <CommandInput
             placeholder="Search tokens..."
             className="h-9 w-full p-2"
+            onChangeCapture={onCommandInputChange}
+            value={commandInputValue}
           />
           <CommandEmpty>No tokens found.</CommandEmpty>
           <CommandList>
@@ -83,6 +103,7 @@ export function TokenSelect({ onChange }: TokenSelectProps) {
                   onSelect={() => {
                     onSelect(token);
                   }}
+                  hidden={false}
                 >
                   <TokenListDisplay token={token} />
                 </CommandItem>

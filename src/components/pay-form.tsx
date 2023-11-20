@@ -12,115 +12,128 @@ import { UseQueryResult } from '@tanstack/react-query';
 import { useDebounce } from '@uidotdev/usehooks';
 import clsx from 'clsx';
 import { Loader2 } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Address, formatUnits, pad, parseUnits } from 'viem';
 import { useBalance } from 'wagmi';
 import { Button } from './ui/button';
 import AddressLink from './AddressLink';
 import { TokenDetails } from '@/models';
+import { RouteParams, useUniswapRoute } from '@/hooks/useUniswap';
+import { produce } from 'immer';
+import { useTokenDetails } from '@/hooks/useTokenDetails';
 
 interface PayFormProps {
-  initialSellToken: TokenDetails;
-  buyToken: TokenDetails;
+  sellToken: Address;
+  buyToken: Address;
   from?: Address;
   receiver: Address;
 }
 
 export default function PayForm({
-  initialSellToken,
+  sellToken,
   buyToken,
   from,
   receiver,
 }: PayFormProps) {
-  const [sellToken, setSellToken] = useState<TokenDetails>(initialSellToken);
-  const [sellAmount, setSellAmount] = useState('');
-  const [buyAmount, setBuyAmount] = useState('');
-
-  const quoteBaseOptions = {
-    sellToken: sellToken.address,
-    buyToken: buyToken.address,
-    from: from || pad('0x0', { size: 20 }),
-    receiver: receiver,
+  const initialRouteParams: RouteParams = {
+    recipient: receiver,
+    tokenIn: sellToken,
+    tokenOut: buyToken,
+    amount: BigInt(0),
+    tradeType: 'EXACT_INPUT',
   };
 
-  const [orderOptions, setOrderOptions] = useState<QuoteOptions>({
-    ...quoteBaseOptions,
-    sellAmountBeforeFee: BigInt(0).toString(),
-    kind: OrderQuoteSideKindSell.SELL,
-  });
+  const [sellAmountInput, setSellAmountInput] = useState('');
+  const [buyAmountInput, setBuyAmountInput] = useState('');
 
-  const debouncedOrderOptions = useDebounce(orderOptions, 1000);
-  const quote = useQuote(debouncedOrderOptions);
+  const [routeParams, setRouteParams] = useState(initialRouteParams);
+  const sellTokenDetails = useTokenDetails(routeParams.tokenIn);
+  const buyTokenDetails = useTokenDetails(routeParams.tokenOut);
 
-  const sellTokenBalance = useBalance({
-    token: sellToken.address,
-    address: from,
+  const debouncedRouteParams = useDebounce(routeParams, 1000);
+
+  const uniswapRoute = useUniswapRoute({
+    ...debouncedRouteParams,
+    enabled: true,
   });
 
   useEffect(() => {
-    if (quote.isError) {
-      if (quote.data?.quote.kind === (OrderQuoteSideKindBuy.BUY as string)) {
-        setSellAmount('');
-      } else {
-        setBuyAmount('');
-      }
+    if (!uniswapRoute.data) {
+      return;
     }
-
-    if (!quote.isSuccess) return;
-
-    if (quote.data.quote.kind === (OrderQuoteSideKindBuy.BUY as string)) {
-      const sellAmount = Number(
-        formatUnits(
-          BigInt(quote.data?.quote.sellAmount || ''),
-          sellToken.decimals
-        )
-      ).toFixed(sellToken.decimals < 8 ? 2 : 4);
-      setSellAmount(sellAmount);
+    if (uniswapRoute.data?.tradeType === 'EXACT_INPUT') {
+      setBuyAmountInput(uniswapRoute.data.amountOut);
     } else {
-      const buyAmount = Number(
-        formatUnits(
-          BigInt(quote.data?.quote.buyAmount || ''),
-          buyToken.decimals
-        )
-      ).toFixed(buyToken.decimals < 8 ? 2 : 4);
-      setBuyAmount(buyAmount);
+      setSellAmountInput(uniswapRoute.data.amountIn);
     }
-  }, [quote, sellToken, buyToken]);
+  }, [uniswapRoute.data]);
 
-  const onSellAmountChange = useCallback(
+  const sellTokenDecimals = sellTokenDetails.data?.decimals;
+  const onSellAmountInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSellAmount(e.target.value);
-      const sellAmount = parseUnits(e.target.value, sellToken.decimals);
-      setOrderOptions({
-        ...quoteBaseOptions,
-        sellAmountBeforeFee: sellAmount.toString(),
-        kind: OrderQuoteSideKindSell.SELL,
-      });
+      setSellAmountInput(e.target.value);
+      setRouteParams(
+        produce((draft: RouteParams) => {
+          if (sellTokenDecimals === undefined) {
+            return;
+          }
+          draft.amount = parseUnits(e.target.value, sellTokenDecimals);
+          draft.tradeType = 'EXACT_INPUT';
+        })
+      );
     },
-    [quoteBaseOptions, sellToken.decimals]
+    [sellTokenDecimals]
   );
 
-  const onBuyAmountChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setBuyAmount(e.target.value);
-      const buyAmount = parseUnits(e.target.value, buyToken.decimals);
-      setOrderOptions({
-        ...quoteBaseOptions,
-        buyAmountAfterFee: buyAmount.toString(),
-        kind: OrderQuoteSideKindBuy.BUY,
-      });
+  const formatSellAmountInput = useCallback(
+    (amount: bigint) => {
+      if (sellTokenDecimals === undefined) {
+        return '';
+      }
+      return formatUnits(amount, sellTokenDecimals);
     },
-    [quoteBaseOptions, buyToken.decimals]
+    [sellTokenDecimals]
+  );
+
+  const buyTokenDecimals = buyTokenDetails.data?.decimals;
+  const onBuyAmountInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setBuyAmountInput(e.target.value);
+      setRouteParams(
+        produce((draft: RouteParams) => {
+          if (buyTokenDecimals === undefined) {
+            return;
+          }
+          draft.amount = parseUnits(e.target.value, buyTokenDecimals);
+          draft.tradeType = 'EXACT_OUTPUT';
+        })
+      );
+    },
+    [buyTokenDecimals]
+  );
+
+  const formatBuyAmountInput = useCallback(
+    (amount: bigint) => {
+      if (buyTokenDecimals === undefined) {
+        return '';
+      }
+      return formatUnits(amount, buyTokenDecimals);
+    },
+    [buyTokenDecimals]
   );
 
   const handleTokenChange = useCallback((token: TokenDetails) => {
-    setOrderOptions({
-      ...quoteBaseOptions,
-      kind: OrderQuoteSideKindBuy.BUY,
-      buyAmountAfterFee: parseUnits(buyAmount, buyToken.decimals).toString(),
-    });
-    setSellToken(token);
+    setRouteParams(
+      produce((draft: RouteParams) => {
+        draft.tokenIn = token.address;
+      })
+    );
   }, []);
+
+  const sellTokenBalance = useBalance({
+    token: debouncedRouteParams.tokenIn,
+    address: from,
+  });
 
   return (
     <form className="flex flex-col gap-4">
@@ -129,11 +142,11 @@ export default function PayForm({
         <div className="flex flex-row justify-stretch">
           <input
             placeholder="0.0"
-            value={sellAmount.toString()}
-            onChange={onSellAmountChange}
+            value={sellAmountInput}
+            onChange={onSellAmountInputChange}
             className="h-12 w-full border-none bg-transparent text-4xl focus:outline-none focus:ring-0 "
           />
-          <TokenSelect onChange={handleTokenChange} />
+          <TokenSelect onChange={handleTokenChange} defaultToken={sellToken} />
         </div>
         <div className="text-right text-sm">
           <span className="text-gray-500">
@@ -150,13 +163,13 @@ export default function PayForm({
 
             <input
               placeholder="0.0"
-              value={buyAmount}
-              onChange={onBuyAmountChange}
+              value={buyAmountInput}
+              onChange={onBuyAmountInputChange}
               className="h-12 w-full border-none bg-transparent text-4xl focus:outline-none focus:ring-0"
             />
           </div>
           <img
-            src={buyToken.logoURI}
+            src={buyTokenDetails.data?.logoURI}
             height={50}
             width={50}
             className="flex-0"
@@ -166,23 +179,27 @@ export default function PayForm({
       <div
         className={clsx(
           'flex flex-row items-center gap-2 text-sm opacity-0 transition-opacity duration-200',
-          quote.data && 'opacity-100'
+          uniswapRoute.data && 'opacity-100'
         )}
       >
-        Fee:{' '}
-        {Number(
-          formatUnits(
-            BigInt(quote.data?.quote.feeAmount || '0'),
-            sellToken.decimals
-          )
-        ).toFixed(sellToken.decimals)}
+        {uniswapRoute.data && (
+          <>
+            Gas Price: {formatUnits(uniswapRoute.data.gasPriceWei, 9)} gwei
+            <br />
+            Quote: {uniswapRoute.data.quoteGasAdjusted}
+            <br />
+            Input Tax: {uniswapRoute.data?.inputTax}
+            <br />
+            Input Tax: {uniswapRoute.data?.quoteGasAndPortionAdjusted}
+          </>
+        )}
       </div>
-      <PayButton quote={quote} />
+      {/* <PayButton quote={quote} />
       {quote.isError && (
         <div className="text-sm text-red-500">
           {(quote.error as any).message || 'Unknown error'}
         </div>
-      )}
+      )} */}
     </form>
   );
 }
