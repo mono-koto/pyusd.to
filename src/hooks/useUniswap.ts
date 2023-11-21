@@ -15,7 +15,7 @@ import { generateRoute, onChainQuoteProvider } from '@/lib/uniswap';
 import { getEthersProvider, walletClientToSigner } from '@/lib/viemEthers';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import { createWalletClient, custom } from 'viem';
+import { createWalletClient, custom, formatUnits } from 'viem';
 import { useTokenDetails } from './useTokenDetails';
 import { TokenDetails } from '@/models';
 
@@ -32,20 +32,23 @@ export interface UniswapRouteParams {
 }
 
 export interface UniswapRouteResult {
-  tradeType: 'EXACT_INPUT' | 'EXACT_OUTPUT';
-  methodParameters: {
-    calldata: string;
-    value: string;
-    to: string;
-  };
-  tokenInDetails: TokenDetails;
-  tokenOutDetails: TokenDetails;
   amountIn: string;
   amountOut: string;
+  estimatedGasUsed: bigint;
+  estimatedGasUsedQuoteToken: string;
+  estimatedGasUsedUSD: string;
+  gasPriceWei: bigint;
   inputTax: string;
+  methodParameters: {
+    calldata: string;
+    to: string;
+    value: string;
+  };
   quoteGasAdjusted: string;
   quoteGasAndPortionAdjusted: string | undefined;
-  gasPriceWei: bigint;
+  tokenInDetails: TokenDetails;
+  tokenOutDetails: TokenDetails;
+  tradeType: 'EXACT_INPUT' | 'EXACT_OUTPUT';
 }
 
 function uniswapToken(tokenDetails: TokenDetails) {
@@ -168,6 +171,11 @@ export function useUniswapRoute({
           quoteGasAndPortionAdjusted:
             route.quoteGasAndPortionAdjusted?.toExact(),
           gasPriceWei: route.gasPriceWei.toBigInt(),
+          estimatedGasUsed: route.estimatedGasUsed.toBigInt(),
+
+          estimatedGasUsedQuoteToken:
+            route?.estimatedGasUsedQuoteToken?.toExact(),
+          estimatedGasUsedUSD: route?.estimatedGasUsedUSD?.toExact(),
         };
       } else {
         throw new Error('Missing router or token data');

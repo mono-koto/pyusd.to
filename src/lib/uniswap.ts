@@ -77,30 +77,13 @@ export async function generateRoute({
       topNWithEachBaseToken: 1,
       topNWithBaseToken: 1,
     },
-    maxSwapsPerPath: 2,
+    maxSwapsPerPath: 3,
     maxSplits: 1,
     distributionPercent: 100,
-    writeToCachedRoutes: true,
-    useCachedRoutes: true, // TODO no route caching provider yet
-    optimisticCachedRoutes: true,
-
+    writeToCachedRoutes: false,
+    useCachedRoutes: false, // TODO no route caching provider yet
+    optimisticCachedRoutes: false,
     protocols: [Protocol.V3],
-    // maxSplits: 3,
-    // maxSwapsPerPath: 1,
-    // debugRouting: true,
-    // forceMixedRoutes: false,
-    // useCachedRoutes: true,
-    // v3PoolSelection: {
-    //   topN: 2,
-    //   topNDirectSwaps: 2,
-    //   topNTokenInOut: 3,
-    //   topNSecondHop: 1,
-    //   // topNSecondHopForTokenAddress: new MapWithLowerCaseKey<number>([
-    //   //   ['0x5f98805a4e8be255a32880fdec7f6728c6568ba0', 2], // LUSD
-    //   // ]),
-    //   topNWithEachBaseToken: 3,
-    //   topNWithBaseToken: 5,
-    // },
   };
 
   if (tradeType === TradeType.EXACT_INPUT) {

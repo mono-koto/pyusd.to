@@ -20,7 +20,7 @@ import {
   CommandItem,
 } from 'cmdk';
 import { useMemo, useState } from 'react';
-import { CommandList } from './ui/command';
+import { CommandList } from '../ui/command';
 import { Address, isAddress } from 'viem';
 import { useToken } from 'wagmi';
 import { useTokenDetails } from '@/hooks/useTokenDetails';
@@ -58,6 +58,7 @@ export function TokenSelect({ defaultToken, onChange }: TokenSelectProps) {
   const onSelect = (token: TokenDetails) => {
     setOpen(false);
     setValue(token);
+    setCurrentToken(token.address);
     if (token !== value) {
       onChange(token);
     }
@@ -122,7 +123,11 @@ function TokenListDisplay({ token }: { token: TokenDetails }) {
       <img src={token.logoURI} className="h-6 w-6" />
       <div>
         <div>{token.symbol}</div>
-        <div className="text-sm">{token.address}</div>
+        {token.isNative ? (
+          <div className="text-sm">Native currency</div>
+        ) : (
+          <div className="text-sm">{token.address}</div>
+        )}
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 
 import BlockscannerLink from '@/components/BlockscannerLink';
 import EnsAvatar from '@/components/EnsAvatar';
-import PayForm from '@/components/pay-form';
+import PayForm from '@/components/pay/pay-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import useConfig from '@/hooks/useConfig';
 import { useEns } from '@/hooks/useEns';

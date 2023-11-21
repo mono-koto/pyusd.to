@@ -1,6 +1,6 @@
 'use client';
 
-import { TokenSelect } from '@/components/TokenSelect';
+import { TokenSelect } from '@/components/pay/TokenSelect';
 import { QuoteOptions, useQuote } from '@/hooks/useCowswap';
 import {
   OrderQuoteResponse,
@@ -13,18 +13,21 @@ import { useDebounce } from '@uidotdev/usehooks';
 import clsx from 'clsx';
 import { Loader2 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Address, formatUnits, pad, parseUnits } from 'viem';
+import { Address, formatEther, formatUnits, pad, parseUnits } from 'viem';
 import { useBalance } from 'wagmi';
-import { Button } from './ui/button';
-import AddressLink from './AddressLink';
+import { Button } from '../ui/button';
+import AddressLink from '../AddressLink';
 import { TokenDetails } from '@/models';
 import {
-  RouteParams,
+  UniswapRouteParams,
   UniswapRouteResult,
   useUniswapRoute,
 } from '@/hooks/useUniswap';
 import { produce } from 'immer';
 import { useTokenDetails } from '@/hooks/useTokenDetails';
+import { reformatTokenAmount } from '@/lib/format';
+import { Skeleton } from '../ui/skeleton';
+import { GasFeeDisplay } from './gas-fee-display';
 
 interface PayFormProps {
   sellToken: Address;
@@ -39,7 +42,7 @@ export default function PayForm({
   from,
   receiver,
 }: PayFormProps) {
-  const initialRouteParams: RouteParams = {
+  const initialRouteParams: UniswapRouteParams = {
     recipient: receiver,
     tokenIn: sellToken,
     tokenOut: buyToken,
@@ -61,23 +64,12 @@ export default function PayForm({
     enabled: true,
   });
 
-  useEffect(() => {
-    if (!uniswapRoute.data) {
-      return;
-    }
-    if (uniswapRoute.data?.tradeType === 'EXACT_INPUT') {
-      setBuyAmountInput(uniswapRoute.data.amountOut);
-    } else {
-      setSellAmountInput(uniswapRoute.data.amountIn);
-    }
-  }, [uniswapRoute.data]);
-
   const sellTokenDecimals = sellTokenDetails.data?.decimals;
   const onSellAmountInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setSellAmountInput(e.target.value);
       setRouteParams(
-        produce((draft: RouteParams) => {
+        produce((draft: UniswapRouteParams) => {
           if (sellTokenDecimals === undefined) {
             return;
           }
@@ -103,12 +95,22 @@ export default function PayForm({
   const onBuyAmountInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setBuyAmountInput(e.target.value);
+      if (buyTokenDecimals === undefined) {
+        return;
+      }
+      const normalizedValue = e.target.value.trim();
+      console.log('normalizedValue', normalizedValue);
+      let amount: bigint;
+      try {
+        amount = parseUnits(normalizedValue, buyTokenDecimals);
+      } catch (e) {
+        console.error('parseUnits error', e);
+        amount = BigInt(0);
+        return;
+      }
       setRouteParams(
-        produce((draft: RouteParams) => {
-          if (buyTokenDecimals === undefined) {
-            return;
-          }
-          draft.amount = parseUnits(e.target.value, buyTokenDecimals);
+        produce((draft: UniswapRouteParams) => {
+          draft.amount = amount;
           draft.tradeType = 'EXACT_OUTPUT';
         })
       );
@@ -116,19 +118,28 @@ export default function PayForm({
     [buyTokenDecimals]
   );
 
-  const formatBuyAmountInput = useCallback(
-    (amount: bigint) => {
-      if (buyTokenDecimals === undefined) {
-        return '';
+  useEffect(() => {
+    if (!uniswapRoute.data) {
+      return;
+    }
+    if (uniswapRoute.data?.tradeType === 'EXACT_INPUT') {
+      if (buyTokenDecimals !== undefined) {
+        setBuyAmountInput(
+          reformatTokenAmount(uniswapRoute.data.amountOut, buyTokenDecimals)
+        );
       }
-      return formatUnits(amount, buyTokenDecimals);
-    },
-    [buyTokenDecimals]
-  );
+    } else {
+      if (sellTokenDecimals !== undefined) {
+        setSellAmountInput(
+          reformatTokenAmount(uniswapRoute.data.amountIn, sellTokenDecimals)
+        );
+      }
+    }
+  }, [uniswapRoute.data, buyTokenDecimals, sellTokenDecimals]);
 
   const handleTokenChange = useCallback((token: TokenDetails) => {
     setRouteParams(
-      produce((draft: RouteParams) => {
+      produce((draft: UniswapRouteParams) => {
         draft.tokenIn = token.address;
       })
     );
@@ -143,16 +154,22 @@ export default function PayForm({
     <form className="flex flex-col gap-4">
       <div className="border-gray flex flex-col rounded-xl border p-2">
         <Label className="text-sm">You pay</Label>
-        <div className="flex flex-row justify-stretch">
+        <div className="flex flex-row justify-stretch gap-2">
           <input
             placeholder="0.0"
             value={sellAmountInput}
             onChange={onSellAmountInputChange}
-            className="h-12 w-full border-none bg-transparent text-4xl focus:outline-none focus:ring-0 "
+            type="number"
+            className="h-12 w-full border-none bg-transparent text-4xl focus:outline-none focus:ring-0"
           />
           <TokenSelect onChange={handleTokenChange} defaultToken={sellToken} />
         </div>
-        <div className="text-right text-sm">
+        <div className="flex flex-row justify-between gap-2 text-xs">
+          <GasFeeDisplay
+            isLoading={uniswapRoute.isFetching}
+            gasAmount={uniswapRoute.data?.estimatedGasUsed}
+            gasPrice={uniswapRoute.data?.gasPriceWei}
+          />
           <span className="text-gray-500">
             Your balance: {sellTokenBalance.data?.formatted}
           </span>
@@ -179,24 +196,6 @@ export default function PayForm({
             className="flex-0"
           />
         </div>
-      </div>
-      <div
-        className={clsx(
-          'flex flex-row items-center gap-2 text-sm opacity-0 transition-opacity duration-200',
-          uniswapRoute.data && 'opacity-100'
-        )}
-      >
-        {uniswapRoute.data && (
-          <>
-            Gas Price: {formatUnits(uniswapRoute.data.gasPriceWei, 9)} gwei
-            <br />
-            Quote: {uniswapRoute.data.quoteGasAdjusted}
-            <br />
-            Input Tax: {uniswapRoute.data?.inputTax}
-            <br />
-            Input Tax: {uniswapRoute.data?.quoteGasAndPortionAdjusted}
-          </>
-        )}
       </div>
       <PayButton routeResult={uniswapRoute} />
       {uniswapRoute.isError && (
