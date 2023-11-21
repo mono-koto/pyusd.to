@@ -1,32 +1,24 @@
 'use client';
 
 import { TokenSelect } from '@/components/pay/TokenSelect';
-import { QuoteOptions, useQuote } from '@/hooks/useCowswap';
-import {
-  OrderQuoteResponse,
-  OrderQuoteSideKindBuy,
-  OrderQuoteSideKindSell,
-} from '@cowprotocol/cow-sdk';
-import { Label } from '@radix-ui/react-label';
-import { UseQueryResult } from '@tanstack/react-query';
-import { useDebounce } from '@uidotdev/usehooks';
-import clsx from 'clsx';
-import { Loader2 } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Address, formatEther, formatUnits, pad, parseUnits } from 'viem';
-import { useBalance } from 'wagmi';
-import { Button } from '../ui/button';
-import AddressLink from '../AddressLink';
-import { TokenDetails } from '@/models';
+import { useTokenDetails } from '@/hooks/useTokenDetails';
 import {
   UniswapRouteParams,
   UniswapRouteResult,
   useUniswapRoute,
 } from '@/hooks/useUniswap';
-import { produce } from 'immer';
-import { useTokenDetails } from '@/hooks/useTokenDetails';
 import { reformatTokenAmount } from '@/lib/format';
-import { Skeleton } from '../ui/skeleton';
+import { TokenDetails } from '@/models';
+import { Label } from '@radix-ui/react-label';
+import { UseQueryResult } from '@tanstack/react-query';
+import { useDebounce } from '@uidotdev/usehooks';
+import { produce } from 'immer';
+import { Loader2 } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+import { Address, parseUnits } from 'viem';
+import { useBalance } from 'wagmi';
+import AddressLink from '../AddressLink';
+import { Button } from '../ui/button';
 import { GasFeeDisplay } from './gas-fee-display';
 
 interface PayFormProps {
