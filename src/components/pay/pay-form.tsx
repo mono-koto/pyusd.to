@@ -148,7 +148,7 @@ export default function PayForm({
   return (
     <form className="flex flex-col gap-4">
       <div className="border-gray flex flex-col rounded-xl border p-2">
-        <Label className="text-sm">You pay</Label>
+        <Label className="text-sm">You send</Label>
         <div className="flex flex-row justify-stretch gap-2">
           <input
             placeholder="0.0"
