@@ -65,28 +65,27 @@ export default function PayForm({
   });
 
   const sellTokenDecimals = sellTokenDetails.data?.decimals;
+
   const onSellAmountInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setSellAmountInput(e.target.value);
+      if (sellTokenDecimals === undefined) {
+        return;
+      }
+      let amount: bigint;
+      try {
+        amount = parseUnits(e.target.value, sellTokenDecimals);
+      } catch (e) {
+        console.error('parseUnits error', e);
+        amount = BigInt(0);
+        return;
+      }
       setRouteParams(
         produce((draft: UniswapRouteParams) => {
-          if (sellTokenDecimals === undefined) {
-            return;
-          }
-          draft.amount = parseUnits(e.target.value, sellTokenDecimals);
+          draft.amount = amount;
           draft.tradeType = 'EXACT_INPUT';
         })
       );
-    },
-    [sellTokenDecimals]
-  );
-
-  const formatSellAmountInput = useCallback(
-    (amount: bigint) => {
-      if (sellTokenDecimals === undefined) {
-        return '';
-      }
-      return formatUnits(amount, sellTokenDecimals);
     },
     [sellTokenDecimals]
   );
@@ -98,11 +97,9 @@ export default function PayForm({
       if (buyTokenDecimals === undefined) {
         return;
       }
-      const normalizedValue = e.target.value.trim();
-      console.log('normalizedValue', normalizedValue);
       let amount: bigint;
       try {
-        amount = parseUnits(normalizedValue, buyTokenDecimals);
+        amount = parseUnits(e.target.value, buyTokenDecimals);
       } catch (e) {
         console.error('parseUnits error', e);
         amount = BigInt(0);
@@ -150,6 +147,12 @@ export default function PayForm({
     address: from,
   });
 
+  const sellTokenInputDisabled =
+    uniswapRoute.isFetching &&
+    debouncedRouteParams.tradeType === 'EXACT_OUTPUT';
+  const buyTokenInputDisabled =
+    uniswapRoute.isFetching && debouncedRouteParams.tradeType === 'EXACT_INPUT';
+
   return (
     <form className="flex flex-col gap-4">
       <div className="border-gray flex flex-col rounded-xl border p-2">
@@ -161,6 +164,7 @@ export default function PayForm({
             onChange={onSellAmountInputChange}
             type="number"
             className="h-12 w-full border-none bg-transparent text-4xl focus:outline-none focus:ring-0"
+            disabled={sellTokenInputDisabled}
           />
           <TokenSelect onChange={handleTokenChange} defaultToken={sellToken} />
         </div>
@@ -184,9 +188,11 @@ export default function PayForm({
 
             <input
               placeholder="0.0"
+              type="number"
               value={buyAmountInput}
               onChange={onBuyAmountInputChange}
               className="h-12 w-full border-none bg-transparent text-4xl focus:outline-none focus:ring-0"
+              disabled={buyTokenInputDisabled}
             />
           </div>
           <img
