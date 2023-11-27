@@ -30,6 +30,7 @@ describe('NicknameRepository', () => {
       id: 1,
       value: 'test',
       address_id: 1,
+      address: '0x1234567812345678123456781234567812345678',
       created_at: expect.any(Date),
     });
   });

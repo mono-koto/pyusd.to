@@ -7,6 +7,8 @@ import { Inter as FontSans } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import Providers from '@/components/providers';
 import MainLayout from '@/components/layout-wrapper';
+import { Suspense } from 'react';
+import SuspenseFallback from '@/components/SuspenseFallback';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -33,7 +35,9 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          <MainLayout>{children}</MainLayout>
+          <MainLayout>
+            <Suspense fallback={<SuspenseFallback />}>{children}</Suspense>
+          </MainLayout>
         </Providers>
       </body>
     </html>

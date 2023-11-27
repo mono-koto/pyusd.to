@@ -4,10 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build:dev": "npm run db:migrate && next build",
+    "build": "npm run db:migrate:prod && next build",
     "start": "next start",
     "test": "vitest",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:migrate": "tsx ./src/app/_db/migrate.ts latest",
+    "db:migrate:prod": "NODE_ENV=production tsx ./src/app/_db/migrate.ts latest",
+    "db:reset": "tsx ./src/app/_db/migrate.ts down-to NO_MIGRATIONS"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.0.4",
@@ -34,6 +38,7 @@
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
     "decimal.js": "^10.4.3",
+    "emoji-regex": "^10.3.0",
     "ethers": "^5.7.2",
     "immer": "^10.0.3",
     "kysely": "^0.26.3",
@@ -48,21 +53,24 @@
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
     "viem": "^1.19.3",
-    "wagmi": "^1.4.7"
+    "wagmi": "^1.4.7",
+    "zod": "^3.22.4",
+    "zod-validation-error": "^2.1.0"
   },
   "peerDependencies": {
     "pino-pretty": "^10.2.3"
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "^18.2.36",
+    "@types/react-dom": "^18.2.13",
     "@vitejs/plugin-react": "^4.2.0",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.0.2",
     "eslint-config-prettier": "^9.0.0",
     "jsdom": "^22.1.0",
+    "node-mocks-http": "^1.13.0",
     "postcss": "^8",
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.7",

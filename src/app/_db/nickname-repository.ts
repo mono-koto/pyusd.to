@@ -1,19 +1,30 @@
 import { createOrFindAddress } from './address-repository';
+import { jsonObjectFrom } from 'kysely/helpers/postgres';
 import { db } from './db';
 
-export async function findNicknameById(id: number) {
-  return await db
+function findNickNameBuilder() {
+  return db
     .selectFrom('nickname')
-    .where('id', '=', id)
-    .selectAll()
-    .executeTakeFirst();
+    .select((eb) => [
+      'id',
+      'value',
+      'created_at',
+      jsonObjectFrom(
+        eb
+          .selectFrom('address')
+          .select(['address.value', 'address.created_at'])
+          .whereRef('nickname.address_id', '=', 'address.id')
+      ).as('address'),
+    ]);
+}
+
+export async function findNicknameById(id: number) {
+  return findNickNameBuilder().where('id', '=', id).executeTakeFirst();
 }
 
 export async function findNickname(value: string) {
-  return await db
-    .selectFrom('nickname')
-    .where('value', '=', value)
-    .selectAll()
+  return await findNickNameBuilder()
+    .where('nickname.value', '=', value)
     .executeTakeFirst();
 }
 
@@ -29,7 +40,7 @@ export async function findNicknamesByAddress(addressValue: string) {
   return await db
     .selectFrom('nickname')
     .innerJoin('address', 'address.id', 'nickname.address_id')
-    .where('address.value', '=', addressValue)
+    .where('address.value', 'ilike', addressValue)
     .selectAll('nickname')
     .limit(100)
     .orderBy('nickname.created_at', 'desc')

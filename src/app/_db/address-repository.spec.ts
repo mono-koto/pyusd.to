@@ -16,10 +16,6 @@ describe('AddressRepository', () => {
     await migrator.migrateTo(NO_MIGRATIONS);
   });
 
-  it('foo', () => {
-    expect(true).toBe(true);
-  });
-
   it('should create an address with a given value', async () => {
     const createdAddress = await AddressRepository.createAddress(
       '0x1234567812345678123456781234567812345678'

@@ -23,5 +23,17 @@ function createDevKysely() {
 
 export const db =
   process.env.NODE_ENV === 'production'
-    ? createKysely<Database>()
+    ? createKysely<Database>({
+        connectionString: process.env.POSTGRES_URL,
+      })
     : createDevKysely();
+
+// hack to help vercel postgres not worry about transacitonal migrations:
+// https://github.com/vercel/storage/issues/325
+if (process.env.NODE_ENV === 'production') {
+  Object.defineProperty(
+    db.getExecutor().adapter,
+    'supportsTransactionalDdl',
+    () => false
+  );
+}
