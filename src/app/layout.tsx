@@ -6,7 +6,7 @@ import { Inter as FontSans } from 'next/font/google';
 
 import { cn } from '@/lib/utils';
 import Providers from '@/components/providers';
-import MainLayout from '@/components/layout-wrapper';
+import LayoutWrapper from '@/components/layout-wrapper';
 import { Suspense } from 'react';
 import SuspenseFallback from '@/components/SuspenseFallback';
 
@@ -35,9 +35,9 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          <MainLayout>
+          <LayoutWrapper>
             <Suspense fallback={<SuspenseFallback />}>{children}</Suspense>
-          </MainLayout>
+          </LayoutWrapper>
         </Providers>
       </body>
     </html>

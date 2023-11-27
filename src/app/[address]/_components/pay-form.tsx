@@ -1,6 +1,6 @@
 'use client';
 
-import { TokenSelect } from '@/components/pay/TokenSelect';
+import { TokenSelect } from '@/app/[address]/_components/token-select';
 import { useTokenDetails } from '@/hooks/useTokenDetails';
 import {
   UniswapRouteParams,
@@ -13,12 +13,12 @@ import { Label } from '@radix-ui/react-label';
 import { UseQueryResult } from '@tanstack/react-query';
 import { useDebounce } from '@uidotdev/usehooks';
 import { produce } from 'immer';
-import { Loader2 } from 'lucide-react';
+import { LuLoader2 } from 'react-icons/lu';
 import { useCallback, useEffect, useState } from 'react';
 import { Address, parseUnits } from 'viem';
 import { useBalance } from 'wagmi';
-import AddressLink from '../AddressLink';
-import { Button } from '../ui/button';
+import AddressLink from '../../../components/AddressLink';
+import { Button } from '../../../components/ui/button';
 import { GasFeeDisplay } from './gas-fee-display';
 
 interface PayFormProps {
@@ -213,7 +213,7 @@ function PayButton({
   if (routeResult.isFetching) {
     return (
       <Button className="h-fit" disabled>
-        <Loader2 className="h-4 w-4 animate-spin duration-1000" />
+        <LuLoader2 className="h-4 w-4 animate-spin duration-1000" />
         &nbsp; Updating routeResult
       </Button>
     );

@@ -20,7 +20,7 @@ import {
   CommandItem,
 } from 'cmdk';
 import { useMemo, useState } from 'react';
-import { CommandList } from '../ui/command';
+import { CommandList } from '../../../components/ui/command';
 import { Address, isAddress } from 'viem';
 import { useToken } from 'wagmi';
 import { useTokenDetails } from '@/hooks/useTokenDetails';

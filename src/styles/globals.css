@@ -75,3 +75,14 @@ input[type='number'] {
   -moz-appearance: textfield; /* Firefox */
   appearance: textfield; /* Safari and Chrome */
 }
+
+.pulse-stroke {
+  stroke-width: 7px;
+  animation: 0.5s infinite alternate ease-in pulse-stroke;
+}
+
+@keyframes pulse-stroke {
+  to {
+    stroke-width: 13px;
+  }
+}

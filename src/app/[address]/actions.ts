@@ -1,20 +1,20 @@
 'use server';
-import { z } from 'zod';
-import { fromZodError, errorMap } from 'zod-validation-error';
 
-import { emojiPattern } from '../api/nicknames/emoji-regex-string';
-import { getAddress, isAddress } from 'viem';
+import { z } from 'zod';
+import { errorMap, fromZodError } from 'zod-validation-error';
+
+import { isAddress } from 'viem';
+import { emojiPattern } from './_components/emoji-regex-string';
 
 import {
-  findNickname,
   addNickname,
+  findNickname,
   findNicknamesByAddress,
 } from '@/app/_db/nickname-repository';
 import { revalidatePath } from 'next/cache';
 
 const nicknamePattern = `^([a-zA-Z0-9_-]|${emojiPattern}|(?:\\p{L}))*$`;
 const nicknameRegExp = new RegExp(nicknamePattern, 'u');
-console.log(nicknameRegExp.test('☠️'));
 
 const NicknameRequest = z.object({
   address: z
@@ -45,11 +45,6 @@ export async function submitNickname(
   prevState: SubmitNicknameState,
   formData: FormData
 ): Promise<SubmitNicknameState> {
-  console.log(
-    'submitNickname',
-    formData.get('address'),
-    formData.get('nickname')
-  );
   const address = formData.get('address');
   const nickname = formData.get('nickname');
 
@@ -59,8 +54,6 @@ export async function submitNickname(
   });
   if (!r.success) {
     const validationError = fromZodError(r.error);
-    console.log(fromZodError(r.error));
-    revalidatePath('/');
     return {
       status: 'error',
       message: validationError.message,
@@ -74,7 +67,6 @@ export async function submitNickname(
       message: 'Nickname added!',
     };
   } catch (error) {
-    revalidatePath('/');
     return {
       status: 'error',
       message: (error as any).message,

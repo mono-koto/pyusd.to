@@ -1,7 +1,7 @@
 'use server';
 
 import React from 'react';
-import { getNicknamesByAddress } from './actions';
+import { getNicknamesByAddress } from '../actions';
 
 export default async function NicknameList() {
   const nicknames = await getNicknamesByAddress(

@@ -1,17 +1,16 @@
 'use client';
 
-import { Form } from '@/components/ui/form';
-import { SubmitNicknameState, submitNickname } from './actions';
+import { SubmitNicknameState, submitNickname } from '../actions';
 
-import { useFormState } from 'react-dom';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useFormState } from 'react-dom';
 
 const initialState: SubmitNicknameState = {
   status: 'idle',
 };
 
-export default async function NicknameForm() {
+export default function NicknameForm() {
   const [state, formAction] = useFormState(submitNickname, initialState);
 
   return (

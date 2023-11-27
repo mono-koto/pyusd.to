@@ -38,7 +38,8 @@ export async function createOrFindAddress(address: string) {
         'duplicate key value violates unique constraint "address_value_key"'
     ) {
       return (await findAddress(address)) as Address;
+    } else {
+      throw error;
     }
-    throw error;
   }
 }

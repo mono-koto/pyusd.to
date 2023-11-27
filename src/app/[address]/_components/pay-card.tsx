@@ -2,12 +2,12 @@
 
 import BlockscannerLink from '@/components/BlockscannerLink';
 import EnsAvatar from '@/components/EnsAvatar';
-import PayForm from '@/components/pay/pay-form';
+import PayForm from '@/app/[address]/_components/pay-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import useConfig from '@/hooks/useConfig';
 import { useEns } from '@/hooks/useEns';
 import { useTokenDetails } from '@/hooks/useTokenDetails';
-import { CookieIcon, Loader2 } from 'lucide-react';
+import { LuCookie, LuLoader2 } from 'react-icons/lu';
 import { useEffect } from 'react';
 import { Address } from 'viem';
 import { useAccount, useChainId } from 'wagmi';
@@ -22,7 +22,7 @@ export default function PayPage({ recipient }: { recipient: string }) {
   if (ens.data.name && ens.isLoading) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 opacity-70">
-        <Loader2 className="h-12 w-12 animate-spin" />
+        <LuLoader2 className="h-12 w-12 animate-spin" />
         Reticulating splines for {recipient}...
       </div>
     );
@@ -31,7 +31,7 @@ export default function PayPage({ recipient }: { recipient: string }) {
   if (ens.isFetched && ens.data.name && !ens.data.address) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 opacity-70">
-        <CookieIcon className="h-12 w-12" />
+        <LuCookie className="h-12 w-12" />
         Unabled to find address for {recipient}...
       </div>
     );

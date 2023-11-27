@@ -2,47 +2,47 @@ import { createOrFindAddress } from './address-repository';
 import { jsonObjectFrom } from 'kysely/helpers/postgres';
 import { db } from './db';
 
-function findNickNameBuilder() {
-  return db
+export async function findNickname(value: string) {
+  return await db
     .selectFrom('nickname')
     .select((eb) => [
       'id',
       'value',
       'created_at',
+      'address_id',
       jsonObjectFrom(
         eb
           .selectFrom('address')
           .select(['address.value', 'address.created_at'])
           .whereRef('nickname.address_id', '=', 'address.id')
       ).as('address'),
-    ]);
-}
-
-export async function findNicknameById(id: number) {
-  return findNickNameBuilder().where('id', '=', id).executeTakeFirst();
-}
-
-export async function findNickname(value: string) {
-  return await findNickNameBuilder()
+    ])
     .where('nickname.value', '=', value)
     .executeTakeFirst();
 }
 
-export async function findNicknamesByAddressId(addressId: number) {
-  return await db
-    .selectFrom('nickname')
-    .where('address_id', '=', addressId)
-    .selectAll()
-    .execute();
+interface PaginationOptions {
+  offset: number;
+  limit: number;
 }
 
-export async function findNicknamesByAddress(addressValue: string) {
+export async function findNicknamesByAddress(
+  addressValue: string,
+  paginationOptions: Partial<PaginationOptions> = {}
+) {
+  const pagination = {
+    offset: 0,
+    limit: 100,
+    ...paginationOptions,
+  };
+
   return await db
     .selectFrom('nickname')
     .innerJoin('address', 'address.id', 'nickname.address_id')
     .where('address.value', 'ilike', addressValue)
     .selectAll('nickname')
-    .limit(100)
+    .offset(pagination.offset)
+    .limit(pagination.limit)
     .orderBy('nickname.created_at', 'desc')
     .execute();
 }

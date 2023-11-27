@@ -1,7 +1,9 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { ThemeToggle } from './ThemeToggle';
+import { ThemeToggle } from './theme-toggle';
+import { ShareButton } from './share-button';
+import Logo from './Logo';
 
-export default function MainLayout({
+export default function LayoutWrapper({
   children,
 }: {
   children: React.ReactNode;
@@ -11,11 +13,14 @@ export default function MainLayout({
       <div className="flex h-full min-h-screen flex-col justify-between gap-4 p-5">
         <nav className="items-top flex flex-row  justify-between">
           <div className="flex flex-row items-center gap-4 text-2xl">
-            <div></div>
+            <div className="h-[50px]">
+              <Logo />
+            </div>
           </div>
           <div className="flex flex-row items-center gap-4">
-            <ConnectButton />
+            <ShareButton address="" />
             <ThemeToggle />
+            <ConnectButton />
           </div>
         </nav>
 

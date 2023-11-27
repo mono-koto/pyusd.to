@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ChevronRightIcon } from 'lucide-react';
+import { LuChevronRight } from 'react-icons/lu';
 import { useState } from 'react';
 import { isAddress } from 'viem';
 import { useRouter } from 'next/navigation';
@@ -83,7 +83,7 @@ export default function Home() {
                     variant="outline"
                     className="disabled:opacity-50"
                   >
-                    <ChevronRightIcon className="h-4 w-4" />
+                    <LuChevronRight className="h-4 w-4" />
                   </Button>
                 </div>
               </div>

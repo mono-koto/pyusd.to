@@ -1,7 +1,7 @@
 'use client';
 
 import { reformatTokenAmount } from '@/lib/format';
-import { Skeleton } from '../ui/skeleton';
+import { Skeleton } from '../../../components/ui/skeleton';
 
 interface GasFeeDisplayProps {
   isLoading: boolean;
