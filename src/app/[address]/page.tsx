@@ -35,14 +35,14 @@ export default async function PayPage({
         <PayCard recipient={recipient} />
       </Suspense>
 
-      <Card>
+      {/* <Card>
         <CardContent>
           <div className="flex flex-col gap-4">
             <NicknameForm />
             <NicknameList />
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
     </>
   );
 }

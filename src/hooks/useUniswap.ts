@@ -155,6 +155,7 @@ export function useUniswapRoute({
         if (!route.methodParameters) {
           throw new Error('No method parameters in result');
         }
+        console.log(route.route);
 
         return {
           tradeType:
@@ -181,6 +182,7 @@ export function useUniswapRoute({
         throw new Error('Missing router or token data');
       }
     },
+    retry: false,
     staleTime: 1000 * 30,
     enabled:
       amount > 0 && Boolean(tokenInQuery.data && tokenOutQuery.data && enabled),

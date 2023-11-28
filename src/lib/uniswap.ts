@@ -77,7 +77,7 @@ export async function generateRoute({
       topNWithEachBaseToken: 1,
       topNWithBaseToken: 1,
     },
-    maxSwapsPerPath: 3,
+    maxSwapsPerPath: 2,
     maxSplits: 1,
     distributionPercent: 100,
     writeToCachedRoutes: false,

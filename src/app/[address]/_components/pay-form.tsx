@@ -1,25 +1,21 @@
 'use client';
 
 import { TokenSelect } from '@/app/[address]/_components/token-select';
+import { useAllowance } from '@/hooks/useAllowance';
 import { useTokenDetails } from '@/hooks/useTokenDetails';
-import {
-  UniswapRouteParams,
-  UniswapRouteResult,
-  useUniswapRoute,
-} from '@/hooks/useUniswap';
+import { UniswapRouteParams, useUniswapRoute } from '@/hooks/useUniswap';
 import { reformatTokenAmount } from '@/lib/format';
 import { TokenDetails } from '@/models';
 import { Label } from '@radix-ui/react-label';
-import { UseQueryResult } from '@tanstack/react-query';
 import { useDebounce } from '@uidotdev/usehooks';
 import { produce } from 'immer';
-import { LuLoader2 } from 'react-icons/lu';
-import { useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { Address, parseUnits } from 'viem';
 import { useBalance } from 'wagmi';
 import AddressLink from '../../../components/AddressLink';
-import { Button } from '../../../components/ui/button';
 import { GasFeeDisplay } from './gas-fee-display';
+import { PayButton } from './pay-button';
+import PayFormUI from './pay-form-ui';
 
 interface PayFormProps {
   sellToken: Address;
@@ -56,17 +52,23 @@ export default function PayForm({
     enabled: true,
   });
 
+  const allowance = useAllowance(
+    sellTokenDetails.data?.address,
+    from,
+    uniswapRoute.data?.methodParameters.to as Address
+  );
+
   const sellTokenDecimals = sellTokenDetails.data?.decimals;
 
   const onSellAmountInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSellAmountInput(e.target.value);
+    (value: string) => {
+      setSellAmountInput(value);
       if (sellTokenDecimals === undefined) {
         return;
       }
       let amount: bigint;
       try {
-        amount = parseUnits(e.target.value, sellTokenDecimals);
+        amount = parseUnits(value, sellTokenDecimals);
       } catch (e) {
         console.error('parseUnits error', e);
         amount = BigInt(0);
@@ -84,14 +86,14 @@ export default function PayForm({
 
   const buyTokenDecimals = buyTokenDetails.data?.decimals;
   const onBuyAmountInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setBuyAmountInput(e.target.value);
+    (value: string) => {
+      setBuyAmountInput(value);
       if (buyTokenDecimals === undefined) {
         return;
       }
       let amount: bigint;
       try {
-        amount = parseUnits(e.target.value, buyTokenDecimals);
+        amount = parseUnits(value, buyTokenDecimals);
       } catch (e) {
         console.error('parseUnits error', e);
         amount = BigInt(0);
@@ -111,6 +113,7 @@ export default function PayForm({
     if (!uniswapRoute.data) {
       return;
     }
+
     if (uniswapRoute.data?.tradeType === 'EXACT_INPUT') {
       if (buyTokenDecimals !== undefined) {
         setBuyAmountInput(
@@ -130,13 +133,21 @@ export default function PayForm({
     setRouteParams(
       produce((draft: UniswapRouteParams) => {
         draft.tokenIn = token.address;
+        draft.amount = BigInt(0);
+        draft.tradeType = 'EXACT_OUTPUT';
       })
     );
+    setSellAmountInput('');
+    if (routeParams.tradeType === 'EXACT_INPUT') {
+      setBuyAmountInput('');
+    }
   }, []);
 
+  const isNative = sellTokenDetails.data?.isNative;
   const sellTokenBalance = useBalance({
-    token: debouncedRouteParams.tokenIn,
+    token: isNative ? undefined : sellTokenDetails.data?.address,
     address: from,
+    enabled: sellTokenDetails.data !== undefined,
   });
 
   const sellTokenInputDisabled =
@@ -146,87 +157,34 @@ export default function PayForm({
     uniswapRoute.isFetching && debouncedRouteParams.tradeType === 'EXACT_INPUT';
 
   return (
-    <form className="flex flex-col gap-4">
-      <div className="border-gray flex flex-col rounded-xl border p-2">
-        <Label className="text-sm">You send</Label>
-        <div className="flex flex-row justify-stretch gap-2">
-          <input
-            placeholder="0.0"
-            value={sellAmountInput}
-            onChange={onSellAmountInputChange}
-            type="number"
-            className="h-12 w-full border-none bg-transparent text-4xl focus:outline-none focus:ring-0"
-            disabled={sellTokenInputDisabled}
-          />
-          <TokenSelect onChange={handleTokenChange} defaultToken={sellToken} />
-        </div>
-        <div className="flex flex-row justify-between gap-2 text-xs">
+    <div className="flex flex-col gap-4">
+      <PayFormUI
+        receiver={receiver}
+        initialSellToken={sellToken}
+        sellTokenBalance={reformatTokenAmount(
+          sellTokenBalance.data?.formatted || '0',
+          sellTokenDetails.data?.decimals || 0
+        )}
+        gasFeeIndicator={
           <GasFeeDisplay
             isLoading={uniswapRoute.isFetching}
             gasAmount={uniswapRoute.data?.estimatedGasUsed}
             gasPrice={uniswapRoute.data?.gasPriceWei}
           />
-          <span className="text-gray-500">
-            Your balance: {sellTokenBalance.data?.formatted}
-          </span>
-        </div>
-      </div>
-      <div className="border-gray flex flex-col rounded-xl border p-2">
-        <div className="flex flex-row items-center justify-between">
-          <div className="flex-1">
-            <Label className="text-sm">
-              <AddressLink address={receiver} /> will receive:
-            </Label>
-
-            <input
-              placeholder="0.0"
-              type="number"
-              value={buyAmountInput}
-              onChange={onBuyAmountInputChange}
-              className="h-12 w-full border-none bg-transparent text-4xl focus:outline-none focus:ring-0"
-              disabled={buyTokenInputDisabled}
-            />
-          </div>
-          <img
-            src={buyTokenDetails.data?.logoURI}
-            height={50}
-            width={50}
-            className="flex-0"
-          />
-        </div>
-      </div>
-      <PayButton routeResult={uniswapRoute} />
-      {uniswapRoute.isError && (
-        <div className="text-sm text-red-500">
-          {(uniswapRoute.error as any).message || 'Unknown error'}
-        </div>
-      )}
-    </form>
+        }
+        buyTokenLogo={buyTokenDetails.data?.logoURI}
+        handleTokenChange={handleTokenChange}
+        onSellAmountInputChange={onSellAmountInputChange}
+        onBuyAmountInputChange={onBuyAmountInputChange}
+        sellAmountInput={sellAmountInput}
+        sellTokenInputDisabled={sellTokenInputDisabled}
+        buyAmountInput={buyAmountInput}
+        buyTokenInputDisabled={buyTokenInputDisabled}
+      />
+      <PayButton
+        sellTokenDetails={sellTokenDetails.data}
+        routeResult={uniswapRoute}
+      />
+    </div>
   );
-}
-
-function PayButton({
-  routeResult,
-}: {
-  routeResult: UseQueryResult<UniswapRouteResult>;
-}) {
-  if (routeResult.isFetching) {
-    return (
-      <Button className="h-fit" disabled>
-        <LuLoader2 className="h-4 w-4 animate-spin duration-1000" />
-        &nbsp; Updating routeResult
-      </Button>
-    );
-  } else {
-    return (
-      <Button className="h-fit" disabled={!routeResult.isSuccess}>
-        <img
-          src="https://www.paypalobjects.com/devdoc/coin-PYUSD.svg"
-          height={20}
-          width={20}
-        />
-        &nbsp; Pay
-      </Button>
-    );
-  }
 }

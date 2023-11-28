@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { TokenDetails } from '@/models';
 
-import { useTokens } from '@/hooks/useTokens';
+import { usePreferredTokens, useTokens } from '@/hooks/useTokens';
 import {
   Command,
   CommandEmpty,
@@ -24,6 +24,10 @@ import { CommandList } from '../../../components/ui/command';
 import { Address, isAddress } from 'viem';
 import { useToken } from 'wagmi';
 import { useTokenDetails } from '@/hooks/useTokenDetails';
+import BlockscannerLink from '@/components/BlockscannerLink';
+import AddressLink from '@/components/AddressLink';
+import { TokenButton } from './token-button';
+import Image from 'next/image';
 
 interface TokenSelectProps {
   defaultToken?: Address;
@@ -71,6 +75,8 @@ export function TokenSelect({ defaultToken, onChange }: TokenSelectProps) {
     }
   };
 
+  const preferredTokens = usePreferredTokens();
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -78,7 +84,7 @@ export function TokenSelect({ defaultToken, onChange }: TokenSelectProps) {
           <TokenDisplay token={currentTokenDetails.data} />
         </Button>
       </DialogTrigger>
-      <DialogContent className="">
+      <DialogContent className="px-4">
         <DialogHeader>
           <DialogTitle>Select Token</DialogTitle>
           <DialogDescription>
@@ -86,15 +92,25 @@ export function TokenSelect({ defaultToken, onChange }: TokenSelectProps) {
           </DialogDescription>
         </DialogHeader>
 
+        <div className="flex flex-row flex-wrap justify-center gap-2">
+          {preferredTokens.map((token, i) => (
+            <TokenButton
+              tokenDetails={token}
+              key={i}
+              onClick={() => onSelect(token)}
+            />
+          ))}
+        </div>
+
         <Command className="space-y-4">
           <CommandInput
             placeholder="Search tokens..."
-            className="h-9 w-full p-2"
+            className="h-9 w-full"
             onChangeCapture={onCommandInputChange}
             value={commandInputValue}
           />
           <CommandEmpty>No tokens found.</CommandEmpty>
-          <CommandList>
+          <CommandList className="w-full overflow-x-clip">
             <CommandGroup>
               {tokens.map((token) => (
                 <CommandItem
@@ -119,15 +135,11 @@ export function TokenSelect({ defaultToken, onChange }: TokenSelectProps) {
 
 function TokenListDisplay({ token }: { token: TokenDetails }) {
   return (
-    <div className="flex flex-row items-center space-x-2">
-      <img src={token.logoURI} className="h-6 w-6" />
-      <div>
-        <div>{token.symbol}</div>
-        {token.isNative ? (
-          <div className="text-sm">Native currency</div>
-        ) : (
-          <div className="text-sm">{token.address}</div>
-        )}
+    <div className="flex flex-row items-center space-x-2 pr-2">
+      <img src={token.logoURI} className="h-6 w-6" alt={`${token.name} logo`} />
+      <div className="overflow-ellipsis">
+        <div>{token.name}</div>
+        <div className="text-sm">{token.symbol}</div>
       </div>
     </div>
   );

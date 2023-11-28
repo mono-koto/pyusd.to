@@ -45,7 +45,7 @@ export default function PayCard({ recipient }: { recipient: string }) {
               <>
                 <div>{ens.data.name}</div>
                 <div className="text-sm font-normal text-foreground">
-                  <BlockscannerLink address={ens.data.address} />
+                  <BlockscannerLink address={ens.data.address} short />
                 </div>
               </>
             ) : (

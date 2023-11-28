@@ -42,6 +42,6 @@ export default function BlockscannerLink({
       </a>
     );
   } else {
-    return <>{displayAddress}</>;
+    return <span>{displayAddress}</span>;
   }
 }

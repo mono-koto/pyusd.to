@@ -1,5 +1,5 @@
 @import 'tailwindcss/base';
-@import './background';
+/* @import './background'; */
 
 @import 'tailwindcss/components';
 
@@ -60,6 +60,10 @@
   #root,
   [data-rk] {
     @apply min-h-screen text-foreground;
+  }
+
+  body {
+    /* @apply terrain bg-repeat; */
   }
 }
 
