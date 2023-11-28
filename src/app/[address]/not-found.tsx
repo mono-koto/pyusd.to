@@ -15,32 +15,12 @@ const PayCard = dynamic(() => import('@/app/[address]/_components/pay-card'), {
   loading: () => <Loading />,
 });
 
-export default async function PayPage({
-  params,
-}: {
-  params: { address: string };
-}) {
-  let recipient = decodeURIComponent(params.address);
-  if (!recipient.endsWith('.eth') && !isAddress(recipient)) {
-    const nickname = await findNickname(recipient);
-    if (!nickname?.address) {
-      return notFound();
-    }
-    recipient = nickname.address.value;
-  }
-
+export default async function NotFound() {
   return (
     <>
-      <Suspense fallback={<div>Loading...</div>}>
-        <PayCard recipient={recipient} />
-      </Suspense>
-
       <Card>
         <CardContent>
-          <div className="flex flex-col gap-4">
-            <NicknameForm />
-            <NicknameList />
-          </div>
+          <div className="flex flex-col gap-4">Not found</div>
         </CardContent>
       </Card>
     </>

@@ -14,12 +14,19 @@ import { QRCodeSVG } from 'qrcode.react';
 
 import { BiQrScan } from 'react-icons/bi';
 import ClientOnly from './client-only';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 interface ShareProps {
   address: string;
   currentSlug?: string;
 }
 export function ShareButton({ address, currentSlug }: ShareProps) {
+  const [location, setLocation] = useState<string>('');
+  useEffect(() => {
+    setLocation(window.location.href);
+  });
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -31,7 +38,7 @@ export function ShareButton({ address, currentSlug }: ShareProps) {
         <div className="m-6 border-2 border-transparent dark:border-foreground">
           <ClientOnly>
             <QRCodeSVG
-              value={window.location.toString()}
+              value={'xxx'}
               className="h-full w-full"
               imageSettings={{
                 src: icon.src,

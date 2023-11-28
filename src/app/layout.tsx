@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import Providers from '@/components/providers';
 import LayoutWrapper from '@/components/layout-wrapper';
 import { Suspense } from 'react';
-import SuspenseFallback from '@/components/SuspenseFallback';
+import SuspenseFallback from '@/components/loading';
 
 const fontSans = FontSans({
   subsets: ['latin'],

@@ -1,18 +1,16 @@
 'use client';
 
-import BlockscannerLink from '@/components/BlockscannerLink';
-import EnsAvatar from '@/components/EnsAvatar';
 import PayForm from '@/app/[address]/_components/pay-form';
+import BlockscannerLink from '@/components/BlockscannerLink';
+import EnsAvatar from '@/components/ens-avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import useConfig from '@/hooks/useConfig';
 import { useEns } from '@/hooks/useEns';
-import { useTokenDetails } from '@/hooks/useTokenDetails';
 import { LuCookie, LuLoader2 } from 'react-icons/lu';
-import { useEffect } from 'react';
 import { Address } from 'viem';
-import { useAccount, useChainId } from 'wagmi';
+import { useAccount } from 'wagmi';
 
-export default function PayPage({ recipient }: { recipient: string }) {
+export default function PayCard({ recipient }: { recipient: string }) {
   const account = useAccount();
 
   const { initialSellTokenAddress, buyTokenAddress, tokenList } = useConfig();
