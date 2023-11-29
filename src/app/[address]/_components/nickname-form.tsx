@@ -1,99 +1,105 @@
 'use client';
 
-import {
-  SubmitNicknameState,
-  getNickname,
-  nicknameExists,
-  submitNickname,
-} from '../actions';
+import { nicknameExists, submitNickname } from '../actions';
 
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useCallback, useEffect, useState } from 'react';
-import { useFormState } from 'react-dom';
-import { useForm } from 'react-hook-form';
-import { generateSlug } from 'random-word-slugs';
-import { useDebounce } from '@uidotdev/usehooks';
-import { useMutation, useQueries, useQuery } from '@tanstack/react-query';
-import { Address } from 'viem';
 import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { NicknameSchema } from '@/schemas';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useDebounce } from '@uidotdev/usehooks';
+import debouncePromise from 'awesome-debounce-promise';
+import { useRouter } from 'next/navigation';
+import { generateSlug } from 'random-word-slugs';
+import { useCallback, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { GiPerspectiveDiceSixFacesRandom } from 'react-icons/gi';
+import { Address } from 'viem';
+import { z } from 'zod';
 
 interface NicknameFormProps {
   address: Address;
 }
 
-const initialState: SubmitNicknameState = {
-  status: 'idle',
+const validateNicknameDoesNotExist = async (value: string) => {
+  const response = await nicknameExists(value);
+  return !response;
 };
 
-type Inputs = {
-  nickname: string;
-};
+const schema = z.object({
+  nickname: NicknameSchema.refine(
+    debouncePromise(validateNicknameDoesNotExist, 1000),
+    'Already exists'
+  ),
+});
 
 export default function NicknameForm({ address }: NicknameFormProps) {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-    setValue,
-  } = useForm<Inputs>({});
+  const { register, handleSubmit, watch, formState, setValue, reset } =
+    useForm<{
+      nickname: string;
+    }>({
+      resolver: zodResolver(schema),
+      mode: 'all',
+    });
 
-  const input = watch('nickname');
-  const debouncedInput = useDebounce(input || '', 1000);
-  const [shuffledInput, setShuffledInput] = useState<string>('');
-
-  const nickname = input === shuffledInput ? input : debouncedInput;
-
-  const checkNicknameExists = useQuery({
-    queryKey: ['get-nickname', nickname],
-    queryFn: async () => {
-      const response = await nicknameExists(nickname);
-      return response;
-    },
-    enabled: nickname.length > 0,
-  });
+  const router = useRouter();
 
   const onSubmit = useCallback(
     async (data: any) => {
-      const response = await submitNickname(address, debouncedInput);
+      reset(undefined, { keepValues: false });
+      await submitNickname(address, data.nickname);
+      router.push('/' + data.nickname);
     },
-    [address, debouncedInput]
+    [router, address, reset]
   );
 
   const onShuffle = useCallback(
     (e: React.FormEvent) => {
       const slug = generateSlug();
-      setShuffledInput(slug);
-      setValue('nickname', slug, {});
+      setValue('nickname', slug, {
+        shouldValidate: true,
+        shouldDirty: true,
+        shouldTouch: true,
+      });
       e.preventDefault();
     },
     [setValue, generateSlug]
   );
 
-  const nicknameAvailable =
-    checkNicknameExists.isSuccess && !checkNicknameExists.data;
+  const input = watch('nickname');
 
   const message = useCallback(() => {
-    switch (checkNicknameExists.status) {
-      case 'error':
-        return 'Unable to load';
-      case 'loading':
-        switch (checkNicknameExists.fetchStatus) {
-          case 'fetching':
-            return 'Checking...';
-          case 'paused':
-            return 'Paused...';
-          default:
-            return 'Please provide a unique URL of your choice';
-        }
-      case 'success':
-        return checkNicknameExists.data ? '👎 Taken!' : '👍 Looks good!';
-      default:
-        return 'Ready';
+    if (!input || input.length === 0) {
+      return '🦄 Enter a unique name';
     }
-  }, [checkNicknameExists])();
+    if (formState.isValidating) {
+      return '⏳ Checking...';
+    }
+    if (formState.isSubmitting) {
+      return '🤞 Creating...';
+    }
+    if (formState.errors.nickname) {
+      if (formState.errors.nickname.message?.match(/Already exists/)) {
+        return '👎 Already exists';
+      }
+      if (formState.errors.nickname.message?.match(/at least/)) {
+        return '👎 Too short';
+      }
+      if (formState.errors.nickname.message?.match(/Invalid input/)) {
+        return '🤔 Only letters, numbers, dashes. Oh, and emoji.';
+      }
+      return '❌ Invalid input';
+    }
+    if (formState.errors.root) {
+      return '❌ Invalid input';
+    }
+    if (formState.isValid) {
+      return '✅ Looking good!';
+    }
+
+    if (formState.isSubmitted) {
+      return '🎉 Created!';
+    }
+  }, [input, formState, formState.isSubmitSuccessful, formState.isSubmitted])();
 
   return (
     <>
@@ -111,7 +117,7 @@ export default function NicknameForm({ address }: NicknameFormProps) {
                 autoComplete="off"
                 spellCheck="false"
                 type="text"
-                {...register('nickname', { required: true })}
+                {...register('nickname')}
                 className="h-12 w-full border-none bg-transparent text-lg text-primary focus:outline-none focus:ring-0"
               />
             </div>

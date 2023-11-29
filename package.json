@@ -14,6 +14,7 @@
     "db:reset": "tsx ./src/app/_db/migrate.ts down-to NO_MIGRATIONS"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.3.2",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
@@ -33,6 +34,7 @@
     "@uniswap/smart-order-router": "^3.18.2",
     "@vercel/postgres-kysely": "^0.6.0",
     "alchemy-sdk": "^2.10.1",
+    "awesome-debounce-promise": "^2.1.0",
     "boring-avatars": "^1.10.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
