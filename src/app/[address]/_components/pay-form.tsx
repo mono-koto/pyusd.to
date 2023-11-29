@@ -11,7 +11,7 @@ import { useDebounce } from '@uidotdev/usehooks';
 import { produce } from 'immer';
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { Address, parseUnits } from 'viem';
-import { useBalance } from 'wagmi';
+import { erc20ABI, useBalance, usePrepareContractWrite } from 'wagmi';
 import AddressLink from '../../../components/AddressLink';
 import { GasFeeDisplay } from './gas-fee-display';
 import { PayButton } from './pay-button';
@@ -47,10 +47,29 @@ export default function PayForm({
 
   const debouncedRouteParams = useDebounce(routeParams, 1000);
 
+  const sameToken =
+    sellTokenDetails.data?.address === buyTokenDetails.data?.address;
+
   const uniswapRoute = useUniswapRoute({
     ...debouncedRouteParams,
-    enabled: true,
+    enabled: !sameToken,
   });
+
+  const directTransfer = usePrepareContractWrite({
+    account: from,
+    address: sellTokenDetails.data!.address,
+    functionName: 'transfer',
+    abi: erc20ABI,
+    args: [receiver, debouncedRouteParams.amount],
+    enabled: sameToken && sellTokenDetails.data !== undefined,
+  });
+
+  console.log(
+    sameToken,
+    sellTokenDetails.data !== undefined,
+    debouncedRouteParams.amount,
+    directTransfer
+  );
 
   const allowance = useAllowance(
     sellTokenDetails.data?.address,
@@ -180,6 +199,7 @@ export default function PayForm({
         sellTokenInputDisabled={sellTokenInputDisabled}
         buyAmountInput={buyAmountInput}
         buyTokenInputDisabled={buyTokenInputDisabled}
+        collapseFields={sameToken}
       />
       <PayButton
         sellTokenDetails={sellTokenDetails.data}

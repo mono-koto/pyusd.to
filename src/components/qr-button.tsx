@@ -1,27 +1,19 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import icon from '../../public/heartpyusd.svg';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { QRCodeSVG } from 'qrcode.react';
+import icon from '../../public/heartpyusd.svg';
 
+import { useEffect, useState } from 'react';
 import { BiQrScan } from 'react-icons/bi';
 import ClientOnly from './client-only';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 
 interface ShareProps {
   address: string;
   currentSlug?: string;
 }
-export function ShareButton({ address, currentSlug }: ShareProps) {
+export function QrButton({ address, currentSlug }: ShareProps) {
   const [location, setLocation] = useState<string>('');
   useEffect(() => {
     setLocation(window.location.href);
@@ -31,11 +23,11 @@ export function ShareButton({ address, currentSlug }: ShareProps) {
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="outline" size="icon">
-          <BiQrScan className="h-[1.4rem] w-[1.4rem] " />
+          <BiQrScan className="h-[2rem] w-[2rem]" />
         </Button>
       </DialogTrigger>
       <DialogContent>
-        <div className="m-6 border-2 border-transparent dark:border-foreground">
+        <div className="m-2 border-2 border-transparent dark:border-foreground md:m-6">
           <ClientOnly>
             <QRCodeSVG
               value={'xxx'}

@@ -21,6 +21,7 @@ interface PayFormUIProps {
   sellTokenInputDisabled: boolean;
   buyAmountInput: string;
   buyTokenInputDisabled: boolean;
+  collapseFields: boolean;
 }
 
 export default function PayFormUI({
@@ -36,6 +37,7 @@ export default function PayFormUI({
   sellTokenInputDisabled,
   buyAmountInput,
   buyTokenInputDisabled,
+  collapseFields,
 }: PayFormUIProps) {
   const handleSellAmountInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +58,15 @@ export default function PayFormUI({
   return (
     <div className="flex flex-col gap-4">
       <div className="border-gray flex flex-col rounded-xl border p-2">
-        <Label className="text-sm">You send</Label>
+        <Label className="text-sm">
+          You send
+          {collapseFields && (
+            <span>
+              {' '}
+              and <AddressLink address={receiver} /> will receive:
+            </span>
+          )}
+        </Label>
         <div className="flex flex-row justify-stretch gap-2">
           <input
             placeholder="0.0"
@@ -78,25 +88,27 @@ export default function PayFormUI({
           </span>
         </div>
       </div>
-      <div className="border-gray flex flex-col rounded-xl border p-2">
-        <div className="flex flex-row items-center justify-between">
-          <div className="flex-1">
-            <Label className="text-sm">
-              <AddressLink address={receiver} /> will receive:
-            </Label>
+      {!collapseFields && (
+        <div className="border-gray flex flex-col rounded-xl border p-2">
+          <div className="flex flex-row items-center justify-between">
+            <div className="flex-1">
+              <Label className="text-sm">
+                <AddressLink address={receiver} /> will receive:
+              </Label>
 
-            <input
-              placeholder="0.0"
-              type="number"
-              value={buyAmountInput}
-              onChange={handleBuyAmountInputChange}
-              className="h-12 w-full border-none bg-transparent text-4xl focus:outline-none focus:ring-0"
-              disabled={buyTokenInputDisabled}
-            />
+              <input
+                placeholder="0.0"
+                type="number"
+                value={buyAmountInput}
+                onChange={handleBuyAmountInputChange}
+                className="h-12 w-full border-none bg-transparent text-4xl focus:outline-none focus:ring-0"
+                disabled={buyTokenInputDisabled}
+              />
+            </div>
+            <img src={buyTokenLogo} height={50} width={50} className="flex-0" />
           </div>
-          <img src={buyTokenLogo} height={50} width={50} className="flex-0" />
         </div>
-      </div>
+      )}
     </div>
   );
 }

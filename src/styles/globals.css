@@ -84,12 +84,12 @@ input[type='number'] {
 }
 
 .pulse-stroke {
-  stroke-width: 7px;
+  stroke-width: 5px;
   animation: 0.5s infinite alternate ease-in pulse-stroke;
 }
 
 @keyframes pulse-stroke {
   to {
-    stroke-width: 13px;
+    stroke-width: 17px;
   }
 }

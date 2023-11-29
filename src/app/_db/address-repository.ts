@@ -29,7 +29,7 @@ export async function createAddress(address: string) {
 
 export async function createOrFindAddress(address: string) {
   try {
-    return await createAddress(address);
+    return await createAddress(address.toLowerCase());
   } catch (error) {
     let message = (error as any).message;
     if (

@@ -126,7 +126,6 @@ export function useUniswapRoute({
       uniswapTradeType,
     ],
     queryFn: async (): Promise<UniswapRouteResult> => {
-      console.log(router, tokenInQuery.data, tokenOutQuery.data);
       if (amount === BigInt(0)) {
         throw new Error('Amount must be greater than 0');
       }
@@ -155,7 +154,7 @@ export function useUniswapRoute({
         if (!route.methodParameters) {
           throw new Error('No method parameters in result');
         }
-        console.log(route.route);
+        console.log('Route found', route.route);
 
         return {
           tradeType:

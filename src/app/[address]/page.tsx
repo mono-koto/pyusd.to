@@ -1,14 +1,10 @@
 'use server';
 
-import React, { Suspense } from 'react';
-import NicknameList from './_components/nickname-list';
-import NicknameForm from './_components/nickname-form';
+import Loading from '@/components/loading';
 import dynamic from 'next/dynamic';
-import { findNickname } from '../_db/nickname-repository';
 import { notFound } from 'next/navigation';
 import { isAddress } from 'viem';
-import { Card, CardContent } from '@/components/ui/card';
-import Loading from '@/components/loading';
+import { findNickname } from '../_db/nickname-repository';
 
 const PayCard = dynamic(() => import('@/app/[address]/_components/pay-card'), {
   ssr: false,
@@ -21,28 +17,20 @@ export default async function PayPage({
   params: { address: string };
 }) {
   let recipient = decodeURIComponent(params.address);
+  let nickname;
   if (!recipient.endsWith('.eth') && !isAddress(recipient)) {
-    const nickname = await findNickname(recipient);
-    if (!nickname?.address) {
-      return notFound();
+    const nicknameRecord = await findNickname(recipient);
+    console.log(recipient, nicknameRecord);
+    if (!nicknameRecord?.address) {
+      notFound();
     }
-    recipient = nickname.address.value;
+    recipient = nicknameRecord.address.value;
+    nickname = nicknameRecord.value;
   }
 
   return (
     <>
-      <Suspense fallback={<div>Loading...</div>}>
-        <PayCard recipient={recipient} />
-      </Suspense>
-
-      {/* <Card>
-        <CardContent>
-          <div className="flex flex-col gap-4">
-            <NicknameForm />
-            <NicknameList />
-          </div>
-        </CardContent>
-      </Card> */}
+      <PayCard addressOrEns={recipient} nickname={nickname} />
     </>
   );
 }

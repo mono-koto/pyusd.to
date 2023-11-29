@@ -1,28 +1,17 @@
-'use server';
+import React from 'react';
+import { LuCookie } from 'react-icons/lu';
 
-import React, { Suspense } from 'react';
-import NicknameList from './_components/nickname-list';
-import NicknameForm from './_components/nickname-form';
-import dynamic from 'next/dynamic';
-import { findNickname } from '../_db/nickname-repository';
-import { notFound } from 'next/navigation';
-import { isAddress } from 'viem';
-import { Card, CardContent } from '@/components/ui/card';
-import Loading from '@/components/loading';
+interface NotFoundProps {
+  children?: React.ReactNode;
+}
 
-const PayCard = dynamic(() => import('@/app/[address]/_components/pay-card'), {
-  ssr: false,
-  loading: () => <Loading />,
-});
-
-export default async function NotFound() {
+export default function NotFound({ children = <>Not found</> }: NotFoundProps) {
   return (
-    <>
-      <Card>
-        <CardContent>
-          <div className="flex flex-col gap-4">Not found</div>
-        </CardContent>
-      </Card>
-    </>
+    <div className="flex h-full flex-1 flex-col items-center justify-center gap-4 opacity-70">
+      <LuCookie className="h-12 w-12" />
+      <div className="flex flex-col gap-4">
+        <div>{children}</div>
+      </div>
+    </div>
   );
 }
