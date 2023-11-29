@@ -1,42 +1,65 @@
+'use client';
+
 import { cn } from '@/lib/utils';
+import dynamic from 'next/dynamic';
+import { useState } from 'react';
+import { should } from 'vitest';
 
 interface LogoProps extends React.SVGAttributes<SVGElement> {
   animate?: boolean;
+  dynamicHover?: boolean;
 }
 
 const Logo: React.FC<LogoProps> = (props) => {
-  const animationProps = props.animate
+  const [mouseOver, setMouseOver] = useState<boolean>(false);
+  const [cc, setCc] = useState(false);
+
+  const shouldAnimate = props.animate || (props.dynamicHover && mouseOver);
+  const animationProps = shouldAnimate
     ? {
+        strokeWidth: '12',
+
         strokeDashoffset: '0',
-        strokeDasharray: '200',
+        strokeDasharray: '0 24',
       }
     : {};
 
+  const svgProps = { ...props };
+  delete svgProps.dynamicHover;
+  delete svgProps.animate;
+
   return (
     <svg
+      onMouseOver={() => {
+        setMouseOver(true);
+        setCc(!cc);
+      }}
+      onMouseOut={() => setMouseOver(false)}
       width="100%"
       height="100%"
       viewBox="0 0 200 200"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...svgProps}
     >
       <path
-        // className={cn(props.animate && 'pulse-stroke')}
+        // className={cn(shouldAnimate && 'pulse-stroke')}
         d="M108.333 159.333L100 167.667L37.5 105.767C33.3776 101.755 30.1304 96.9335 27.9629 91.6053C25.7954 86.2771 24.7547 80.5579 24.9061 74.8078C25.0576 69.0576 26.398 63.4011 28.843 58.1945C31.2879 52.9878 34.7845 48.3438 39.1124 44.5548C43.4403 40.7659 48.5059 37.9141 53.9901 36.179C59.4743 34.4439 65.2584 33.8632 70.9781 34.4733C76.6978 35.0835 82.2292 36.8713 87.224 39.7242C92.2188 42.5771 96.5687 46.4333 100 51.05C105.879 43.2295 114.322 37.727 123.85 35.5066C133.378 33.2863 143.384 34.4896 152.114 38.9059C160.844 43.3221 167.742 50.6696 171.599 59.661C175.456 68.6523 176.025 78.7141 173.208 88.0833"
         stroke="#CE007C"
-        strokeWidth="9.67"
+        strokeWidth="10"
         strokeLinecap="round"
         strokeLinejoin="round"
         {...animationProps}
       >
-        {props.animate && (
-          <animate
-            attributeName="stroke-dashoffset"
-            values="0;400"
-            dur="0.5s"
-            repeatCount="indefinite"
-          />
+        {shouldAnimate && (
+          <>
+            <animate
+              attributeName="stroke-dashoffset"
+              values={cc ? '0;24' : '0;-24'}
+              dur="0.2s"
+              repeatCount="indefinite"
+            />
+          </>
         )}
       </path>
       <path

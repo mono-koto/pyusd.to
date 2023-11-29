@@ -53,7 +53,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-8">
+    <div className="flex w-full flex-col items-center gap-8">
       <Card className="w-full">
         <CardHeader>
           <CardTitle>pyusd.to</CardTitle>

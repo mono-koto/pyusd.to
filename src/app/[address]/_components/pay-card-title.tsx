@@ -49,8 +49,10 @@ const PayCardTitle: React.FC<PayCardTitleProps> = ({
   }
 
   return (
-    <div className="flex w-full flex-row items-center justify-stretch gap-4">
-      <EnsAvatar address={address} size={60} />
+    <div className="flex w-full flex-row flex-wrap items-center justify-stretch gap-4">
+      <div className="shrink-0">
+        <EnsAvatar address={address} size={60} />
+      </div>
       <div className="flex-grow space-y-1">
         <div>{title}</div>
         <div className="font-normal text-foreground">{content}</div>

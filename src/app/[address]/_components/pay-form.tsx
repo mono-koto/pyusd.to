@@ -77,6 +77,8 @@ export default function PayForm({
     uniswapRoute.data?.methodParameters.to as Address
   );
 
+  console.log(allowance.data);
+
   const sellTokenDecimals = sellTokenDetails.data?.decimals;
 
   const onSellAmountInputChange = useCallback(

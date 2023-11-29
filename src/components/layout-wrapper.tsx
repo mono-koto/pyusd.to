@@ -3,6 +3,8 @@ import Logo from './logo-svg';
 import { ThemeToggle } from './theme-toggle';
 
 import Link from 'next/link';
+import { Suspense } from 'react';
+import Loading from './loading';
 
 export default function LayoutWrapper({
   children,
@@ -16,7 +18,7 @@ export default function LayoutWrapper({
           <div className="flex flex-row items-center text-2xl">
             <div className="h-[50px]">
               <Link href="/">
-                <Logo />
+                <Logo dynamicHover={true} />
               </Link>
             </div>
           </div>
@@ -26,8 +28,8 @@ export default function LayoutWrapper({
           </div>
         </nav>
 
-        <main className="mx-auto flex max-w-2xl flex-1 flex-col p-2">
-          {children}
+        <main className="container mx-auto flex max-w-2xl flex-1 flex-col p-2">
+          <Suspense fallback={<Loading />}>{children}</Suspense>
         </main>
 
         <footer className="grow-0 text-center text-xs">
