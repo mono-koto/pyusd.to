@@ -19,6 +19,7 @@ import PayFormUI from './pay-form-ui';
 import { set } from 'zod';
 
 interface PayFormProps {
+  nickname?: string;
   sellToken: Address;
   buyToken: Address;
   from?: Address;
@@ -26,6 +27,7 @@ interface PayFormProps {
 }
 
 export default function PayForm({
+  nickname,
   sellToken,
   buyToken,
   from,
@@ -197,6 +199,7 @@ export default function PayForm({
   return (
     <div className="flex flex-col gap-4">
       <PayFormUI
+        nickname={nickname}
         receiver={receiver}
         initialSellToken={sellToken}
         sellTokenBalance={reformatTokenAmount(

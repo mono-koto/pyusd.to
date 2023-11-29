@@ -21,6 +21,7 @@ import { ReactNode, useCallback, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { reformatTokenAmount } from '@/lib/format';
 import BlockscannerLink from '@/components/BlockscannerLink';
+import { useConfetti } from '@/hooks/useConfetti';
 
 export function PayButton({
   nonZeroAmounts,
@@ -35,6 +36,7 @@ export function PayButton({
   sellTokenDetails: TokenDetails | undefined;
   onSuccess: () => void;
 }) {
+  const { fireConfetti } = useConfetti();
   const account = useAccount();
 
   const allowance = useAllowance(
@@ -81,6 +83,7 @@ export function PayButton({
         </TransactionMessage>
       );
       allowance.refetch();
+      fireConfetti();
       onSuccess();
     },
     onError: (data) => {
@@ -160,8 +163,6 @@ export function PayButton({
       </StyledPayButton>
     );
   }
-
-  console.log(prepareApprove);
 
   if (needsApproval) {
     return (

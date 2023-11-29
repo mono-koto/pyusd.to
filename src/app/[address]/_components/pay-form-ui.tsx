@@ -9,6 +9,7 @@ import AddressLink from '../../../components/AddressLink';
 import { GasFeeDisplay } from './gas-fee-display';
 
 interface PayFormUIProps {
+  nickname?: string;
   receiver: Address;
   initialSellToken: Address;
   sellTokenBalance: string;
@@ -25,6 +26,7 @@ interface PayFormUIProps {
 }
 
 export default function PayFormUI({
+  nickname,
   receiver,
   initialSellToken,
   sellTokenBalance,
@@ -93,7 +95,14 @@ export default function PayFormUI({
           <div className="flex flex-row items-center justify-between">
             <div className="flex-1">
               <Label className="text-sm">
-                <AddressLink address={receiver} /> will receive:
+                {nickname ? (
+                  <span>
+                    "{nickname}" (<AddressLink address={receiver} />)
+                  </span>
+                ) : (
+                  <AddressLink address={receiver} />
+                )}{' '}
+                will receive:
               </Label>
 
               <input
