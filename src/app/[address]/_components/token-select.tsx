@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { TokenDetails } from '@/models';
 
+import { useTokenDetails } from '@/hooks/useTokenDetails';
 import { usePreferredTokens, useTokens } from '@/hooks/useTokens';
 import {
   Command,
@@ -19,15 +20,10 @@ import {
   CommandInput,
   CommandItem,
 } from 'cmdk';
-import { useMemo, useState } from 'react';
-import { CommandList } from '../../../components/ui/command';
+import { useState } from 'react';
 import { Address, isAddress } from 'viem';
-import { useToken } from 'wagmi';
-import { useTokenDetails } from '@/hooks/useTokenDetails';
-import BlockscannerLink from '@/components/BlockscannerLink';
-import AddressLink from '@/components/AddressLink';
+import { CommandList } from '../../../components/ui/command';
 import { TokenButton } from './token-button';
-import Image from 'next/image';
 
 interface TokenSelectProps {
   defaultToken?: Address;

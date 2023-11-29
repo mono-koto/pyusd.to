@@ -20,7 +20,6 @@ export default async function PayPage({
   let nickname;
   if (!recipient.endsWith('.eth') && !isAddress(recipient)) {
     const nicknameRecord = await findNickname(recipient);
-    console.log(recipient, nicknameRecord);
     if (!nicknameRecord?.address) {
       notFound();
     }

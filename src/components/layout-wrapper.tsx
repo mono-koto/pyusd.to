@@ -33,7 +33,7 @@ export default function LayoutWrapper({
         </main>
 
         <footer className="grow-0 text-center text-xs">
-          Made with 🩸😅💧 by Mono Koto + Garden Labs
+          Made with 🔥💜🔥 by Mono Koto + Garden Labs
         </footer>
       </div>
     </>

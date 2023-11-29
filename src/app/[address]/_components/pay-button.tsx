@@ -11,74 +11,91 @@ import {
   useContractWrite,
   usePrepareSendTransaction,
   useSendTransaction,
+  useWaitForTransaction,
 } from 'wagmi';
 import { Button } from '../../../components/ui/button';
 import { TokenDetails } from '@/models';
+import { useCallback } from 'react';
 
 export function PayButton({
+  nonZeroAmounts,
   routeResult,
   sellTokenDetails,
 }: {
-  routeResult: UseQueryResult<UniswapRouteResult>;
+  nonZeroAmounts: boolean;
+  routeResult: UniswapRouteResult | undefined;
   sellTokenDetails: TokenDetails | undefined;
 }) {
   const account = useAccount();
-  const tokenDetails = routeResult.data?.tokenInDetails;
+
   const allowance = useAllowance(
     sellTokenDetails?.address,
     account.address,
-    routeResult.data?.methodParameters.to as Address
+    routeResult?.methodParameters.to as Address,
+    {
+      enabled: !sellTokenDetails?.isNative,
+    }
   );
   const balance = useBalance({
-    token: sellTokenDetails?.isNative ? undefined : tokenDetails?.address,
+    token: sellTokenDetails?.isNative ? undefined : sellTokenDetails?.address,
     address: account.address,
   });
 
   const sendPrepare = usePrepareSendTransaction({
-    data: routeResult.data?.methodParameters.calldata as `0x${string}`,
-    to: routeResult.data?.methodParameters.to,
-    value: BigInt(routeResult.data?.methodParameters.value || 0),
+    data: routeResult?.methodParameters.calldata as `0x${string}`,
+    to: routeResult?.methodParameters.to,
+    value: BigInt(routeResult?.methodParameters.value || 0),
   });
 
   const send = useSendTransaction(sendPrepare.config);
 
-  const sufficientBalance =
-    balance.data &&
-    (balance.data.value === BigInt(0) ||
-      (routeResult.data &&
-        balance.data.value >=
-          parseUnits(
-            routeResult.data.amountIn,
-            routeResult.data.tokenInDetails.decimals
-          )));
+  const executeSwap = useCallback(() => {
+    if (!send.sendTransaction) {
+      console.error('Not yet ready to send');
+      return;
+    }
+    send.sendTransaction();
+  }, [send.sendTransaction]);
 
-  const amountIn = routeResult.data
-    ? BigInt(routeResult.data.amountIn)
+  const t = useWaitForTransaction({
+    hash: send.data?.hash,
+  });
+
+  const amountIn = routeResult
+    ? parseUnits(routeResult.amountIn, routeResult.tokenInDetails.decimals)
     : BigInt(0);
-  const sufficientAllowance =
-    allowance.data !== undefined && allowance.data >= amountIn;
 
-  const allowanceAmount = BigInt(0); //allowance.data ? amountIn - allowance.data : ;
+  const sufficientBalance = balance.data && balance.data.value > amountIn;
+
+  const readyForApproval =
+    allowance.data !== undefined &&
+    allowance.data < amountIn &&
+    !sellTokenDetails?.isNative;
+
+  const allowanceAmount = amountIn;
 
   const prepareApprove = usePrepareApprove(
-    tokenDetails?.address,
+    sellTokenDetails?.address,
     account.address,
-    routeResult.data?.methodParameters.to as Address,
+    routeResult?.methodParameters.to as Address,
     allowanceAmount,
     {
-      enabled: sufficientBalance && !sufficientAllowance,
+      enabled: sufficientBalance && readyForApproval,
     }
   );
 
   const setAllowance = useContractWrite(prepareApprove.config);
 
   const updating =
-    routeResult.isFetching ||
-    allowance.isFetching ||
-    balance.isFetching ||
-    sendPrepare.isFetching;
+    allowance.isFetching || balance.isFetching || sendPrepare.isFetching;
 
-  if (routeResult.isFetching || allowance.isFetching) {
+  if (!nonZeroAmounts) {
+    <Button className="h-fit rounded-xl py-4 text-lg" disabled>
+      Please enter an amount
+    </Button>;
+  }
+
+  if (allowance.isFetching) {
     return (
       <Button className="h-fit rounded-xl py-4 text-lg" disabled>
         <LuLoader2 className="h-4 w-4 animate-spin duration-1000" />
@@ -95,7 +112,7 @@ export function PayButton({
     );
   }
 
-  if (!sufficientAllowance) {
+  if (readyForApproval) {
     return (
       <Button
         className="h-fit rounded-xl py-4 text-lg"
@@ -104,7 +121,7 @@ export function PayButton({
         }}
         disabled={!prepareApprove.isSuccess}
       >
-        Approve {tokenDetails?.symbol}
+        Approve {sellTokenDetails?.symbol}
       </Button>
     );
   }
@@ -112,7 +129,8 @@ export function PayButton({
   return (
     <Button
       className="h-fit rounded-xl py-4 text-lg"
-      disabled={!routeResult.isSuccess}
+      disabled={!routeResult}
+      onClick={executeSwap}
     >
       <img
         src="https://www.paypalobjects.com/devdoc/coin-PYUSD.svg"

@@ -26,7 +26,6 @@ export function AddNicknameButton({
   useEffect(() => {
     setLocation(window.location.href);
   });
-  console.log('nickname.address', address);
   return (
     <Dialog>
       <DialogTrigger asChild>
