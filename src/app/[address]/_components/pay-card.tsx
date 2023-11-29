@@ -42,6 +42,7 @@ export default function PayCard({ addressOrEns, nickname }: PayCardProps) {
       </CardHeader>
       <CardContent>
         <PayForm
+          nickname={nickname}
           receiver={ens.data.address as Address}
           from={account.address}
           buyToken={buyTokenAddress}

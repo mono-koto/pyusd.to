@@ -97,7 +97,7 @@ export default function PayFormUI({
               <Label className="text-sm">
                 {nickname ? (
                   <span>
-                    "{nickname}" (<AddressLink address={receiver} />)
+                    &quot;{nickname}&quot; (<AddressLink address={receiver} />)
                   </span>
                 ) : (
                   <AddressLink address={receiver} />
