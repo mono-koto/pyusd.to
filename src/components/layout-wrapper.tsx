@@ -5,6 +5,7 @@ import { ThemeToggle } from './theme-toggle';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import Loading from './loading';
+import { ToastContainer } from 'react-toastify';
 
 export default function LayoutWrapper({
   children,
@@ -33,7 +34,12 @@ export default function LayoutWrapper({
         </main>
 
         <footer className="grow-0 text-center text-xs">
-          Made with 🔥💜🔥 by Mono Koto + Garden Labs
+          Made with 🔥💜🔥 by Mono Koto + Garden Labs.
+          <br />
+          <Link href="https://github.com/mono-koto/fluffy-clouds">
+            Open Source
+          </Link>{' '}
+          (soon) with <Link href="">MIT License</Link>
         </footer>
       </div>
     </>

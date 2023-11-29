@@ -15,20 +15,25 @@ import {
   useSendTransaction,
   useWaitForTransaction,
 } from 'wagmi';
-import { Button } from '../../../components/ui/button';
+import { Button, ButtonProps } from '../../../components/ui/button';
 import { TokenDetails } from '@/models';
-import { useCallback } from 'react';
+import { ReactNode, useCallback, useEffect } from 'react';
+import { toast } from 'react-toastify';
+import { reformatTokenAmount } from '@/lib/format';
+import BlockscannerLink from '@/components/BlockscannerLink';
 
 export function PayButton({
   nonZeroAmounts,
   updating,
   routeResult,
   sellTokenDetails,
+  onSuccess,
 }: {
   updating: boolean;
   nonZeroAmounts: boolean;
   routeResult: UniswapRouteResult | undefined;
   sellTokenDetails: TokenDetails | undefined;
+  onSuccess: () => void;
 }) {
   const account = useAccount();
 
@@ -64,7 +69,26 @@ export function PayButton({
     enabled: !needsApproval,
   });
 
-  const send = useSendTransaction(sendPrepare.config);
+  const send = useSendTransaction({
+    ...sendPrepare.config,
+    onMutate: (data) => {
+      toast('Initiating transaction...');
+    },
+    onSuccess: (data) => {
+      toast.success(
+        <TransactionMessage transactionHash={data.hash}>
+          🎉 Transaction success!
+        </TransactionMessage>
+      );
+      allowance.refetch();
+      onSuccess();
+    },
+    onError: (data) => {
+      data.message.match('User rejected')
+        ? toast.warn('Transaction cancelled')
+        : toast.error('Transaction failed');
+    },
+  });
 
   const executeSwap = useCallback(() => {
     if (!send.sendTransaction) {
@@ -73,10 +97,6 @@ export function PayButton({
     }
     send.sendTransaction();
   }, [send.sendTransaction]);
-
-  const t = useWaitForTransaction({
-    hash: send.data?.hash,
-  });
 
   const allowanceAmount = amountIn;
 
@@ -88,6 +108,7 @@ export function PayButton({
       (routeResult?.methodParameters.to || account.address) as Address,
       allowanceAmount,
     ],
+
     enabled:
       account.address &&
       sellTokenDetails &&
@@ -97,33 +118,46 @@ export function PayButton({
       !sellTokenDetails?.isNative,
   });
 
-  const setAllowance = useContractWrite(prepareApprove.config);
+  const setAllowance = useContractWrite({
+    ...prepareApprove.config,
+    onMutate: (data) => {
+      toast('Initiating transaction...');
+    },
+    onSuccess: (data) => {
+      toast.success(
+        <TransactionMessage transactionHash={data.hash}>
+          🎉 Transaction success!
+        </TransactionMessage>
+      );
+    },
+    onError: (data) => {
+      data.message.match('User rejected')
+        ? toast.info('Transaction cancelled')
+        : toast.error('Transaction failed');
+    },
+  });
 
   const fetching =
     allowance.isFetching || balance.isFetching || sendPrepare.isFetching;
 
   if (updating || fetching) {
     return (
-      <Button className="h-fit rounded-xl py-4 text-lg" disabled>
+      <StyledPayButton disabled>
         <LuLoader2 className="h-4 w-4 animate-spin duration-1000" />
         &nbsp; Updating
-      </Button>
+      </StyledPayButton>
     );
   }
 
   if (!nonZeroAmounts) {
-    return (
-      <Button className="h-fit rounded-xl py-4 text-lg" disabled>
-        Please enter an amount
-      </Button>
-    );
+    return <StyledPayButton disabled>Please enter an amount</StyledPayButton>;
   }
 
   if (!sufficientBalance) {
     return (
-      <Button className="h-fit rounded-xl py-4 text-lg" disabled>
+      <StyledPayButton disabled>
         Insufficient {sellTokenDetails?.symbol} Balance
-      </Button>
+      </StyledPayButton>
     );
   }
 
@@ -131,30 +165,64 @@ export function PayButton({
 
   if (needsApproval) {
     return (
-      <Button
-        className="h-fit rounded-xl py-4 text-lg"
+      <StyledPayButton
         onClick={() => {
           setAllowance.write && setAllowance.write();
         }}
         disabled={!prepareApprove.isSuccess}
       >
         Approve {sellTokenDetails?.symbol}
-      </Button>
+      </StyledPayButton>
     );
   }
 
+  if (send.isLoading) {
+    return (
+      <StyledPayButton disabled>
+        <LuLoader2 className="h-4 w-4 animate-spin duration-1000" />
+        &nbsp; Paying
+      </StyledPayButton>
+    );
+  }
+
+  if (!routeResult) {
+    return <StyledPayButton disabled>Unable to swap</StyledPayButton>;
+  }
+
   return (
-    <Button
-      className="h-fit rounded-xl py-4 text-lg"
-      disabled={!sendPrepare.isSuccess}
-      onClick={executeSwap}
-    >
+    <StyledPayButton disabled={!sendPrepare.isSuccess} onClick={executeSwap}>
       <img
         src="https://www.paypalobjects.com/devdoc/coin-PYUSD.svg"
         height={20}
         width={20}
       />
-      &nbsp; Pay
-    </Button>
+      &nbsp; Send{' '}
+      {reformatTokenAmount(
+        routeResult.amountOut,
+        routeResult.tokenOutDetails.decimals
+      )}{' '}
+      PYUSD
+    </StyledPayButton>
+  );
+}
+
+function StyledPayButton(props?: ButtonProps) {
+  return <Button className="h-fit rounded-xl py-4 text-lg" {...props} />;
+}
+
+function TransactionMessage({
+  children,
+  transactionHash,
+}: {
+  children: ReactNode;
+  transactionHash?: string;
+}) {
+  return (
+    <div>
+      <div>{children}</div>
+      {transactionHash && (
+        <BlockscannerLink kind="transaction" address={transactionHash} />
+      )}
+    </div>
   );
 }

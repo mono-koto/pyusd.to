@@ -2,6 +2,7 @@
 
 import { reformatTokenAmount } from '@/lib/format';
 import { Skeleton } from '../../../components/ui/skeleton';
+import { FaEthereum } from 'react-icons/fa6';
 
 interface GasFeeDisplayProps {
   isLoading: boolean;
@@ -29,9 +30,9 @@ export function GasFeeDisplay({
         }
 
         return (
-          <span className="">
+          <span className="flex flex-row items-center gap-0.5">
             +{reformatTokenAmount(gasAmount * gasPrice, 18)}
-            <img src={'/eth-mini.svg'} className="inline-block h-4 w-4" />
+            <FaEthereum />
           </span>
         );
       })()}

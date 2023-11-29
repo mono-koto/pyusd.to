@@ -186,6 +186,7 @@ export function useUniswapRoute({
     },
     retry: false,
     staleTime: 1000 * 30,
+    refetchInterval: 1000 * 30,
     enabled:
       amount > 0 && Boolean(tokenInQuery.data && tokenOutQuery.data && enabled),
   });

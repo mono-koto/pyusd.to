@@ -16,6 +16,7 @@ import AddressLink from '../../../components/AddressLink';
 import { GasFeeDisplay } from './gas-fee-display';
 import { PayButton } from './pay-button';
 import PayFormUI from './pay-form-ui';
+import { set } from 'zod';
 
 interface PayFormProps {
   sellToken: Address;
@@ -55,6 +56,13 @@ export default function PayForm({
     enabled: !sameToken,
   });
 
+  useEffect(() => {
+    if (routeParams.amount === BigInt(0)) {
+      setBuyAmountInput('');
+      setSellAmountInput('');
+    }
+  }, [routeParams.amount]);
+
   const directTransfer = usePrepareContractWrite({
     account: from,
     address: sellTokenDetails.data!.address,
@@ -63,12 +71,6 @@ export default function PayForm({
     args: [receiver, debouncedRouteParams.amount],
     enabled: sameToken && sellTokenDetails.data !== undefined,
   });
-
-  const allowance = useAllowance(
-    sellTokenDetails.data?.address,
-    from,
-    uniswapRoute.data?.methodParameters.to as Address
-  );
 
   const sellTokenDecimals = sellTokenDetails.data?.decimals;
 
@@ -170,6 +172,22 @@ export default function PayForm({
     enabled: sellTokenDetails.data !== undefined,
   });
 
+  const resetForm = useCallback(() => {
+    setRouteParams(
+      produce((draft: UniswapRouteParams) => {
+        draft.amount = BigInt(0);
+        draft.tradeType = 'EXACT_INPUT';
+      })
+    );
+    sellTokenBalance.refetch();
+  }, [
+    setSellAmountInput,
+    setBuyAmountInput,
+    setRouteParams,
+    sellTokenBalance,
+    uniswapRoute,
+  ]);
+
   const sellTokenInputDisabled =
     uniswapRoute.isFetching &&
     debouncedRouteParams.tradeType === 'EXACT_OUTPUT';
@@ -207,6 +225,7 @@ export default function PayForm({
         updating={uniswapRoute.isFetching}
         sellTokenDetails={sellTokenDetails.data}
         routeResult={uniswapRoute.data}
+        onSuccess={resetForm}
       />
     </div>
   );

@@ -17,6 +17,7 @@ import CustomAvatar from './custom-avatar';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ToastContainer } from 'react-toastify';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
@@ -55,16 +56,18 @@ function ClientProviders({ children }: { children: React.ReactNode }) {
   const { theme } = useTheme();
 
   /// hack to move theme to client to avoid hydration mismatch
-  const [rainbowTheme, setRainbowTheme] = useState<string | undefined>('light');
+  const [thirdPartyTheme, setThirdPartyTheme] = useState<'dark' | 'light'>(
+    'light'
+  );
   useEffect(() => {
     if (theme === 'system') {
       if (window.matchMedia('(prefers-color-scheme: dark)')) {
-        setRainbowTheme('dark');
+        setThirdPartyTheme('dark');
       } else {
-        setRainbowTheme('light');
+        setThirdPartyTheme('light');
       }
-    } else {
-      setRainbowTheme(theme);
+    } else if (theme === 'dark' || theme === 'light') {
+      setThirdPartyTheme(theme);
     }
   }, [theme]);
 
@@ -74,7 +77,7 @@ function ClientProviders({ children }: { children: React.ReactNode }) {
         <RainbowKitProvider
           chains={chains}
           avatar={CustomAvatar}
-          theme={rainbowTheme === 'dark' ? darkTheme() : lightTheme()}
+          theme={thirdPartyTheme === 'dark' ? darkTheme() : lightTheme()}
         >
           {children}
         </RainbowKitProvider>
