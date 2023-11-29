@@ -18,9 +18,10 @@ import { useMemo } from 'react';
 import { createWalletClient, custom, formatUnits } from 'viem';
 import { useTokenDetails } from './useTokenDetails';
 import { TokenDetails } from '@/models';
+import { localhost } from 'viem/chains';
 
 const UNISWAP_V3_SWAP_ROUTER_ADDRESS: Address =
-  '0xE592427A0AEce92De3Edee1F18E0157C05861564';
+  '0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45';
 
 export interface UniswapRouteParams {
   recipient: Address;
@@ -84,10 +85,12 @@ export function useRouter() {
       currentWalletClient || temporaryWalletClient(publicClient);
     const provider = getEthersProvider({ chainId });
     const signer = walletClientToSigner(walletClient);
+    // Trick Uniswap into thinking that localhost is mainnet
+    const uniswapChainId = (chainId as number) === localhost.id ? 1 : chainId;
     return new AlphaRouter({
-      chainId,
+      chainId: uniswapChainId,
       provider: signer.provider,
-      onChainQuoteProvider: onChainQuoteProvider(chainId, provider),
+      onChainQuoteProvider: onChainQuoteProvider(uniswapChainId, provider),
     });
   }, [chainId, currentWalletClient, publicClient]);
 }
@@ -126,7 +129,6 @@ export function useUniswapRoute({
       uniswapTradeType,
     ],
     queryFn: async (): Promise<UniswapRouteResult> => {
-      console.log(router, tokenInQuery.data, tokenOutQuery.data);
       if (amount === BigInt(0)) {
         throw new Error('Amount must be greater than 0');
       }
@@ -155,6 +157,7 @@ export function useUniswapRoute({
         if (!route.methodParameters) {
           throw new Error('No method parameters in result');
         }
+        console.log('Route found', route.route);
 
         return {
           tradeType:
@@ -181,7 +184,9 @@ export function useUniswapRoute({
         throw new Error('Missing router or token data');
       }
     },
+    retry: false,
     staleTime: 1000 * 30,
+    refetchInterval: 1000 * 30,
     enabled:
       amount > 0 && Boolean(tokenInQuery.data && tokenOutQuery.data && enabled),
   });

@@ -1,11 +1,29 @@
-'use client';
+'use server';
 
-import React from 'react';
-import dynamic from 'next/dynamic';
+import { notFound } from 'next/navigation';
+import { isAddress } from 'viem';
+import { findNickname } from '../_db/nickname-repository';
+import PayCard from './_components/pay-card';
 
-const PayCard = dynamic(() => import('@/components/pay/pay-card'), {});
+export default async function PayPage({
+  params,
+}: {
+  params: { address: string };
+}) {
+  let recipient = decodeURIComponent(params.address);
+  let nickname;
+  if (!recipient.endsWith('.eth') && !isAddress(recipient)) {
+    const nicknameRecord = await findNickname(recipient);
+    if (!nicknameRecord?.address) {
+      notFound();
+    }
+    recipient = nicknameRecord.address.value;
+    nickname = nicknameRecord.value;
+  }
 
-export default function PayPage({ params }: { params: { address: string } }) {
-  const recipient = params.address;
-  return <PayCard recipient={recipient} />;
+  return (
+    <>
+      <PayCard addressOrEns={recipient} nickname={nickname} />
+    </>
+  );
 }

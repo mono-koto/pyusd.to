@@ -1,7 +1,7 @@
 'use client';
 import { UrlKind, useBlockExplorerUrl } from '@/hooks/useBlockExplorerUrl';
 import { shortAddress } from '@/lib/utils';
-import { ExternalLinkIcon } from 'lucide-react';
+import { LuExternalLink } from 'react-icons/lu';
 
 type Props = {
   address: string;
@@ -33,7 +33,7 @@ export default function BlockscannerLink({
         {children || (
           <span className="inline-flex flex-row items-center gap-0.5">
             <span>{displayAddress}</span>
-            <ExternalLinkIcon
+            <LuExternalLink
               height={14}
               className="inline-block text-gray-500"
             />
@@ -42,6 +42,6 @@ export default function BlockscannerLink({
       </a>
     );
   } else {
-    return <>{displayAddress}</>;
+    return <span>{displayAddress}</span>;
   }
 }

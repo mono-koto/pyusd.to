@@ -34,3 +34,47 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## Local development
+
+1. Install docker.
+
+2. Pull postgresql:
+
+   ```
+   docker pull postgres
+   ```
+
+3. Run postgres:
+
+   One option is to run it as a daemon:
+
+   ```
+   docker volume create fluffy-db
+   docker run --name fluffy-db \
+     -d -p 5432:5432 \
+     -e POSTGRES_PASSWORD=postgres \
+     -e TZ=America/Los_Angeles \
+     -v fluffy-db:/var/lib/postgresql/data
+     postgres
+   ```
+
+   To reset:
+
+   ```
+   docker stop fluffy-db
+   docker rm fluffy-db
+   docker volume rm fluffy-db
+   ```
+
+   Alternatively, run it in the foreground without a persistent volume:
+
+   ```
+   docker run \
+     --rm \
+     --name fluffy-db \
+     -p 5432:5432 \
+     -e POSTGRES_PASSWORD=postgres \
+     -e TZ=America/Los_Angeles \
+     postgres
+   ```

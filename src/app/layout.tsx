@@ -1,12 +1,16 @@
 import '@/styles/globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 
 import { cn } from '@/lib/utils';
 import Providers from '@/components/providers';
-import MainLayout from '@/components/layout-wrapper';
+import LayoutWrapper from '@/components/layout-wrapper';
+import { Suspense } from 'react';
+import SuspenseFallback from '@/components/loading';
+import { ToastContainer } from 'react-toastify';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -33,7 +37,21 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          <MainLayout>{children}</MainLayout>
+          <LayoutWrapper>
+            <Suspense fallback={<SuspenseFallback />}>{children}</Suspense>
+            <ToastContainer
+              position="bottom-right"
+              // autoClose={5000}
+              // hideProgressBar={false}
+              // newestOnTop={false}
+              // closeOnClick
+              // rtl={false}
+              pauseOnFocusLoss={false}
+              // draggable
+              // pauseOnHover
+              theme={'light'}
+            />
+          </LayoutWrapper>
         </Providers>
       </body>
     </html>

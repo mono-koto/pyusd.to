@@ -1,6 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+/* @import './background'; */
+
+@import 'tailwindcss/components';
+
+@import 'tailwindcss/utilities';
 
 @layer base {
   :root {
@@ -56,7 +59,11 @@
   body,
   #root,
   [data-rk] {
-    @apply min-h-screen bg-background  text-foreground;
+    @apply min-h-screen text-foreground;
+  }
+
+  body {
+    /* @apply terrain bg-repeat; */
   }
 }
 
@@ -74,4 +81,15 @@ input::-webkit-inner-spin-button {
 input[type='number'] {
   -moz-appearance: textfield; /* Firefox */
   appearance: textfield; /* Safari and Chrome */
+}
+
+.pulse-stroke {
+  stroke-width: 5px;
+  animation: 0.5s infinite alternate ease-in pulse-stroke;
+}
+
+@keyframes pulse-stroke {
+  to {
+    stroke-width: 17px;
+  }
 }

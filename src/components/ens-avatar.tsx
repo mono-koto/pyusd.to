@@ -1,7 +1,7 @@
 'use client';
 import { useEns } from '@/hooks/useEns';
 
-import CustomAvatar from './CustomAvatar';
+import CustomAvatar from './custom-avatar';
 
 export default function EnsAvatar({
   address,
