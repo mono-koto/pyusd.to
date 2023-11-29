@@ -18,6 +18,7 @@ import { ethers } from 'ethers';
 import { Address } from 'viem';
 import { Protocol } from '@uniswap/router-sdk';
 import { getEthersProvider } from './viemEthers';
+import { localhost } from 'viem/chains';
 
 type TokenPermit = {
   v: 0 | 1 | 27 | 28;
@@ -77,8 +78,8 @@ export async function generateRoute({
       topNWithEachBaseToken: 1,
       topNWithBaseToken: 1,
     },
-    maxSwapsPerPath: 2,
-    maxSplits: 1,
+    maxSwapsPerPath: 3,
+    maxSplits: 2,
     distributionPercent: 100,
     writeToCachedRoutes: false,
     useCachedRoutes: false, // TODO no route caching provider yet

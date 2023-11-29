@@ -100,8 +100,9 @@ export function TokenSelect({ defaultToken, onChange }: TokenSelectProps) {
 
         <Command className="space-y-4">
           <CommandInput
+            autoFocus
             placeholder="Search tokens..."
-            className="h-9 w-full"
+            className="h-9 w-full p-1"
             onChangeCapture={onCommandInputChange}
             value={commandInputValue}
           />
@@ -110,7 +111,7 @@ export function TokenSelect({ defaultToken, onChange }: TokenSelectProps) {
             <CommandGroup>
               {tokens.map((token) => (
                 <CommandItem
-                  className=" cursor-pointer p-1 transition-colors duration-75 hover:bg-primary hover:text-primary-foreground"
+                  className=" cursor-pointer rounded-md p-1 transition-colors duration-75 aria-selected:bg-primary aria-selected:text-primary-foreground"
                   key={[token.address, token.symbol].join('-')}
                   value={`${token.address} ${token.name} ${token.symbol}`}
                   onSelect={() => {

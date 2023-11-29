@@ -37,7 +37,6 @@ export default function PayForm({
     amount: BigInt(0),
     tradeType: 'EXACT_INPUT',
   };
-  console.log(receiver);
 
   const [sellAmountInput, setSellAmountInput] = useState('');
   const [buyAmountInput, setBuyAmountInput] = useState('');
@@ -65,20 +64,11 @@ export default function PayForm({
     enabled: sameToken && sellTokenDetails.data !== undefined,
   });
 
-  // console.log(
-  //   sameToken,
-  //   sellTokenDetails.data !== undefined,
-  //   debouncedRouteParams.amount,
-  //   directTransfer
-  // );
-
   const allowance = useAllowance(
     sellTokenDetails.data?.address,
     from,
     uniswapRoute.data?.methodParameters.to as Address
   );
-
-  console.log(allowance.data);
 
   const sellTokenDecimals = sellTokenDetails.data?.decimals;
 
@@ -214,6 +204,7 @@ export default function PayForm({
       />
       <PayButton
         nonZeroAmounts={debouncedRouteParams.amount > BigInt(0)}
+        updating={uniswapRoute.isFetching}
         sellTokenDetails={sellTokenDetails.data}
         routeResult={uniswapRoute.data}
       />

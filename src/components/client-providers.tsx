@@ -10,7 +10,7 @@ import {
 import { alchemyProvider } from '@wagmi/core/providers/alchemy';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
-import { goerli, mainnet } from 'wagmi/chains';
+import { goerli, localhost, mainnet } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 
 import CustomAvatar from './custom-avatar';
@@ -21,7 +21,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     mainnet,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [goerli] : []),
+    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true'
+      ? [goerli, localhost]
+      : []),
   ],
   [
     alchemyProvider({

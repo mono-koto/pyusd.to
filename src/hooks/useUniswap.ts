@@ -18,6 +18,7 @@ import { useMemo } from 'react';
 import { createWalletClient, custom, formatUnits } from 'viem';
 import { useTokenDetails } from './useTokenDetails';
 import { TokenDetails } from '@/models';
+import { localhost } from 'viem/chains';
 
 const UNISWAP_V3_SWAP_ROUTER_ADDRESS: Address =
   '0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45';
@@ -84,10 +85,12 @@ export function useRouter() {
       currentWalletClient || temporaryWalletClient(publicClient);
     const provider = getEthersProvider({ chainId });
     const signer = walletClientToSigner(walletClient);
+    // Trick Uniswap into thinking that localhost is mainnet
+    const uniswapChainId = (chainId as number) === localhost.id ? 1 : chainId;
     return new AlphaRouter({
-      chainId,
+      chainId: uniswapChainId,
       provider: signer.provider,
-      onChainQuoteProvider: onChainQuoteProvider(chainId, provider),
+      onChainQuoteProvider: onChainQuoteProvider(uniswapChainId, provider),
     });
   }, [chainId, currentWalletClient, publicClient]);
 }

@@ -6,9 +6,11 @@ import { UseQueryResult } from '@tanstack/react-query';
 import { LuLoader2 } from 'react-icons/lu';
 import { Address, parseUnits } from 'viem';
 import {
+  erc20ABI,
   useAccount,
   useBalance,
   useContractWrite,
+  usePrepareContractWrite,
   usePrepareSendTransaction,
   useSendTransaction,
   useWaitForTransaction,
@@ -19,9 +21,11 @@ import { useCallback } from 'react';
 
 export function PayButton({
   nonZeroAmounts,
+  updating,
   routeResult,
   sellTokenDetails,
 }: {
+  updating: boolean;
   nonZeroAmounts: boolean;
   routeResult: UniswapRouteResult | undefined;
   sellTokenDetails: TokenDetails | undefined;
@@ -36,15 +40,28 @@ export function PayButton({
       enabled: !sellTokenDetails?.isNative,
     }
   );
+
   const balance = useBalance({
     token: sellTokenDetails?.isNative ? undefined : sellTokenDetails?.address,
     address: account.address,
   });
 
+  const amountIn = routeResult
+    ? parseUnits(routeResult.amountIn, routeResult.tokenInDetails.decimals)
+    : BigInt(0);
+
+  const sufficientBalance = balance.data && balance.data.value > amountIn;
+
+  const needsApproval =
+    allowance.data !== undefined &&
+    allowance.data < amountIn &&
+    !sellTokenDetails?.isNative;
+
   const sendPrepare = usePrepareSendTransaction({
     data: routeResult?.methodParameters.calldata as `0x${string}`,
     to: routeResult?.methodParameters.to,
     value: BigInt(routeResult?.methodParameters.value || 0),
+    enabled: !needsApproval,
   });
 
   const send = useSendTransaction(sendPrepare.config);
@@ -61,45 +78,43 @@ export function PayButton({
     hash: send.data?.hash,
   });
 
-  const amountIn = routeResult
-    ? parseUnits(routeResult.amountIn, routeResult.tokenInDetails.decimals)
-    : BigInt(0);
-
-  const sufficientBalance = balance.data && balance.data.value > amountIn;
-
-  const readyForApproval =
-    allowance.data !== undefined &&
-    allowance.data < amountIn &&
-    !sellTokenDetails?.isNative;
-
   const allowanceAmount = amountIn;
 
-  const prepareApprove = usePrepareApprove(
-    sellTokenDetails?.address,
-    account.address,
-    routeResult?.methodParameters.to as Address,
-    allowanceAmount,
-    {
-      enabled: sufficientBalance && readyForApproval,
-    }
-  );
+  const prepareApprove = usePrepareContractWrite({
+    address: sellTokenDetails?.address,
+    abi: erc20ABI,
+    functionName: 'approve',
+    args: [
+      (routeResult?.methodParameters.to || account.address) as Address,
+      allowanceAmount,
+    ],
+    enabled:
+      account.address &&
+      sellTokenDetails &&
+      routeResult &&
+      sufficientBalance &&
+      needsApproval &&
+      !sellTokenDetails?.isNative,
+  });
 
   const setAllowance = useContractWrite(prepareApprove.config);
 
-  const updating =
+  const fetching =
     allowance.isFetching || balance.isFetching || sendPrepare.isFetching;
 
-  if (!nonZeroAmounts) {
-    <Button className="h-fit rounded-xl py-4 text-lg" disabled>
-      Please enter an amount
-    </Button>;
-  }
-
-  if (allowance.isFetching) {
+  if (updating || fetching) {
     return (
       <Button className="h-fit rounded-xl py-4 text-lg" disabled>
         <LuLoader2 className="h-4 w-4 animate-spin duration-1000" />
         &nbsp; Updating
+      </Button>
+    );
+  }
+
+  if (!nonZeroAmounts) {
+    return (
+      <Button className="h-fit rounded-xl py-4 text-lg" disabled>
+        Please enter an amount
       </Button>
     );
   }
@@ -112,7 +127,9 @@ export function PayButton({
     );
   }
 
-  if (readyForApproval) {
+  console.log(prepareApprove);
+
+  if (needsApproval) {
     return (
       <Button
         className="h-fit rounded-xl py-4 text-lg"
@@ -129,7 +146,7 @@ export function PayButton({
   return (
     <Button
       className="h-fit rounded-xl py-4 text-lg"
-      disabled={!routeResult}
+      disabled={!sendPrepare.isSuccess}
       onClick={executeSwap}
     >
       <img
