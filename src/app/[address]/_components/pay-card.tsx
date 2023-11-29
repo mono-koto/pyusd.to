@@ -1,6 +1,6 @@
 'use client';
 
-import PayForm from '@/app/[address]/_components/pay-form';
+import PayForm from './pay-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import useConfig from '@/hooks/useConfig';
 import { useEns } from '@/hooks/useEns';

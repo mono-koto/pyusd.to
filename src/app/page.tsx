@@ -10,47 +10,30 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { LuChevronRight } from 'react-icons/lu';
-import { useState } from 'react';
+import { LuChevronRight, LuLoader2 } from 'react-icons/lu';
+import { useCallback, useState } from 'react';
 import { isAddress } from 'viem';
 import { useRouter } from 'next/navigation';
 
 interface FormElements extends HTMLFormControlsCollection {
-  amount: HTMLInputElement;
+  input: HTMLInputElement;
 }
 interface UsernameFormElement extends HTMLFormElement {
   readonly elements: FormElements;
 }
 
-function isValidEnsName(name: string) {
-  return name.length > 6 && name.endsWith('.eth');
-}
-
 export default function Home() {
   const router = useRouter();
-  const [value, setValue] = useState<string>('');
+  const [loading, setLoading] = useState(false);
 
-  function handleSubmit(event: React.FormEvent<UsernameFormElement>) {
-    event.preventDefault();
-    router.push('/' + event.currentTarget.elements.amount.value);
-  }
-
-  const onInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = event.target.value;
-    setValue(inputValue);
-
-    if (inputValue.endsWith('.eth')) {
-      if (isValidEnsName(inputValue)) {
-        event.target.setCustomValidity('');
-      } else {
-        event.target.setCustomValidity('Invalid ENS name');
-      }
-    } else if (isAddress(inputValue)) {
-      event.target.setCustomValidity('');
-    } else {
-      event.target.setCustomValidity('Invalid address');
-    }
-  };
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<UsernameFormElement>) => {
+      event.preventDefault();
+      router.push('/' + event.currentTarget.elements.input.value);
+      setLoading(true);
+    },
+    []
+  );
 
   return (
     <div className="flex w-full flex-col items-center gap-8">
@@ -68,13 +51,12 @@ export default function Home() {
                 <Label htmlFor="name">Who is getting paid?</Label>
                 <div className="flex w-full items-center space-x-2 md:max-w-md">
                   <Input
-                    id="amount"
+                    id="input"
                     placeholder="ENS or Public Key, e.g. vitalik.eth"
-                    value={value}
-                    onInput={onInput}
                     spellCheck={false}
                     autoCapitalize="off"
                     autoCorrect="off"
+                    autoComplete="off"
                     required
                   />
                   <Button
@@ -82,8 +64,13 @@ export default function Home() {
                     size="icon"
                     variant="outline"
                     className="disabled:opacity-50"
+                    disabled={loading}
                   >
-                    <LuChevronRight className="h-4 w-4" />
+                    {loading ? (
+                      <LuLoader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <LuChevronRight className="h-4 w-4" />
+                    )}
                   </Button>
                 </div>
               </div>

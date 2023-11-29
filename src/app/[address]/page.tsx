@@ -1,15 +1,9 @@
 'use server';
 
-import Loading from '@/components/loading';
-import dynamic from 'next/dynamic';
 import { notFound } from 'next/navigation';
 import { isAddress } from 'viem';
 import { findNickname } from '../_db/nickname-repository';
-
-const PayCard = dynamic(() => import('@/app/[address]/_components/pay-card'), {
-  ssr: false,
-  loading: () => <Loading />,
-});
+import PayCard from './_components/pay-card';
 
 export default async function PayPage({
   params,

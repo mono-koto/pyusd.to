@@ -116,10 +116,15 @@ export default function NicknameForm({ address }: NicknameFormProps) {
               />
             </div>
             <div className="flex flex-row gap-2">
-              <Button size="icon" variant="outline" onClick={onShuffle}>
+              <Button
+                type="button"
+                size="icon"
+                variant="outline"
+                onClick={onShuffle}
+              >
                 <GiPerspectiveDiceSixFacesRandom className="h-6 w-6" />
               </Button>
-              <Button>Create</Button>
+              <Button type="submit">Create</Button>
             </div>
           </div>
           <div className="flex flex-row justify-between gap-2 text-xs">
