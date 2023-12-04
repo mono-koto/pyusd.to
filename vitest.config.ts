@@ -14,5 +14,6 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
+    setupFiles: ['dotenv/config'], //this line,
   },
 });

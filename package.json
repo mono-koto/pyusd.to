@@ -42,6 +42,8 @@
     "decimal.js": "^10.4.3",
     "emoji-regex": "^10.3.0",
     "ethers": "^5.7.2",
+    "graphql": "^16.8.1",
+    "graphql-request": "^6.1.0",
     "immer": "^10.0.3",
     "js-confetti": "^0.11.0",
     "kysely": "^0.26.3",

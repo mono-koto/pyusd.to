@@ -57,6 +57,7 @@ const PayCardTitle: React.FC<PayCardTitleProps> = ({
         <div>{title}</div>
         <div className="font-normal text-foreground">{content}</div>
       </div>
+      <QrButton address={address} />
       <div>
         <AddNicknameButton address={address} />
       </div>

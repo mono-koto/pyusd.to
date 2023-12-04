@@ -1,5 +1,6 @@
 'use client';
 
+import Swaps from '@/components/pyusd-transactions';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -10,10 +11,10 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { LuChevronRight, LuLoader2 } from 'react-icons/lu';
-import { useCallback, useState } from 'react';
-import { isAddress } from 'viem';
+import { networkDependentConfig } from '@/config';
 import { useRouter } from 'next/navigation';
+import { useCallback, useState } from 'react';
+import { LuChevronRight, LuLoader2 } from 'react-icons/lu';
 
 interface FormElements extends HTMLFormControlsCollection {
   input: HTMLInputElement;
@@ -21,6 +22,8 @@ interface FormElements extends HTMLFormControlsCollection {
 interface UsernameFormElement extends HTMLFormElement {
   readonly elements: FormElements;
 }
+
+export const revalidate = 60; // revalidate every 60 seconds
 
 export default function Home() {
   const router = useRouter();
@@ -52,11 +55,12 @@ export default function Home() {
                 <div className="flex w-full items-center space-x-2 md:max-w-md">
                   <Input
                     id="input"
-                    placeholder="ENS or Public Key, e.g. vitalik.eth"
+                    placeholder="ENS, public key, or custom URL"
                     spellCheck={false}
                     autoCapitalize="off"
                     autoCorrect="off"
                     autoComplete="off"
+                    autoFocus
                     required
                   />
                   <Button
@@ -78,6 +82,8 @@ export default function Home() {
           </CardContent>
         </form>
       </Card>
+
+      <Swaps address={networkDependentConfig[1].buyTokenAddress} />
     </div>
   );
 }

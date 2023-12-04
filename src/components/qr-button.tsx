@@ -23,14 +23,14 @@ export function QrButton({ address, currentSlug }: ShareProps) {
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="outline" size="icon">
-          <BiQrScan className="h-[2rem] w-[2rem]" />
+          <BiQrScan className="h-[1.6rem] w-[1.6rem]" />
         </Button>
       </DialogTrigger>
       <DialogContent>
         <div className="m-2 border-2 border-transparent dark:border-foreground md:m-6">
           <ClientOnly>
             <QRCodeSVG
-              value={'xxx'}
+              value={location}
               className="h-full w-full"
               imageSettings={{
                 src: icon.src,

@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import { isAddress } from 'viem';
 import { findNickname } from '../_db/nickname-repository';
 import PayCard from './_components/pay-card';
+import { Suspense } from 'react';
+import Loading from '@/components/loading';
 
 export default async function PayPage({
   params,
@@ -20,10 +22,5 @@ export default async function PayPage({
     recipient = nicknameRecord.address.value;
     nickname = nicknameRecord.value;
   }
-
-  return (
-    <>
-      <PayCard addressOrEns={recipient} nickname={nickname} />
-    </>
-  );
+  return <PayCard addressOrEns={recipient} nickname={nickname} />;
 }

@@ -8,30 +8,25 @@ import {
 } from '@rainbow-me/rainbowkit';
 
 import { alchemyProvider } from '@wagmi/core/providers/alchemy';
-import { infuraProvider } from 'wagmi/providers/infura';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { goerli, localhost, mainnet } from 'wagmi/chains';
+import { infuraProvider } from 'wagmi/providers/infura';
 import { publicProvider } from 'wagmi/providers/public';
 
-import CustomAvatar from './custom-avatar';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ToastContainer } from 'react-toastify';
+import CustomAvatar from './custom-avatar';
+import { coreConfig } from '@/config';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [
-    mainnet,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true'
-      ? [goerli, localhost]
-      : []),
-  ],
+  [mainnet, ...(coreConfig.enableTestnets ? [goerli, localhost] : [])],
   [
     alchemyProvider({
-      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY as string,
+      apiKey: coreConfig.alchemyAPIKey,
     }),
     infuraProvider({
-      apiKey: process.env.NEXT_PUBLIC_INFURA_PROJECT_ID as string,
+      apiKey: coreConfig.infuraAPIKey,
     }),
     publicProvider(),
   ]
