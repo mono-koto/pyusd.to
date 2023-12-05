@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import { Address } from 'viem';
 import { MdIosShare } from 'react-icons/md';
 import NicknameForm from './nickname-form';
+import { FaMagic } from 'react-icons/fa';
 
 interface AddNicknameButtonProps extends ButtonProps {
   address: Address;
@@ -29,7 +30,13 @@ export function AddNicknameButton({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Customize</Button>
+        <Button
+          variant="outline"
+          className=" text-pink-500 hover:text-pink-600"
+        >
+          <FaMagic className="mr-2" />
+          Personalize URL
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

@@ -33,8 +33,9 @@ As always with L1, gas cost is a major issue for simple operations like this, an
 # Local development
 
 ```bash
-npm install
-npm run dev
+nvm use      # Or just ensure you're using node v20+
+npm install  # Install dependencies
+npm run dev  # Start the dev server
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

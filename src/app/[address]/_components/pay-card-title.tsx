@@ -4,7 +4,7 @@ import BlockscannerLink from '@/components/BlockscannerLink';
 import { MdPermIdentity } from 'react-icons/md';
 import { AddNicknameButton } from './add-nickname-button';
 import { Address } from 'viem';
-import { QrButton } from '@/components/qr-button';
+import { ShareButton } from '@/app/[address]/_components/share-button';
 
 interface PayCardTitleProps {
   nickname?: string;
@@ -57,10 +57,8 @@ const PayCardTitle: React.FC<PayCardTitleProps> = ({
         <div>{title}</div>
         <div className="font-normal text-foreground">{content}</div>
       </div>
-      <div>
-        <QrButton address={address} />
-        <AddNicknameButton address={address} />
-      </div>
+      <AddNicknameButton address={address} />
+      <ShareButton ensOrAddress={ensName || address} currentSlug={nickname} />
     </div>
   );
 };

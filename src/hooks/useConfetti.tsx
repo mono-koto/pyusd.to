@@ -3,17 +3,18 @@
 import JSConfetti from 'js-confetti';
 import { create } from 'zustand';
 
-const jsConfetti = new JSConfetti();
-
 interface ConfettiState {
-  confetti: JSConfetti;
+  confetti: JSConfetti | undefined;
   fireConfetti: () => void;
 }
 
 export const useConfetti = create<ConfettiState>()((set, get) => ({
-  confetti: new JSConfetti(),
+  confetti: undefined,
   fireConfetti: () => {
-    get().confetti.addConfetti({
+    if (get().confetti === undefined) {
+      set({ confetti: new JSConfetti() });
+    }
+    get().confetti!.addConfetti({
       emojis: ['✨', '💫', '🌈', '💸', '💰', '💵', '🤑', '💴', '💷', '🅿️'],
       emojiSize: 60,
       confettiNumber: 200,

@@ -52,7 +52,7 @@ export default function Home() {
                 <div className="flex w-full items-center space-x-2 md:max-w-md">
                   <Input
                     id="input"
-                    placeholder="ENS or Public Key, e.g. vitalik.eth"
+                    placeholder="ENS, public key, or custom pyusd.to name"
                     spellCheck={false}
                     autoCapitalize="off"
                     autoCorrect="off"
