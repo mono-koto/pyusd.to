@@ -17,6 +17,7 @@ import { GasFeeDisplay } from './gas-fee-display';
 import { PayButton } from './pay-button';
 import PayFormUI from './pay-form-ui';
 import { set } from 'zod';
+import { UseCowSwapQuoteOptions, useCowSwapQuote } from '@/hooks/useCowSwap';
 
 interface PayFormProps {
   nickname?: string;
@@ -57,6 +58,21 @@ export default function PayForm({
     ...debouncedRouteParams,
     enabled: !sameToken,
   });
+
+  const kind =
+    debouncedRouteParams.tradeType === 'EXACT_INPUT' ? 'sell' : 'buy';
+  const cowswapOptions: UseCowSwapQuoteOptions = {
+    from: from,
+    sellToken: sellTokenDetails.data?.address,
+    buyToken: buyTokenDetails.data?.address,
+    amount: debouncedRouteParams.amount,
+    kind,
+    enabled: !sameToken,
+    receiver: receiver,
+  };
+
+  const cowswapQuote = useCowSwapQuote(cowswapOptions);
+  console.log('cowswapQuote', cowswapQuote.status, cowswapQuote.data);
 
   useEffect(() => {
     if (routeParams.amount === BigInt(0)) {
@@ -228,6 +244,7 @@ export default function PayForm({
         updating={uniswapRoute.isFetching}
         sellTokenDetails={sellTokenDetails.data}
         routeResult={uniswapRoute.data}
+        cowswapQuote={cowswapQuote.data}
         onSuccess={resetForm}
       />
     </div>

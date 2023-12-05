@@ -14,6 +14,7 @@
     "db:reset": "tsx ./src/app/_db/migrate.ts down-to NO_MIGRATIONS"
   },
   "dependencies": {
+    "@cowprotocol/cow-sdk": "^4.0.3",
     "@hookform/resolvers": "^3.3.2",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.5",

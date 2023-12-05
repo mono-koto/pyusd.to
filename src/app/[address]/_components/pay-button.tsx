@@ -4,7 +4,7 @@ import { useAllowance, usePrepareApprove } from '@/hooks/useAllowance';
 import { UniswapRouteResult } from '@/hooks/useUniswap';
 import { UseQueryResult } from '@tanstack/react-query';
 import { LuLoader2 } from 'react-icons/lu';
-import { Address, parseUnits } from 'viem';
+import { Address, formatUnits, parseUnits } from 'viem';
 import {
   erc20ABI,
   useAccount,
@@ -22,47 +22,78 @@ import { toast } from 'react-toastify';
 import { reformatTokenAmount } from '@/lib/format';
 import BlockscannerLink from '@/components/BlockscannerLink';
 import { useConfetti } from '@/hooks/useConfetti';
+import { Token, WETH9 } from '@uniswap/sdk-core';
+import { useTokenDetails } from '@/hooks/useTokenDetails';
+import { useTokens } from '@/hooks/useTokens';
+import useConfig from '@/hooks/useConfig';
+import { UseCowSwapQuoteResult } from '@/hooks/useCowSwap';
 
 export function PayButton({
   nonZeroAmounts,
   updating,
   routeResult,
   sellTokenDetails,
+  cowswapQuote,
   onSuccess,
 }: {
   updating: boolean;
   nonZeroAmounts: boolean;
   routeResult: UniswapRouteResult | undefined;
   sellTokenDetails: TokenDetails | undefined;
+  cowswapQuote: UseCowSwapQuoteResult | undefined;
   onSuccess: () => void;
 }) {
   const { fireConfetti } = useConfetti();
   const account = useAccount();
+  const config = useConfig();
+
+  const wethTokenDetails = useTokenDetails(config.weth);
+
+  const sellableTokenDetails: TokenDetails | undefined =
+    sellTokenDetails?.isNative && wethTokenDetails.data
+      ? wethTokenDetails.data
+      : sellTokenDetails;
 
   const allowance = useAllowance(
-    sellTokenDetails?.address,
+    sellableTokenDetails?.address,
     account.address,
-    routeResult?.methodParameters.to as Address,
-    {
-      enabled: !sellTokenDetails?.isNative,
-    }
+    routeResult?.methodParameters.to as Address
   );
 
   const balance = useBalance({
-    token: sellTokenDetails?.isNative ? undefined : sellTokenDetails?.address,
+    token: sellableTokenDetails?.address,
     address: account.address,
+    enabled: Boolean(sellTokenDetails),
+  });
+
+  const nativeBalance = useBalance({
+    address: account.address,
+    enabled: Boolean(sellTokenDetails?.isNative),
   });
 
   const amountIn = routeResult
     ? parseUnits(routeResult.amountIn, routeResult.tokenInDetails.decimals)
     : BigInt(0);
 
-  const sufficientBalance = balance.data && balance.data.value > amountIn;
+  const sufficientSellableBalance = Boolean(
+    balance.data && balance.data.value > amountIn
+  );
+
+  const sufficientTotalBalance =
+    sufficientSellableBalance ||
+    Boolean(
+      sellTokenDetails?.isNative &&
+        nativeBalance.data &&
+        balance.data &&
+        nativeBalance.data.value + balance.data.value > amountIn
+    );
+
+  const wethToDeposit = sufficientSellableBalance
+    ? 0n
+    : amountIn - (balance.data?.value || 0n);
 
   const needsApproval =
-    allowance.data !== undefined &&
-    allowance.data < amountIn &&
-    !sellTokenDetails?.isNative;
+    allowance.data !== undefined && allowance.data < amountIn;
 
   const sendPrepare = usePrepareSendTransaction({
     data: routeResult?.methodParameters.calldata as `0x${string}`,
@@ -103,8 +134,46 @@ export function PayButton({
 
   const allowanceAmount = amountIn;
 
+  const prepareWethDeposit = usePrepareContractWrite({
+    address: config.weth,
+    abi: [
+      {
+        constant: false,
+        inputs: [],
+        name: 'deposit',
+        outputs: [],
+        payable: true,
+        stateMutability: 'payable',
+        type: 'function',
+      },
+    ],
+    functionName: 'deposit',
+    args: [],
+    value: BigInt(wethToDeposit),
+    enabled: sellTokenDetails?.isNative,
+  });
+
+  const depositWeth = useContractWrite({
+    ...prepareWethDeposit.config,
+    onMutate: (data) => {
+      toast('Initiating deposit...');
+    },
+    onSuccess: (data) => {
+      toast.success(
+        <TransactionMessage transactionHash={data.hash}>
+          🎉 Transaction success!
+        </TransactionMessage>
+      );
+    },
+    onError: (data) => {
+      data.message.match('User rejected')
+        ? toast.info('Transaction cancelled')
+        : toast.error('Transaction failed');
+    },
+  });
+
   const prepareApprove = usePrepareContractWrite({
-    address: sellTokenDetails?.address,
+    address: sellableTokenDetails?.address,
     abi: erc20ABI,
     functionName: 'approve',
     args: [
@@ -114,11 +183,10 @@ export function PayButton({
 
     enabled:
       account.address &&
-      sellTokenDetails &&
+      sellableTokenDetails &&
       routeResult &&
-      sufficientBalance &&
-      needsApproval &&
-      !sellTokenDetails?.isNative,
+      sufficientSellableBalance &&
+      needsApproval,
   });
 
   const setAllowance = useContractWrite({
@@ -141,7 +209,10 @@ export function PayButton({
   });
 
   const fetching =
-    allowance.isFetching || balance.isFetching || sendPrepare.isFetching;
+    allowance.isFetching ||
+    balance.isFetching ||
+    sendPrepare.isFetching ||
+    prepareWethDeposit.isFetching;
 
   if (updating || fetching) {
     return (
@@ -156,7 +227,17 @@ export function PayButton({
     return <StyledPayButton disabled>Please enter an amount</StyledPayButton>;
   }
 
-  if (!sufficientBalance) {
+  if (!sufficientSellableBalance) {
+    if (sufficientTotalBalance) {
+      return (
+        <StyledPayButton
+          onClick={() => depositWeth.write && depositWeth.write()}
+        >
+          Wrap {reformatTokenAmount(formatUnits(wethToDeposit, 18), 18)} ETH
+        </StyledPayButton>
+      );
+    }
+
     return (
       <StyledPayButton disabled>
         Insufficient {sellTokenDetails?.symbol} Balance
