@@ -14,6 +14,12 @@ import { Address } from 'viem';
 import { MdIosShare } from 'react-icons/md';
 import NicknameForm from './nickname-form';
 import { FaMagic } from 'react-icons/fa';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 interface AddNicknameButtonProps extends ButtonProps {
   address: Address;

@@ -99,6 +99,7 @@ export default function NicknameForm({ address }: NicknameFormProps) {
     if (formState.isSubmitted) {
       return '🎉 Created!';
     }
+    return '💭 Thinking...';
   }, [input, formState, formState.isSubmitSuccessful, formState.isSubmitted])();
 
   return (
@@ -130,7 +131,17 @@ export default function NicknameForm({ address }: NicknameFormProps) {
               >
                 <GiPerspectiveDiceSixFacesRandom className="h-6 w-6" />
               </Button>
-              <Button type="submit">Create</Button>
+              <Button
+                type="submit"
+                disabled={
+                  !formState.isValid ||
+                  formState.isValidating ||
+                  formState.isSubmitting ||
+                  formState.isLoading
+                }
+              >
+                Create
+              </Button>
             </div>
           </div>
           <div className="flex flex-row justify-between gap-2 text-xs">

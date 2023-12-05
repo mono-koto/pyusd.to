@@ -41,14 +41,7 @@ export default function RootLayout({
             <Suspense fallback={<SuspenseFallback />}>{children}</Suspense>
             <ToastContainer
               position="bottom-right"
-              // autoClose={5000}
-              // hideProgressBar={false}
-              // newestOnTop={false}
-              // closeOnClick
-              // rtl={false}
               pauseOnFocusLoss={false}
-              // draggable
-              // pauseOnHover
               theme={'light'}
             />
           </LayoutWrapper>

@@ -20,11 +20,13 @@ export default function PayCard({ addressOrEns, nickname }: PayCardProps) {
 
   const ens = useEns(addressOrEns, { suspense: true });
 
-  const notFound = ens.isSuccess && ens.data.name && !ens.data.address;
+  const notFound =
+    !nickname && ens.isSuccess && ens.data.name && !ens.data.address;
   if (notFound) {
     return (
       <NotFound>
-        Address not found for <strong>{ens.data.name}</strong>
+        Address not found for <strong>{ens.data.name}</strong>.
+        <br />
       </NotFound>
     );
   }

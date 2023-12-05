@@ -15,7 +15,7 @@ export const AddressSchema = z
 
 export const NicknameSchema = z
   .string()
-  .min(4)
+  .min(1)
   .refine((nickname) => {
     return nicknameRegExp.test(nickname);
   });
