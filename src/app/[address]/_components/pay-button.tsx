@@ -9,6 +9,7 @@ import {
   erc20ABI,
   useAccount,
   useBalance,
+  useConnect,
   useContractWrite,
   usePrepareContractWrite,
   usePrepareSendTransaction,
@@ -22,6 +23,7 @@ import { toast } from 'react-toastify';
 import { reformatTokenAmount } from '@/lib/format';
 import BlockscannerLink from '@/components/BlockscannerLink';
 import { useConfetti } from '@/hooks/useConfetti';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 export function PayButton({
   nonZeroAmounts,
@@ -38,6 +40,7 @@ export function PayButton({
 }) {
   const { fireConfetti } = useConfetti();
   const account = useAccount();
+  const connectModal = useConnectModal();
 
   const allowance = useAllowance(
     sellTokenDetails?.address,
@@ -154,6 +157,18 @@ export function PayButton({
 
   if (!nonZeroAmounts) {
     return <StyledPayButton disabled>Please enter an amount</StyledPayButton>;
+  }
+
+  if (!account.isConnected) {
+    return (
+      <StyledPayButton
+        onClick={() =>
+          connectModal.openConnectModal && connectModal.openConnectModal()
+        }
+      >
+        Connect wallet to pay
+      </StyledPayButton>
+    );
   }
 
   if (!sufficientBalance) {
