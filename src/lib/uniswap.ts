@@ -79,7 +79,7 @@ export async function generateRoute({
       topNWithBaseToken: 1,
     },
     maxSwapsPerPath: 3,
-    maxSplits: 2,
+    maxSplits: 1,
     distributionPercent: 100,
     writeToCachedRoutes: false,
     useCachedRoutes: false, // TODO no route caching provider yet
