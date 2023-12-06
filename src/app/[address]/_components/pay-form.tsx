@@ -149,19 +149,22 @@ export default function PayForm({
     }
   }, [uniswapRoute.data, buyTokenDecimals, sellTokenDecimals]);
 
-  const handleTokenChange = useCallback((token: TokenDetails) => {
-    setRouteParams(
-      produce((draft: UniswapRouteParams) => {
-        draft.tokenIn = token.address;
-        draft.amount = BigInt(0);
-        draft.tradeType = 'EXACT_OUTPUT';
-      })
-    );
-    setSellAmountInput('');
-    if (routeParams.tradeType === 'EXACT_INPUT') {
-      setBuyAmountInput('');
-    }
-  }, []);
+  const handleTokenChange = useCallback(
+    (token: TokenDetails) => {
+      setRouteParams(
+        produce((draft: UniswapRouteParams) => {
+          draft.tokenIn = token.address;
+          draft.amount = BigInt(0);
+          draft.tradeType = 'EXACT_OUTPUT';
+        })
+      );
+      setSellAmountInput('');
+      if (routeParams.tradeType === 'EXACT_INPUT') {
+        setBuyAmountInput('');
+      }
+    },
+    [routeParams.tradeType]
+  );
 
   const isNative = sellTokenDetails.data?.isNative;
   const sellTokenBalance = useBalance({
@@ -178,13 +181,7 @@ export default function PayForm({
       })
     );
     sellTokenBalance.refetch();
-  }, [
-    setSellAmountInput,
-    setBuyAmountInput,
-    setRouteParams,
-    sellTokenBalance,
-    uniswapRoute,
-  ]);
+  }, [setRouteParams, sellTokenBalance]);
 
   const sellTokenInputDisabled =
     uniswapRoute.isFetching &&

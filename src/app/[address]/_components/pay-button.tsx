@@ -103,7 +103,7 @@ export function PayButton({
       onSuccess();
       fireConfetti();
     }
-  }, [watchSend]);
+  }, [fireConfetti, onSuccess, watchSend]);
 
   const executeSwap = useCallback(() => {
     if (!send.sendTransaction) {
@@ -111,7 +111,7 @@ export function PayButton({
       return;
     }
     send.sendTransaction();
-  }, [send.sendTransaction]);
+  }, [send]);
 
   const allowanceAmount = amountIn;
 
@@ -163,7 +163,7 @@ export function PayButton({
       onSuccess();
       fireConfetti();
     }
-  }, [watchSetAllowance]);
+  }, [fireConfetti, onSuccess, watchSetAllowance]);
 
   const fetching =
     allowance.isFetching || balance.isFetching || sendPrepare.isFetching;

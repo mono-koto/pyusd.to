@@ -62,7 +62,7 @@ export default function NicknameForm({ address }: NicknameFormProps) {
       });
       e.preventDefault();
     },
-    [setValue, generateSlug]
+    [setValue]
   );
 
   const input = watch('nickname');
@@ -100,7 +100,7 @@ export default function NicknameForm({ address }: NicknameFormProps) {
       return '🎉 Created!';
     }
     return '💭 Thinking...';
-  }, [input, formState, formState.isSubmitSuccessful, formState.isSubmitted])();
+  }, [input, formState])();
 
   return (
     <>

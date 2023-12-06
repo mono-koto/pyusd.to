@@ -12,7 +12,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { LuChevronRight, LuLoader2 } from 'react-icons/lu';
 import { useCallback, useState } from 'react';
-import { isAddress } from 'viem';
 import { useRouter } from 'next/navigation';
 
 interface FormElements extends HTMLFormControlsCollection {
@@ -32,7 +31,7 @@ export default function Home() {
       router.push('/' + event.currentTarget.elements.input.value);
       setLoading(true);
     },
-    []
+    [router]
   );
 
   return (

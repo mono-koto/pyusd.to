@@ -32,7 +32,7 @@ export function AddNicknameButton({
   const [location, setLocation] = useState<string>('');
   useEffect(() => {
     setLocation(window.location.href);
-  });
+  }, [setLocation]);
   return (
     <Dialog>
       <DialogTrigger asChild>

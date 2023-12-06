@@ -88,6 +88,8 @@ Copy `.env.template` to `.env` and fill in your own values. If running a local d
      postgres
    ```
 
+4. Run `npm run db:migrate` to run migrations.
+
 ## Testing
 
 Since this project was more exploratory than production-oriented, the codebase does not have many tests other than a few spec files for the database interactions. To run those, run the database in docker as above, then use `npm test`.

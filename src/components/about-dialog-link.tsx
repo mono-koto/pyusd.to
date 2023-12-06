@@ -53,7 +53,7 @@ export function AboutDialogLink({ content }: { content: string }) {
             <li>Tap your crypto balance.</li>
             <li>
               Tap the image Transfer arrows:{' '}
-              <img
+              <Image
                 className="m-0 inline-block"
                 src="https://www.paypalobjects.com/gops/crypto_transfer_arrows.png"
                 width={24}
@@ -76,11 +76,11 @@ export function AboutDialogLink({ content }: { content: string }) {
           </p>
 
           <p>
-            The PYUSD token effectively opens up PayPal's multi-sided web2
+            The PYUSD token effectively opens up PayPal&apos;s multi-sided web2
             commerce network to the Ethereum web3 network. Anyone with a crypto
             wallet can now pay a PayPal user via PYUSD, using readymade web3
-            wallets, composed with DeFi protocols, and all leveraging Ethereum's
-            transparency and security.
+            wallets, composed with DeFi protocols, and all leveraging
+            Ethereum&apos;s transparency and security.
           </p>
         </article>
       </DialogContent>

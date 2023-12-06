@@ -97,7 +97,7 @@ export function useRouter() {
       provider: signer.provider,
       onChainQuoteProvider: onChainQuoteProvider(uniswapChainId, provider),
     });
-  }, [chainId, uniswapChainId, currentWalletClient, publicClient]);
+  }, [chainId, currentWalletClient, publicClient]);
 }
 
 /***

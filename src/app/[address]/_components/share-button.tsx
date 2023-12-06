@@ -30,7 +30,7 @@ export function ShareButton({ ensOrAddress, currentSlug }: ShareProps) {
   const [copied, setCopied] = useState<boolean>(false);
   useEffect(() => {
     setLocation(window.location.href);
-  });
+  }, [setLocation]);
 
   const copyToClipboard = (text: string) => () => {
     navigator.clipboard.writeText(text);

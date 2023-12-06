@@ -85,7 +85,12 @@ export function TransferButton({
       onSuccess();
       fireConfetti();
     }
-  }, [watchTransfer.isSuccess]);
+  }, [
+    watchTransfer.isSuccess,
+    fireConfetti,
+    onSuccess,
+    watchTransfer.data?.blockHash,
+  ]);
 
   const executeTransfer = useCallback(() => {
     if (!transfer.write) {
@@ -93,7 +98,7 @@ export function TransferButton({
       return;
     }
     transfer.write();
-  }, [transfer.write]);
+  }, [transfer]);
 
   const fetching = balance.isFetching || prepareTransfer.isFetching;
 
