@@ -30,7 +30,7 @@ export default function LayoutWrapper({
           </div>
         </nav>
 
-        <main className="container mx-auto flex max-w-2xl flex-1 flex-col p-2">
+        <main className="container mx-auto flex max-w-2xl flex-1 flex-col p-2 xl:max-w-3xl">
           <Suspense fallback={<Loading />}>{children}</Suspense>
         </main>
 
