@@ -13,6 +13,12 @@ const nextConfig = {
         port: '',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'www.paypalobjects.com',
+        port: '',
+        pathname: '**',
+      },
     ],
   },
 };

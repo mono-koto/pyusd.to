@@ -5,7 +5,7 @@ import { ThemeToggle } from './theme-toggle';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import Loading from './loading';
-import { ToastContainer } from 'react-toastify';
+import { AboutDialogLink } from './about-dialog-link';
 
 export default function LayoutWrapper({
   children,
@@ -33,16 +33,30 @@ export default function LayoutWrapper({
           <Suspense fallback={<Loading />}>{children}</Suspense>
         </main>
 
-        <footer className="grow-0 text-center text-xs">
-          Made with 🔥💜🔥 by Mono Koto + Garden Labs.
+        <footer className="grow-0 text-center text-xs leading-5">
+          Made with 🔥💜🔥 by{' '}
+          <Link target="_blank" href="https://mono-koto.com/">
+            Mono Koto
+          </Link>{' '}
+          +{' '}
+          <Link target="_blank" href="https://gardenlabs.xyz/">
+            Garden Labs
+          </Link>
+          .
           <br />
-          <Link href="https://github.com/mono-koto/pyusd.to">
+          <AboutDialogLink content="How & why?" />
+          <br />
+          <Link target="_blank" href="https://github.com/mono-koto/pyusd.to">
             Open Source
           </Link>{' '}
           with{' '}
-          <Link href="https://github.com/mono-koto/pyusd.to/blob/main/LICENSE">
+          <Link
+            target="_blank"
+            href="https://github.com/mono-koto/pyusd.to/blob/main/LICENSE"
+          >
             MIT License
           </Link>
+          .
         </footer>
       </div>
     </>

@@ -68,6 +68,7 @@
     "pino-pretty": "^10.2.3"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.10",
     "@types/node": "^20",
     "@types/react": "^18.2.36",
     "@types/react-dom": "^18.2.13",
