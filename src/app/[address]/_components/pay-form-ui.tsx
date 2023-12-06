@@ -99,7 +99,7 @@ export default function PayFormUI({
           <div className="relative h-0">
             <div
               className={cn(
-                'absolute left-1/2 z-10 h-fit w-fit -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-muted bg-white p-[7px] shadow-sm transition-all',
+                'absolute left-1/2 z-10 h-fit w-fit -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-muted bg-background p-[7px] shadow-sm transition-all',
                 buyTokenInputDisabled || sellTokenInputDisabled
                   ? 'opacity-100'
                   : 'opacity-0 '
