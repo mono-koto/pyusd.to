@@ -41,7 +41,7 @@ export function SecurityDialogLink({ content }: { content: string }) {
             reviewed by security researchers.
           </p>
 
-          <h4>How do I know I'm getting the best swap rate?</h4>
+          <h4>How do I know I am getting the best swap rate?</h4>
 
           <p>
             As with all web3, please review transactions before sending. The
@@ -52,7 +52,7 @@ export function SecurityDialogLink({ content }: { content: string }) {
             >
               MEV
             </a>
-            . If you're looking to maximize your swap rate and protect against
+            . If you are looking to maximize your swap rate and protect against
             MEV, you may want to consider using an aggregated off-chain
             orderbook like{' '}
             <a href="https://swap.cow.fi/" target="_blank">
