@@ -86,7 +86,7 @@ export function ShareButton({ ensOrAddress, currentSlug }: ShareProps) {
                 <input
                   className="w-full overflow-ellipsis border-0 text-sm hover:cursor-pointer"
                   contentEditable={false}
-                  value={location}
+                  defaultValue={location}
                   onClick={(e) => copyToClipboard(location)}
                 />
                 <div className="shrink-0">
