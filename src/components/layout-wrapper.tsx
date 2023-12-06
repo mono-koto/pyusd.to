@@ -36,10 +36,13 @@ export default function LayoutWrapper({
         <footer className="grow-0 text-center text-xs">
           Made with 🔥💜🔥 by Mono Koto + Garden Labs.
           <br />
-          <Link href="https://github.com/mono-koto/fluffy-clouds">
+          <Link href="https://github.com/mono-koto/pyusd.to">
             Open Source
           </Link>{' '}
-          (soon) with <Link href="">MIT License</Link>
+          with{' '}
+          <Link href="https://github.com/mono-koto/pyusd.to/blob/main/LICENSE">
+            MIT License
+          </Link>
         </footer>
       </div>
     </>
