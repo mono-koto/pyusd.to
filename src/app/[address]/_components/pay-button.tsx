@@ -1,15 +1,20 @@
 'use client';
 
-import { useAllowance, usePrepareApprove } from '@/hooks/useAllowance';
+import BlockscannerLink from '@/components/BlockscannerLink';
+import { useAllowance } from '@/hooks/useAllowance';
+import { useConfetti } from '@/hooks/useConfetti';
 import { UniswapRouteResult } from '@/hooks/useUniswap';
-import { UseQueryResult } from '@tanstack/react-query';
+import { reformatTokenAmount } from '@/lib/format';
+import { TokenDetails } from '@/models';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { ReactNode, useCallback, useEffect } from 'react';
 import { LuLoader2 } from 'react-icons/lu';
+import { toast } from 'react-toastify';
 import { Address, parseUnits } from 'viem';
 import {
   erc20ABI,
   useAccount,
   useBalance,
-  useConnect,
   useContractWrite,
   usePrepareContractWrite,
   usePrepareSendTransaction,
@@ -17,13 +22,6 @@ import {
   useWaitForTransaction,
 } from 'wagmi';
 import { Button, ButtonProps } from '../../../components/ui/button';
-import { TokenDetails } from '@/models';
-import { ReactNode, useCallback, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import { reformatTokenAmount } from '@/lib/format';
-import BlockscannerLink from '@/components/BlockscannerLink';
-import { useConfetti } from '@/hooks/useConfetti';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 export function PayButton({
   nonZeroAmounts,
@@ -79,15 +77,8 @@ export function PayButton({
     onMutate: (data) => {
       toast('Initiating transaction...');
     },
-    onSuccess: (data) => {
-      toast.success(
-        <TransactionMessage transactionHash={data.hash}>
-          🎉 Transaction success!
-        </TransactionMessage>
-      );
-      allowance.refetch();
-      fireConfetti();
-      onSuccess();
+    onSettled: (data) => {
+      balance.refetch();
     },
     onError: (data) => {
       data.message.match('User rejected')
@@ -95,6 +86,23 @@ export function PayButton({
         : toast.error('Transaction failed');
     },
   });
+
+  const watchSend = useWaitForTransaction({
+    confirmations: 1,
+    hash: send.data?.hash,
+  });
+
+  useEffect(() => {
+    if (watchSend.isSuccess) {
+      toast.success(
+        <TransactionMessage transactionHash={watchSend.data?.blockHash}>
+          🎉 Transaction success!
+        </TransactionMessage>
+      );
+      onSuccess();
+      fireConfetti();
+    }
+  }, [watchSend]);
 
   const executeSwap = useCallback(() => {
     if (!send.sendTransaction) {
@@ -129,12 +137,8 @@ export function PayButton({
     onMutate: (data) => {
       toast('Initiating transaction...');
     },
-    onSuccess: (data) => {
-      toast.success(
-        <TransactionMessage transactionHash={data.hash}>
-          🎉 Transaction success!
-        </TransactionMessage>
-      );
+    onSettled: (data) => {
+      allowance.refetch();
     },
     onError: (data) => {
       data.message.match('User rejected')
@@ -142,6 +146,23 @@ export function PayButton({
         : toast.error('Transaction failed');
     },
   });
+
+  const watchSetAllowance = useWaitForTransaction({
+    confirmations: 1,
+    hash: setAllowance.data?.hash,
+  });
+
+  useEffect(() => {
+    if (watchSetAllowance.isSuccess) {
+      toast.success(
+        <TransactionMessage transactionHash={watchSetAllowance.data?.blockHash}>
+          🎉 Transaction success!
+        </TransactionMessage>
+      );
+      onSuccess();
+      fireConfetti();
+    }
+  }, [watchSetAllowance]);
 
   const fetching =
     allowance.isFetching || balance.isFetching || sendPrepare.isFetching;

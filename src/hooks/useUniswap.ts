@@ -77,8 +77,13 @@ function temporaryWalletClient(publicClient: PublicClient) {
 
 export function useRouter() {
   const chainId = useChainId();
-  const { data: currentWalletClient } = useWalletClient({ chainId });
-  const publicClient = usePublicClient({ chainId });
+
+  const uniswapChainId = (chainId as number) === localhost.id ? 1 : chainId;
+
+  const { data: currentWalletClient } = useWalletClient({
+    chainId: uniswapChainId,
+  });
+  const publicClient = usePublicClient({ chainId: uniswapChainId });
 
   return useMemo(() => {
     const walletClient =
@@ -92,7 +97,7 @@ export function useRouter() {
       provider: signer.provider,
       onChainQuoteProvider: onChainQuoteProvider(uniswapChainId, provider),
     });
-  }, [chainId, currentWalletClient, publicClient]);
+  }, [chainId, uniswapChainId, currentWalletClient, publicClient]);
 }
 
 /***

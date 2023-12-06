@@ -17,6 +17,7 @@ import { GasFeeDisplay } from './gas-fee-display';
 import { PayButton } from './pay-button';
 import PayFormUI from './pay-form-ui';
 import { set } from 'zod';
+import { TransferButton } from './transfer-button';
 
 interface PayFormProps {
   nickname?: string;
@@ -223,13 +224,24 @@ export default function PayForm({
         buyTokenInputDisabled={buyTokenInputDisabled}
         collapseFields={sameToken}
       />
-      <PayButton
-        nonZeroAmounts={debouncedRouteParams.amount > BigInt(0)}
-        updating={uniswapRoute.isFetching}
-        sellTokenDetails={sellTokenDetails.data}
-        routeResult={uniswapRoute.data}
-        onSuccess={resetForm}
-      />
+
+      {sameToken ? (
+        <TransferButton
+          nonZeroAmounts={debouncedRouteParams.amount > BigInt(0)}
+          updating={uniswapRoute.isFetching}
+          tokenDetails={sellTokenDetails.data}
+          onSuccess={resetForm}
+          amount={debouncedRouteParams.amount}
+        />
+      ) : (
+        <PayButton
+          nonZeroAmounts={debouncedRouteParams.amount > BigInt(0)}
+          updating={uniswapRoute.isFetching}
+          sellTokenDetails={sellTokenDetails.data}
+          routeResult={uniswapRoute.data}
+          onSuccess={resetForm}
+        />
+      )}
     </div>
   );
 }

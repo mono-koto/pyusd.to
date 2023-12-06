@@ -16,7 +16,7 @@ interface PayCardProps {
 
 export default function PayCard({ addressOrEns, nickname }: PayCardProps) {
   const account = useAccount();
-  const { initialSellTokenAddress, buyTokenAddress, tokenList } = useConfig();
+  const { initialSellTokenAddress, buyTokenAddress } = useConfig();
 
   const ens = useEns(addressOrEns, { suspense: true });
 
