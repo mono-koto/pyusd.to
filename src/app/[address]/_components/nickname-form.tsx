@@ -6,11 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { NicknameSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useDebounce } from '@uidotdev/usehooks';
 import debouncePromise from 'awesome-debounce-promise';
 import { useRouter } from 'next/navigation';
 import { generateSlug } from 'random-word-slugs';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { GiPerspectiveDiceSixFacesRandom } from 'react-icons/gi';
 import { Address } from 'viem';
@@ -38,7 +37,7 @@ export default function NicknameForm({ address }: NicknameFormProps) {
       nickname: string;
     }>({
       resolver: zodResolver(schema),
-      mode: 'all',
+      mode: 'onChange',
     });
 
   const router = useRouter();
@@ -68,6 +67,9 @@ export default function NicknameForm({ address }: NicknameFormProps) {
   const input = watch('nickname');
 
   const message = useCallback(() => {
+    if (formState.isSubmitted) {
+      return '🎉 Created!';
+    }
     if (!input || input.length === 0) {
       return '🦄 Enter a unique name';
     }
@@ -96,9 +98,6 @@ export default function NicknameForm({ address }: NicknameFormProps) {
       return '✅ Looking good!';
     }
 
-    if (formState.isSubmitted) {
-      return '🎉 Created!';
-    }
     return '💭 Thinking...';
   }, [input, formState])();
 

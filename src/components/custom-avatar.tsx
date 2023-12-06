@@ -23,7 +23,7 @@ export default function CustomAvatar({
   return (
     <div className="overflow-clip rounded-full">
       {!useFallback && ensImage ? (
-        <Image
+        <img
           src={ensImage || ''}
           alt={`ENS avatar of ${address}`}
           height={size}

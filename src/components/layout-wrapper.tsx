@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import Loading from './loading';
 import { AboutDialogLink } from './about-dialog-link';
+import { SecurityDialogLink } from './security-dialog-link';
 
 export default function LayoutWrapper({
   children,
@@ -24,8 +25,8 @@ export default function LayoutWrapper({
             </div>
           </div>
           <div className="flex flex-row items-center gap-1 md:gap-4">
-            <ThemeToggle />
             <ConnectButton showBalance={false} label="Connect" />
+            <ThemeToggle />
           </div>
         </nav>
 
@@ -34,29 +35,27 @@ export default function LayoutWrapper({
         </main>
 
         <footer className="grow-0 text-center text-xs leading-5">
-          Made with 🔥💜🔥 by{' '}
-          <Link target="_blank" href="https://mono-koto.com/">
-            Mono Koto
-          </Link>{' '}
-          +{' '}
-          <Link target="_blank" href="https://gardenlabs.xyz/">
-            Garden Labs
-          </Link>
-          .
-          <br />
-          <AboutDialogLink content="How & why?" />
-          <br />
-          <Link target="_blank" href="https://github.com/mono-koto/pyusd.to">
-            Open Source
-          </Link>{' '}
-          with{' '}
-          <Link
+          <AboutDialogLink content="How & why?" /> |{' '}
+          <SecurityDialogLink content="Security + Safety" /> |{' '}
+          <a
             target="_blank"
             href="https://github.com/mono-koto/pyusd.to/blob/main/LICENSE"
           >
             MIT License
-          </Link>
-          .
+          </a>{' '}
+          |{' '}
+          <a target="_blank" href="https://github.com/mono-koto/pyusd.to">
+            GitHub
+          </a>{' '}
+          <br />
+          Made with 🔥💜🔥 by{' '}
+          <a target="_blank" href="https://mono-koto.com/">
+            Mono Koto
+          </a>{' '}
+          +{' '}
+          <a target="_blank" href="https://gardenlabs.xyz/">
+            Garden Labs
+          </a>
         </footer>
       </div>
     </>

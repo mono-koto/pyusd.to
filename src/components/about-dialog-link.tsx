@@ -67,6 +67,47 @@ export function AboutDialogLink({ content }: { content: string }) {
             <li>Copy the address.</li>
           </ol>
 
+          <h4>How does this work?</h4>
+
+          <p>
+            Under the hood this dapp uses{' '}
+            <a href="https://uniswap.org" target="_blank">
+              Uniswap
+            </a>{' '}
+            which is an AMM (automated market maker) protocol on Ethereum.
+          </p>
+          <p>
+            We use the{' '}
+            <a
+              href="https://github.com/Uniswap/smart-order-router"
+              target="_blank"
+            >
+              Uniswap Alpha Router
+            </a>{' '}
+            to find the optimal swap path and to generate transaction calldata,
+            which we then ask your wallet to sign.
+          </p>
+
+          <p>
+            Built with <a href="https://www.typescriptlang.org/">Typescript</a>,{' '}
+            <a href="https://nextjs.org/">NextJS</a>,{' '}
+            <a href="https://vercel.com/">Vercel</a>,{' '}
+            <a href="https://tailwindcss.com/">TailwindCSS</a>,{' '}
+            <a href="https://viem.sh/">Viem</a>,{' '}
+            <a href="https://wagmi.dev/">Wagmi</a>,{' '}
+            <a href="https://www.rainbowkit.com/">RainbowKit</a>,{' '}
+            <a href="https://kysely.dev/">Kysely</a>,{' '}
+            <a href="https://www.postgresql.org/">PostgreSql</a>,{' '}
+            <a href="https://ui.shadcn.com/">ShadCN</a> +{' '}
+            <a href="https://radix-ui.com/">Radix</a>,{' '}
+            <a href="https://react-icons.github.io/react-icons/">React Icons</a>
+            ,{' '}
+            <a href="https://github.com/mono-koto/pyusd.to/blob/main/package.json">
+              and much more
+            </a>
+            .
+          </p>
+
           <h4>Why PYUSD.to?</h4>
 
           <p>

@@ -18,8 +18,10 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: 'PYUSD.to',
-  description: 'Send and receive PYUSD easily using memorable URLs',
+  title: {
+    template: 'PYUSD.to/%s',
+    default: 'PYUSD.to',
+  },
 };
 
 export default function RootLayout({
