@@ -1,6 +1,5 @@
 import Decimal from 'decimal.js';
-import { format } from 'path';
-import { formatUnits, parseAccount, parseUnits } from 'viem/utils';
+import { formatUnits } from 'viem/utils';
 
 function precisionForTokenDecimals(decimals: number) {
   if (decimals < 6) {

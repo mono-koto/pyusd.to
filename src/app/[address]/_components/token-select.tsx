@@ -24,6 +24,7 @@ import { useState } from 'react';
 import { Address, isAddress } from 'viem';
 import { CommandList } from '../../../components/ui/command';
 import { TokenButton } from './token-button';
+import Image from 'next/image';
 
 interface TokenSelectProps {
   defaultToken?: Address;
@@ -36,7 +37,13 @@ function TokenDisplay({ token }: { token: TokenDetails | undefined }) {
   } else {
     return (
       <>
-        <img src={token.logoURI} className="mr-1.5 h-6 w-6" />
+        <Image
+          src={token.logoURI}
+          className="mr-1.5 h-6 w-6"
+          width={24}
+          height={24}
+          alt={`${token.symbol} Token Logo`}
+        />
         <div>{token.symbol}</div>
       </>
     );
@@ -133,7 +140,13 @@ export function TokenSelect({ defaultToken, onChange }: TokenSelectProps) {
 function TokenListDisplay({ token }: { token: TokenDetails }) {
   return (
     <div className="flex flex-row items-center space-x-2 pr-2">
-      <img src={token.logoURI} className="h-6 w-6" alt={`${token.name} logo`} />
+      <Image
+        src={token.logoURI}
+        className="h-6 w-6"
+        alt={`${token.name} Token Logo`}
+        width={24}
+        height={24}
+      />
       <div className="overflow-ellipsis">
         <div>{token.name}</div>
         <div className="text-sm">{token.symbol}</div>

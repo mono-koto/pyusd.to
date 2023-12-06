@@ -22,6 +22,7 @@ import {
   useWaitForTransaction,
 } from 'wagmi';
 import { Button, ButtonProps } from '../../../components/ui/button';
+import Image from 'next/image';
 
 export function PayButton({
   nonZeroAmounts,
@@ -228,10 +229,11 @@ export function PayButton({
 
   return (
     <StyledPayButton disabled={!sendPrepare.isSuccess} onClick={executeSwap}>
-      <img
+      <Image
         src="https://www.paypalobjects.com/devdoc/coin-PYUSD.svg"
         height={20}
         width={20}
+        alt={'PYUSD Token'}
       />
       &nbsp; Send{' '}
       {reformatTokenAmount(

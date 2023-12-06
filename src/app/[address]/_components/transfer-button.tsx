@@ -7,6 +7,7 @@ import { UniswapRouteResult } from '@/hooks/useUniswap';
 import { reformatTokenAmount } from '@/lib/format';
 import { TokenDetails } from '@/models';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
+import Image from 'next/image';
 import { ReactNode, useCallback, useEffect } from 'react';
 import { LuLoader2 } from 'react-icons/lu';
 import { toast } from 'react-toastify';
@@ -143,10 +144,11 @@ export function TransferButton({
       disabled={!prepareTransfer.isSuccess}
       onClick={executeTransfer}
     >
-      <img
+      <Image
         src="https://www.paypalobjects.com/devdoc/coin-PYUSD.svg"
         height={20}
         width={20}
+        alt="PYUSD Token"
       />
       &nbsp; Send{' '}
       {tokenDetails &&

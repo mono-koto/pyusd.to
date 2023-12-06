@@ -1,22 +1,17 @@
 'use client';
 
-import { TokenSelect } from '@/app/[address]/_components/token-select';
-import { useAllowance } from '@/hooks/useAllowance';
 import { useTokenDetails } from '@/hooks/useTokenDetails';
 import { UniswapRouteParams, useUniswapRoute } from '@/hooks/useUniswap';
 import { reformatTokenAmount } from '@/lib/format';
 import { TokenDetails } from '@/models';
-import { Label } from '@radix-ui/react-label';
 import { useDebounce } from '@uidotdev/usehooks';
 import { produce } from 'immer';
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Address, parseUnits } from 'viem';
 import { erc20ABI, useBalance, usePrepareContractWrite } from 'wagmi';
-import AddressLink from '../../../components/AddressLink';
 import { GasFeeDisplay } from './gas-fee-display';
 import { PayButton } from './pay-button';
 import PayFormUI from './pay-form-ui';
-import { set } from 'zod';
 import { TransferButton } from './transfer-button';
 
 interface PayFormProps {

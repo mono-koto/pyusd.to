@@ -1,64 +1,21 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { QRCodeSVG } from 'qrcode.react';
-import icon from '../../public/heartpyusd.svg';
-
-import { useEffect, useState } from 'react';
-import { BiQrScan } from 'react-icons/bi';
-
 import {
-  EmailIcon,
-  EmailShareButton,
   FacebookIcon,
-  FacebookMessengerIcon,
-  FacebookMessengerShareButton,
   FacebookShareButton,
-  FacebookShareCount,
   GabIcon,
   GabShareButton,
-  HatenaIcon,
-  HatenaShareButton,
-  HatenaShareCount,
-  InstapaperIcon,
-  InstapaperShareButton,
   LineIcon,
   LineShareButton,
   LinkedinIcon,
   LinkedinShareButton,
-  LivejournalIcon,
-  LivejournalShareButton,
-  MailruIcon,
-  MailruShareButton,
-  OKIcon,
-  OKShareButton,
-  OKShareCount,
-  PinterestIcon,
-  PinterestShareButton,
-  PinterestShareCount,
-  PocketIcon,
-  PocketShareButton,
-  RedditIcon,
-  RedditShareButton,
-  RedditShareCount,
   TelegramIcon,
   TelegramShareButton,
-  TumblrIcon,
-  TumblrShareButton,
-  TumblrShareCount,
   TwitterShareButton,
-  ViberIcon,
-  ViberShareButton,
-  VKIcon,
-  VKShareButton,
-  VKShareCount,
   WeiboIcon,
   WeiboShareButton,
   WhatsappIcon,
   WhatsappShareButton,
-  WorkplaceIcon,
-  WorkplaceShareButton,
   XIcon,
 } from 'react-share';
 

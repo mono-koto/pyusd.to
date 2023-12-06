@@ -1,5 +1,6 @@
 'use client';
 import BoringAvatar from 'boring-avatars';
+import Image from 'next/image';
 import { useState } from 'react';
 import { isAddress } from 'viem';
 
@@ -22,7 +23,7 @@ export default function CustomAvatar({
   return (
     <div className="overflow-clip rounded-full">
       {!useFallback && ensImage ? (
-        <img
+        <Image
           src={ensImage || ''}
           alt={`ENS avatar of ${address}`}
           height={size}

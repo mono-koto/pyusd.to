@@ -7,6 +7,10 @@ import { useCallback, useState } from 'react';
 import { Address } from 'viem';
 import AddressLink from '../../../components/AddressLink';
 import { GasFeeDisplay } from './gas-fee-display';
+import Image from 'next/image';
+import Logo from '@/components/logo-svg';
+import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 
 interface PayFormUIProps {
   nickname?: string;
@@ -58,7 +62,7 @@ export default function PayFormUI({
   );
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-2">
       <div className="border-gray flex flex-col rounded-xl border p-2">
         <Label className="text-sm">
           You send
@@ -91,32 +95,53 @@ export default function PayFormUI({
         </div>
       </div>
       {!collapseFields && (
-        <div className="border-gray flex flex-col rounded-xl border p-2">
-          <div className="flex flex-row items-center justify-between">
-            <div className="flex-1">
-              <Label className="text-sm">
-                {nickname ? (
-                  <span>
-                    &quot;{nickname}&quot; (<AddressLink address={receiver} />)
-                  </span>
-                ) : (
-                  <AddressLink address={receiver} />
-                )}{' '}
-                will receive:
-              </Label>
+        <>
+          <div className="relative h-0">
+            <div
+              className={cn(
+                'absolute left-1/2 z-10 h-fit w-fit -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-muted bg-white p-[7px] shadow-sm transition-all',
+                buyTokenInputDisabled || sellTokenInputDisabled
+                  ? 'opacity-100'
+                  : 'opacity-0 '
+              )}
+            >
+              <Logo className="w-10" animate />
+            </div>
+          </div>
+          <div className="border-gray flex flex-col rounded-xl border p-2">
+            <div className="flex flex-row items-center justify-between">
+              <div className="flex-1">
+                <Label className="text-sm">
+                  {nickname ? (
+                    <span>
+                      &quot;{nickname}&quot; (<AddressLink address={receiver} />
+                      )
+                    </span>
+                  ) : (
+                    <AddressLink address={receiver} />
+                  )}{' '}
+                  will receive:
+                </Label>
 
-              <input
-                placeholder="0.0"
-                type="number"
-                value={buyAmountInput}
-                onChange={handleBuyAmountInputChange}
-                className="h-12 w-full border-none bg-transparent text-4xl focus:outline-none focus:ring-0"
-                disabled={buyTokenInputDisabled}
+                <input
+                  placeholder="0.0"
+                  type="number"
+                  value={buyAmountInput}
+                  onChange={handleBuyAmountInputChange}
+                  className="h-12 w-full border-none bg-transparent text-4xl focus:outline-none focus:ring-0"
+                  disabled={buyTokenInputDisabled}
+                />
+              </div>
+
+              <Image
+                src={buyTokenLogo!}
+                alt={`Buy Token Logo`}
+                height={50}
+                width={50}
               />
             </div>
-            <img src={buyTokenLogo} height={50} width={50} className="flex-0" />
           </div>
-        </div>
+        </>
       )}
     </div>
   );
