@@ -57,8 +57,10 @@ const PayCardTitle: React.FC<PayCardTitleProps> = ({
         <div>{title}</div>
         <div className="font-normal text-foreground">{content}</div>
       </div>
-      <AddNicknameButton address={address} />
-      <ShareButton ensOrAddress={ensName || address} currentSlug={nickname} />
+      <div className="flex flex-row gap-2">
+        <AddNicknameButton address={address} />
+        <ShareButton ensOrAddress={ensName || address} currentSlug={nickname} />
+      </div>
     </div>
   );
 };

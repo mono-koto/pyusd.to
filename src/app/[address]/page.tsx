@@ -44,8 +44,5 @@ export async function generateMetadata(
     description: nickname
       ? `Send PYUSD to ${nickname} (${recipient})`
       : `Send PYUSD to ${recipient}`,
-    // openGraph: {
-    //   images: ['/some-specific-page-image.jpg', ...previousImages],
-    // },
   };
 }

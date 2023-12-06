@@ -32,7 +32,7 @@ export default function PayCard({ addressOrEns, nickname }: PayCardProps) {
   }
 
   return (
-    <Card>
+    <Card className=" max-w-6xl">
       <CardHeader>
         <CardTitle className="flex flex-row items-center gap-4">
           <PayCardTitle
