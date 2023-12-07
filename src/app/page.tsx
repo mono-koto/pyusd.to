@@ -47,8 +47,8 @@ export default function Home() {
           </h1>
           <h2 className="text-xl text-pink-600 ">
             <span className="bg-semi-transparent">
-              Easily zap your tokens to PYUSD into any wallet. Share custom
-              links. Just gas + swap fees.
+              Easily zap your tokens to PYUSD into any wallet.
+              <br /> Share custom links. Just gas + swap fees.
             </span>
           </h2>
         </div>

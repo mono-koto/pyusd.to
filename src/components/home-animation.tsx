@@ -69,7 +69,8 @@ const sketch = (p5: P5CanvasInstance<SketchProps>) => {
     zAxis: number;
     yAxis: number;
     distance: number;
-    scatterProgress: number;
+    scatterTarget: number;
+    scatterStatus: number;
   }
 
   function createOrbitingToken(logoURI: string, i: number) {
@@ -81,13 +82,26 @@ const sketch = (p5: P5CanvasInstance<SketchProps>) => {
       zAxis: (i * p5.TWO_PI) / logoURIs.length,
       yAxis: Math.random() * p5.TWO_PI,
       distance: Math.random() * 320 + 100,
-      scatterProgress: 0.5,
+      scatterTarget: 0.5,
+      scatterStatus: 0.5,
     };
   }
 
   p5.updateWithProps = (p: SketchProps) => {
     console.log('update props', p);
     props = p;
+    if (orbitingTokens === undefined) {
+      return;
+    }
+    orbitingTokens.forEach((o, i) => {
+      if (o.logoURL === props.filteredToken) {
+        o.scatterTarget = 1;
+      } else if (props.filteredToken === undefined) {
+        o.scatterTarget = 0.5;
+      } else {
+        o.scatterTarget = 0;
+      }
+    });
   };
 
   p5.setup = () => {
@@ -120,27 +134,21 @@ const sketch = (p5: P5CanvasInstance<SketchProps>) => {
     orbitingTokens.forEach((o, i) => {
       if (props.filteredToken === o.logoURL) {
         found = true;
-        o.scatterProgress = Math.min((o.scatterProgress || 0.1) * 1.03, 1);
-      } else if (props.filteredToken === undefined) {
-        if (o.scatterProgress > 0.5) {
-          o.scatterProgress = Math.max(o.scatterProgress * 0.99, 0.5);
-        } else if (scatterProgress < 0.5) {
-          o.scatterProgress = Math.min((o.scatterProgress || 0.1) * 1.03, 0.5);
-        }
-      } else {
-        o.scatterProgress = o.scatterProgress * 0.99;
       }
-      if (o.scatterProgress < 0.01) {
+
+      o.scatterStatus =
+        o.scatterStatus + (o.scatterTarget - o.scatterStatus) * 0.1;
+      if (o.scatterStatus < 0.01) {
         return;
       }
       p5.push();
       p5.rotateZ(p5.frameCount * 0.001 + o.zAxis);
       p5.push();
       p5.rotateY(p5.frameCount * o.orbitSpeed + o.yAxis);
-      const scatterAddition = (1 - o.scatterProgress) * 100;
+      const scatterAddition = (1 - o.scatterStatus) * 100;
       p5.translate(0, 0, o.distance + scatterAddition);
 
-      p5.scale(1 * o.scatterProgress);
+      p5.scale(1 * o.scatterStatus);
       coin(p5, o.image, o.rotationSpeed, false);
       p5.pop();
       p5.pop();
@@ -152,7 +160,8 @@ const sketch = (p5: P5CanvasInstance<SketchProps>) => {
           props.filteredToken as string,
           orbitingTokens.length
         ),
-        scatterProgress: 0,
+        scatterStatus: 0,
+        scatterTarget: 1,
       });
     }
   };
