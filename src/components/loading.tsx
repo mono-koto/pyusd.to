@@ -1,8 +1,7 @@
 'use client';
 
+import React from 'react';
 import { LuLoader2 } from 'react-icons/lu';
-import React, { useEffect, useState } from 'react';
-import Logo from './logo-svg';
 
 const expressions = [
   'Reticulating Splines…',

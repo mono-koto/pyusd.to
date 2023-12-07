@@ -13,6 +13,8 @@ import { Label } from '@/components/ui/label';
 import { LuChevronRight, LuLoader2 } from 'react-icons/lu';
 import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import HomeAnimation from '@/components/home-animation';
+import LayoutWrapper from '@/components/layout-wrapper';
 
 interface FormElements extends HTMLFormControlsCollection {
   input: HTMLInputElement;
@@ -35,48 +37,51 @@ export default function Home() {
   );
 
   return (
-    <div className="flex w-full flex-col items-center gap-8">
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>pyusd.to</CardTitle>
-          <CardDescription>
-            Pay with any token. Receiver gets PYUSD.
-          </CardDescription>
-        </CardHeader>
-        <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-2">
-            <div className="grid w-full items-center gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Who is getting paid?</Label>
-                <div className="flex w-full items-center space-x-2 md:max-w-md">
-                  <Input
-                    id="input"
-                    placeholder="ENS, public key, or custom pyusd.to name"
-                    spellCheck={false}
-                    autoCapitalize="off"
-                    autoCorrect="off"
-                    autoComplete="off"
-                    required
-                  />
-                  <Button
-                    type="submit"
-                    size="icon"
-                    variant="outline"
-                    className="disabled:opacity-50"
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <LuLoader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <LuChevronRight className="h-4 w-4" />
-                    )}
-                  </Button>
+    <>
+      <LayoutWrapper>
+        <Card className="bg-opacity-70 dark:bg-opacity-70">
+          <CardHeader>
+            <CardTitle>pyusd.to</CardTitle>
+            <CardDescription>
+              Pay with any token. Receiver gets PYUSD.
+            </CardDescription>
+          </CardHeader>
+          <form onSubmit={handleSubmit}>
+            <CardContent className="space-y-2">
+              <div className="grid w-full items-center gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Who is getting paid?</Label>
+                  <div className="flex w-full items-center space-x-2 md:max-w-md">
+                    <Input
+                      id="input"
+                      placeholder="ENS, public key, or custom pyusd.to name"
+                      spellCheck={false}
+                      autoCapitalize="off"
+                      autoCorrect="off"
+                      autoComplete="off"
+                      required
+                    />
+                    <Button
+                      type="submit"
+                      size="icon"
+                      variant="outline"
+                      className="disabled:opacity-50"
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <LuLoader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <LuChevronRight className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </form>
-      </Card>
-    </div>
+            </CardContent>
+          </form>
+        </Card>{' '}
+      </LayoutWrapper>
+      <HomeAnimation />
+    </>
   );
 }

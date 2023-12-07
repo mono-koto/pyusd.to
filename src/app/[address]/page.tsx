@@ -5,6 +5,7 @@ import { isAddress } from 'viem';
 import { findNickname } from '../_db/nickname-repository';
 import PayCard from './_components/pay-card';
 import { ResolvingMetadata, Metadata } from 'next';
+import LayoutWrapper from '@/components/layout-wrapper';
 
 type Props = {
   params: { address: string };
@@ -28,7 +29,9 @@ export default async function PayPage({ params }: Props) {
   const { recipient, nickname } = await getRecipientAndNickname(params.address);
   return (
     <>
-      <PayCard addressOrEns={recipient} nickname={nickname} />
+      <LayoutWrapper>
+        <PayCard addressOrEns={recipient} nickname={nickname} />
+      </LayoutWrapper>
     </>
   );
 }

@@ -5,11 +5,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 
-import { cn } from '@/lib/utils';
-import Providers from '@/components/providers';
-import LayoutWrapper from '@/components/layout-wrapper';
-import { Suspense } from 'react';
 import SuspenseFallback from '@/components/loading';
+import Providers from '@/components/providers';
+import { cn } from '@/lib/utils';
+import { Suspense } from 'react';
 import { ToastContainer } from 'react-toastify';
 
 const fontSans = FontSans({
@@ -39,14 +38,12 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          <LayoutWrapper>
-            <Suspense fallback={<SuspenseFallback />}>{children}</Suspense>
-            <ToastContainer
-              position="bottom-right"
-              pauseOnFocusLoss={false}
-              theme={'light'}
-            />
-          </LayoutWrapper>
+          <Suspense fallback={<SuspenseFallback />}>{children}</Suspense>
+          <ToastContainer
+            position="bottom-right"
+            pauseOnFocusLoss={false}
+            theme={'light'}
+          />
         </Providers>
       </body>
     </html>
