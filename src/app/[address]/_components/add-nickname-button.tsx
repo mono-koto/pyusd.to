@@ -20,6 +20,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { PersonalizeButton } from '@/components/personalize-button';
 
 interface AddNicknameButtonProps extends ButtonProps {
   address: Address;
@@ -36,13 +37,7 @@ export function AddNicknameButton({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          className=" text-pink-500 hover:text-pink-600"
-        >
-          <FaMagic className="mr-2" />
-          Personalize URL
-        </Button>
+        <PersonalizeButton />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

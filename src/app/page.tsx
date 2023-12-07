@@ -39,16 +39,16 @@ export default function Home() {
   return (
     <>
       <div className="container mt-6 w-full space-y-6 text-center lg:mt-20">
-        <div className="mx-auto max-w-3xl space-y-2">
+        <div className="mx-auto max-w-2xl space-y-2">
           <h1 className="text-4xl font-bold">
             <span className="bg-semi-transparent">
-              Send payment to PayPal accounts using whatever tokens
+              Send payment to PayPal accounts using any tokens
             </span>
           </h1>
           <h2 className="text-xl text-pink-600 ">
             <span className="bg-semi-transparent">
-              Easily zap your tokens to PYUSD into any wallet.
-              <br /> Share custom links. Just gas + swap fees.
+              Easily swap your tokens to PYUSD, and zap them into any wallet
+              (even PayPal / Venmo)! Claim your custom and easy-to-share link!
             </span>
           </h2>
         </div>

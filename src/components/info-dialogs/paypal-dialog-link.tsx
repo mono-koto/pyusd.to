@@ -13,6 +13,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { useState } from 'react';
+import { LuChevronRight } from 'react-icons/lu';
+import { PersonalizeButton } from '../personalize-button';
 
 export function PayPalDialogLink({ content }: { content: string }) {
   const [open, setOpen] = useState(false);
@@ -76,8 +78,34 @@ export function PayPalDialogLink({ content }: { content: string }) {
             </li>
             <li>Tap Receive.</li>
             <li>Select PYUSD.</li>
-            <li>Your QR code & PYUSD address will appear.</li>
+            <li>Your QR code & PYUSD receiving address will appear.</li>
             <li>Copy the address.</li>
+            <li>
+              Paste PYUSD receiving address into home page of this dapp. Hit the
+              arrow button:
+              <br />
+              <Button
+                type="submit"
+                size="icon"
+                variant="outline"
+                disabled={false}
+                autoFocus={false}
+                className="mb-0 ml-0 scale-75"
+              >
+                <LuChevronRight className="h-4 w-4" />
+              </Button>
+            </li>
+            <li>
+              On the next page &ndash;{' '}
+              <code>pyusd.to/&lt;0x-your-address&gt;</code> &ndash; claim your
+              unique URL using the &ldquo;Personalize URL&rdquo; button:
+              <br />
+              <PersonalizeButton className="mb-0 ml-0 scale-75" />
+            </li>
+            <li>
+              Use your personal URL going forward to easily receive PYUSD from
+              anyone!
+            </li>
           </ol>
 
           <h4>Is this an official PayPal product?</h4>
