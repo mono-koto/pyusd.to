@@ -61,10 +61,6 @@
   [data-rk] {
     @apply min-h-screen text-foreground;
   }
-
-  body {
-    /* @apply terrain bg-repeat; */
-  }
 }
 
 a {
@@ -92,4 +88,18 @@ input[type='number'] {
   to {
     stroke-width: 17px;
   }
+}
+
+.react-p5-wrapper {
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.react-p5-wrapper canvas {
+  width: 100%;
+  height: 100%;
 }
