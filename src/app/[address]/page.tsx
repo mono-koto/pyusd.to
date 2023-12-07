@@ -6,6 +6,7 @@ import { findNickname } from '../_db/nickname-repository';
 import PayCard from './_components/pay-card';
 import { ResolvingMetadata, Metadata } from 'next';
 import LayoutWrapper from '@/components/layout-wrapper';
+import MainContent from '@/components/main-content';
 
 type Props = {
   params: { address: string };
@@ -27,7 +28,11 @@ async function getRecipientAndNickname(address: string) {
 
 export default async function PayPage({ params }: Props) {
   const { recipient, nickname } = await getRecipientAndNickname(params.address);
-  return <PayCard addressOrEns={recipient} nickname={nickname} />;
+  return (
+    <MainContent>
+      <PayCard addressOrEns={recipient} nickname={nickname} />
+    </MainContent>
+  );
 }
 
 export async function generateMetadata(
