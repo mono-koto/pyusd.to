@@ -16,7 +16,7 @@ const NextReactP5Wrapper = dynamic(
   { ssr: false }
 );
 
-export default async function HomeAnimation() {
+export default function HomeAnimation() {
   const favoriteSymbols = [
     'ETH',
     'WETH',

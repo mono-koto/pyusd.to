@@ -26,18 +26,18 @@ export function PayPalDialogLink({ content }: { content: string }) {
         <DialogHeader>
           <DialogTitle>Hello PayPal friend!</DialogTitle>
           <DialogDescription>
-            So you want to get paid with crypto? Let's do this.
+            So you want to get paid with crypto? Let&apos;s do this.
           </DialogDescription>
         </DialogHeader>
         <article className="prose prose-sm prose-slate dark:prose-invert">
-          <h4>I'm not a crypto person. Is this going to be hard?</h4>
+          <h4>I&apos;m not a crypto person. Is this going to be hard?</h4>
           <p>
-            Not at all! You don't need a wallet or weird accounts or special
-            phrases or anything.
+            Not at all! You don&apos;t need a wallet or weird accounts or
+            special phrases or anything.
           </p>
           <p>
-            You're just wanting to get paid by someone who has crypto. This is
-            an easy way to do it.
+            You&apos;re just wanting to get paid by someone who has crypto. This
+            is an easy way to do it.
           </p>
 
           <h4>How do I find my PYUSD wallet address in PayPal</h4>
@@ -90,13 +90,13 @@ export function PayPalDialogLink({ content }: { content: string }) {
             <a target="_blank" href="https://gardenlabs.xyz/">
               Garden Labs
             </a>
-            . PayPal doesn't endorse this app.
+            . PayPal doesn&apos;t endorse this app.
           </p>
 
           <h4>What are the fees for this?</h4>
           <p>
-            This website doesn't charge any fees! But when people pay you, there
-            will be a few costs:
+            This website doesn&apos;t charge any fees! But when people pay you,
+            there will be a few costs:
           </p>
           <ul>
             <li>Gas fees for the Ethereum network</li>

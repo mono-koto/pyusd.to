@@ -43,8 +43,8 @@ export default function Home() {
           Send payment to PayPal accounts using whatever tokens
         </h1>
         <h2 className="text-xl text-pink-600 ">
-          Easily zap to PYUSD to and from any wallet. Share custom links. Just
-          gas + swap fees.
+          Easily zap your tokens to PYUSD into any wallet. Share custom links.
+          Just gas + swap fees.
         </h2>
 
         <Card className="text-1xl mx-auto bg-opacity-70 dark:bg-opacity-70 lg:w-2/3">
