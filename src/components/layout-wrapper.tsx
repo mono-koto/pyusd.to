@@ -1,3 +1,5 @@
+'use client';
+
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Logo from './logo-svg';
 import { ThemeToggle } from './theme-toggle';
@@ -8,6 +10,8 @@ import Loading from './loading';
 import { AboutDialogLink } from './info-dialogs/about-dialog-link';
 import { SecurityDialogLink } from './info-dialogs/security-dialog-link';
 import { PayPalDialogLink } from './info-dialogs/paypal-dialog-link';
+import HomeAnimation from './home-animation';
+import { useSelectedLayoutSegment } from 'next/navigation';
 
 export default function LayoutWrapper({
   children,
@@ -31,7 +35,7 @@ export default function LayoutWrapper({
           </div>
         </nav>
 
-        <div className="flex-1">
+        <div className="h-full flex-1">
           <Suspense fallback={<Loading />}>{children}</Suspense>
         </div>
 
@@ -60,6 +64,9 @@ export default function LayoutWrapper({
           </a>
         </footer>
       </div>
+      <Suspense fallback={<div />}>
+        <HomeAnimation />
+      </Suspense>
     </>
   );
 }

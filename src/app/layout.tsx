@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import { Suspense } from 'react';
 import { ToastContainer } from 'react-toastify';
 import LayoutWrapper from '@/components/layout-wrapper';
+import HomeAnimation from '@/components/home-animation';
 
 const fontSans = FontSans({
   subsets: ['latin'],

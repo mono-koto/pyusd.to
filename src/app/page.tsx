@@ -39,17 +39,19 @@ export default function Home() {
   return (
     <>
       <div className="container mt-6 w-full space-y-6 text-center lg:mt-20">
-        <h1 className="text-4xl font-bold">
-          <span className="bg-semi-transparent">
-            Send payment to PayPal accounts using whatever tokens
-          </span>
-        </h1>
-        <h2 className="text-xl text-pink-600 ">
-          <span className="bg-semi-transparent">
-            Easily zap your tokens to PYUSD into any wallet. Share custom links.
-            Just gas + swap fees.
-          </span>
-        </h2>
+        <div className="mx-auto max-w-3xl space-y-2">
+          <h1 className="text-4xl font-bold">
+            <span className="bg-semi-transparent">
+              Send payment to PayPal accounts using whatever tokens
+            </span>
+          </h1>
+          <h2 className="text-xl text-pink-600 ">
+            <span className="bg-semi-transparent">
+              Easily zap your tokens to PYUSD into any wallet. Share custom
+              links. Just gas + swap fees.
+            </span>
+          </h2>
+        </div>
 
         <Card className="text-1xl mx-auto bg-opacity-70 dark:bg-opacity-70 lg:w-2/3">
           <CardContent className="space-y-8 p-6 text-center">
@@ -96,9 +98,6 @@ export default function Home() {
           </CardContent>
         </Card>
       </div>
-      <Suspense fallback={<div />}>
-        <HomeAnimation />
-      </Suspense>
     </>
   );
 }
