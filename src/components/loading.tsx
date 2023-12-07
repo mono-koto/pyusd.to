@@ -54,13 +54,17 @@ const expressions = [
   'Sailing the seas of code…',
 ];
 
-const Loading: React.FC = () => {
+interface LoadingProps {
+  skipExpressions?: boolean;
+}
+
+const Loading = (props: LoadingProps) => {
   const expressionIndex = Math.floor(Math.random() * expressions.length);
 
   return (
     <div className="flex h-full flex-1 flex-col items-center justify-center gap-3 opacity-40 md:min-h-[200px]">
       <LuLoader2 className="h-12 w-12 animate-spin" />
-      <span>{expressions[expressionIndex]}</span>
+      {!props.skipExpressions && <span>{expressions[expressionIndex]}</span>}
     </div>
   );
 };

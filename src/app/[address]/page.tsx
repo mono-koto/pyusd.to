@@ -27,13 +27,7 @@ async function getRecipientAndNickname(address: string) {
 
 export default async function PayPage({ params }: Props) {
   const { recipient, nickname } = await getRecipientAndNickname(params.address);
-  return (
-    <>
-      <LayoutWrapper>
-        <PayCard addressOrEns={recipient} nickname={nickname} />
-      </LayoutWrapper>
-    </>
-  );
+  return <PayCard addressOrEns={recipient} nickname={nickname} />;
 }
 
 export async function generateMetadata(

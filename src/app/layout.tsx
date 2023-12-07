@@ -10,6 +10,7 @@ import Providers from '@/components/providers';
 import { cn } from '@/lib/utils';
 import { Suspense } from 'react';
 import { ToastContainer } from 'react-toastify';
+import LayoutWrapper from '@/components/layout-wrapper';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -38,7 +39,9 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          <Suspense fallback={<SuspenseFallback />}>{children}</Suspense>
+          <Suspense fallback={<SuspenseFallback />}>
+            <LayoutWrapper>{children}</LayoutWrapper>
+          </Suspense>
           <ToastContainer
             position="bottom-right"
             pauseOnFocusLoss={false}

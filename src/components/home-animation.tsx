@@ -1,29 +1,50 @@
 'use client';
 
-import { usePreferredTokens, useTokens } from '@/hooks/useTokens';
+import {
+  useNamedTokens,
+  usePreferredTokens,
+  useTokens,
+} from '@/hooks/useTokens';
 import { shuffle } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import { P5CanvasInstance, Sketch, SketchProps } from '@p5-wrapper/react';
 import { Image, Renderer } from 'p5';
-import { useCallback } from 'react';
+import { Suspense, useCallback } from 'react';
 
 const NextReactP5Wrapper = dynamic(
-  async () => (await import('@p5-wrapper/react')).ReactP5Wrapper
-  // { ssr: false }
+  async () => (await import('@p5-wrapper/react')).ReactP5Wrapper,
+  { ssr: false }
 );
+
 export default async function HomeAnimation() {
-  const preferredTokens = usePreferredTokens()
-    .filter((token) => token.symbol !== 'PYUSD')
-    .map((token) => token.logoURI);
-  const allTokens = shuffle(
-    useTokens()
-      .filter(
-        (token) => token.logoURI.endsWith('.png') && token.symbol !== 'PYUSD'
-      )
-      .map((token) => token.logoURI)
-  ).slice(0, 15);
-  const tokenSet = new Set([...preferredTokens, ...allTokens, '/icon.png']);
-  const tokens = [...tokenSet];
+  const favoriteSymbols = [
+    'ETH',
+    'WETH',
+    'BTC',
+    'USDC',
+    'DAI',
+    'USDT',
+    'PYUSD',
+    'SUSHI',
+    'UNI',
+    'CRV',
+    'SHIB',
+    'FRAX',
+    'MIM',
+    'ALCX',
+    'COW',
+    'BTRFLY',
+    'BAL',
+    'AAVE',
+    'LINK',
+    'MKR',
+    'SNX',
+    'YFI',
+    'COMP',
+    'FTT',
+    'MATIC',
+  ];
+  const tokens = useNamedTokens(favoriteSymbols).map((token) => token.logoURI);
 
   const sketch: Sketch = useCallback(
     (p5) => {
@@ -41,19 +62,17 @@ export default async function HomeAnimation() {
         distance: number;
       }
 
-      p5.preload = () => {
+      p5.setup = () => {
         pyusdImage = p5.loadImage('/pyusd-220-219.png');
         tokenImages = tokens.map((logoURI) => p5.loadImage(logoURI));
-      };
 
-      p5.setup = () => {
         orbitingTokens = tokens.map((token, i) => ({
           image: tokenImages[i],
           rotationSpeed: Math.random() / 20 + 0.01,
           orbitSpeed: Math.random() / 300 + 0.001,
           zAxis: (i * p5.TWO_PI) / tokens.length,
           yAxis: Math.random() * p5.TWO_PI,
-          distance: Math.random() * 400 + 100,
+          distance: Math.random() * 320 + 80,
         }));
         renderer = p5.createCanvas(p5.windowWidth, p5.windowHeight, p5.WEBGL);
         console.log(
@@ -76,13 +95,7 @@ export default async function HomeAnimation() {
         p5.background(0, 0, 0, 0);
         p5.noStroke();
         p5.normalMaterial();
-        // p5.translate(0, -p5.windowHeight / 2);
-
-        // const offsetX = p5.mouseX - p5.windowWidth / 2;
-        // const offsetY = p5.mouseY - p5.windowHeight / 2;
-        // p5.translate(-offsetX / 10, -offsetY / 10);
         p5.push();
-
         p5.scale(2);
         coin(p5, pyusdImage, 0.01, true);
         p5.pop();

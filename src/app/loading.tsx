@@ -1,3 +1,5 @@
-export default function Loading() {
-  return <>Hey...</>;
+import Loading from '@/components/loading';
+
+export default function TopLevelLoading() {
+  return <Loading />;
 }
