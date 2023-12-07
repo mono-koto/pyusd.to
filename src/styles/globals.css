@@ -100,6 +100,13 @@ input[type='number'] {
 }
 
 .react-p5-wrapper canvas {
+  @apply absolute -top-[75px] h-screen w-screen md:top-0;
+
   width: 100%;
   height: 100%;
+}
+
+.bg-semi-transparent {
+  @apply bg-white dark:bg-slate-950;
+  @apply bg-opacity-60 dark:bg-opacity-60;
 }

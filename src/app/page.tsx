@@ -38,13 +38,17 @@ export default function Home() {
 
   return (
     <>
-      <div className="container mt-20 w-full space-y-6 text-center">
-        <h1 className="text-4xl font-bold animate-in fade-in-50">
-          Send payment to PayPal accounts using whatever tokens
+      <div className="container mt-6 w-full space-y-6 text-center lg:mt-20">
+        <h1 className="text-4xl font-bold">
+          <span className="bg-semi-transparent">
+            Send payment to PayPal accounts using whatever tokens
+          </span>
         </h1>
         <h2 className="text-xl text-pink-600 ">
-          Easily zap your tokens to PYUSD into any wallet. Share custom links.
-          Just gas + swap fees.
+          <span className="bg-semi-transparent">
+            Easily zap your tokens to PYUSD into any wallet. Share custom links.
+            Just gas + swap fees.
+          </span>
         </h2>
 
         <Card className="text-1xl mx-auto bg-opacity-70 dark:bg-opacity-70 lg:w-2/3">
@@ -56,20 +60,9 @@ export default function Home() {
                     Who is getting paid?
                   </Label>
                   <div className="flex w-full items-center justify-stretch space-x-2 ">
-                    <Button
-                      type="submit"
-                      size="icon"
-                      variant="outline"
-                      className="flex-shrink-0 flex-grow-0 opacity-0"
-                      disabled={loading}
-                    >
-                      {loading ? (
-                        <LuLoader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        <LuChevronRight className="h-4 w-4" />
-                      )}
-                    </Button>
-                    <div className="flex-1">
+                    {/* Hiding this button for evenness */}
+
+                    <div className="relative flex-1 self-center">
                       <Input
                         id="input"
                         className="w-full text-center text-xl"
@@ -80,20 +73,19 @@ export default function Home() {
                         autoComplete="off"
                         required
                       />
+                      <Button
+                        type="submit"
+                        size="icon"
+                        className="absolute right-0 top-0 flex-shrink-0 flex-grow-0 rounded-l-none disabled:opacity-50"
+                        disabled={loading}
+                      >
+                        {loading ? (
+                          <LuLoader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <LuChevronRight className="h-4 w-4" />
+                        )}
+                      </Button>
                     </div>
-                    <Button
-                      type="submit"
-                      size="icon"
-                      variant="outline"
-                      className="flex-shrink-0 flex-grow-0  disabled:opacity-50"
-                      disabled={loading}
-                    >
-                      {loading ? (
-                        <LuLoader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        <LuChevronRight className="h-4 w-4" />
-                      )}
-                    </Button>
                   </div>
                 </div>
               </div>

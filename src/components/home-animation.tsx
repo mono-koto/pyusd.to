@@ -147,11 +147,5 @@ export default function HomeAnimation() {
     [tokens]
   );
 
-  return (
-    <NextReactP5Wrapper
-      className="absolute h-screen w-screen"
-      sketch={sketch}
-      tokens={tokens}
-    />
-  );
+  return <NextReactP5Wrapper sketch={sketch} tokens={tokens} />;
 }
