@@ -1,3 +1,5 @@
+'use client';
+
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Logo from './logo-svg';
 import { ThemeToggle } from './theme-toggle';
@@ -5,8 +7,11 @@ import { ThemeToggle } from './theme-toggle';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import Loading from './loading';
-import { AboutDialogLink } from './about-dialog-link';
-import { SecurityDialogLink } from './security-dialog-link';
+import { AboutDialogLink } from './info-dialogs/about-dialog-link';
+import { SecurityDialogLink } from './info-dialogs/security-dialog-link';
+import { PayPalDialogLink } from './info-dialogs/paypal-dialog-link';
+import HomeAnimation from './home-animation';
+import { useSelectedLayoutSegment } from 'next/navigation';
 
 export default function LayoutWrapper({
   children,
@@ -30,11 +35,12 @@ export default function LayoutWrapper({
           </div>
         </nav>
 
-        <main className="container mx-auto flex max-w-2xl flex-1 flex-col p-2 xl:max-w-3xl">
+        <div className="h-full flex-1">
           <Suspense fallback={<Loading />}>{children}</Suspense>
-        </main>
+        </div>
 
         <footer className="grow-0 text-center text-xs leading-5">
+          <PayPalDialogLink content="PayPal user?" /> |{' '}
           <AboutDialogLink content="How & why?" /> |{' '}
           <SecurityDialogLink content="Security + Safety" /> |{' '}
           <a
@@ -58,6 +64,9 @@ export default function LayoutWrapper({
           </a>
         </footer>
       </div>
+      <Suspense fallback={<div />}>
+        <HomeAnimation />
+      </Suspense>
     </>
   );
 }

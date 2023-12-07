@@ -16,6 +16,6 @@ export function useNamedTokens(symbols: string[]): TokenDetails[] {
 }
 
 export function usePreferredTokens(): TokenDetails[] {
-  const preferredTokens = useConfig().preferredTokens;
+  const preferredTokens = useConfig().preferredTokenSymbols;
   return useNamedTokens(preferredTokens);
 }

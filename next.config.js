@@ -5,6 +5,7 @@ const nextConfig = {
       transform: 'react-icons/{{ matches.[1] }}/{{member}}',
     },
   },
+  transpilePackages: ['p5'],
   images: {
     remotePatterns: [
       {

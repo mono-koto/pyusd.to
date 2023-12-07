@@ -13,6 +13,7 @@ import { GasFeeDisplay } from './gas-fee-display';
 import { PayButton } from './pay-button';
 import PayFormUI from './pay-form-ui';
 import { TransferButton } from './transfer-button';
+import { useAnimationProps } from '@/components/home-animation';
 
 interface PayFormProps {
   nickname?: string;
@@ -29,6 +30,8 @@ export default function PayForm({
   from,
   receiver,
 }: PayFormProps) {
+  const { setFilteredToken } = useAnimationProps();
+
   const initialRouteParams: UniswapRouteParams = {
     recipient: receiver,
     tokenIn: sellToken,
@@ -43,6 +46,11 @@ export default function PayForm({
   const [routeParams, setRouteParams] = useState(initialRouteParams);
   const sellTokenDetails = useTokenDetails(routeParams.tokenIn);
   const buyTokenDetails = useTokenDetails(routeParams.tokenOut);
+
+  useEffect(() => {
+    setFilteredToken(sellTokenDetails.data?.logoURI);
+    return () => setFilteredToken(undefined);
+  }, [sellTokenDetails.data?.logoURI]);
 
   const debouncedRouteParams = useDebounce(routeParams, 1000);
 
