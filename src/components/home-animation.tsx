@@ -88,7 +88,6 @@ const sketch = (p5: P5CanvasInstance<SketchProps>) => {
   }
 
   p5.updateWithProps = (p: SketchProps) => {
-    console.log('update props', p);
     props = p;
     if (orbitingTokens === undefined) {
       return;
@@ -117,7 +116,6 @@ const sketch = (p5: P5CanvasInstance<SketchProps>) => {
   };
 
   p5.windowResized = () => {
-    console.log('resized', p5.windowWidth, p5.windowHeight);
     p5.resizeCanvas(p5.windowWidth, p5.windowHeight);
   };
 

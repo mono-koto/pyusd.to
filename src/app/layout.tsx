@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import { Suspense } from 'react';
 import { ToastContainer } from 'react-toastify';
 import LayoutWrapper from '@/components/layout-wrapper';
-import HomeAnimation from '@/components/home-animation';
+import Script from 'next/script';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -32,7 +32,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
+      <head>
+        {process.env.NEXT_PUBLIC_UMAMI_ID && (
+          <Script
+            async
+            src="https://us.umami.is/script.js"
+            data-website-id={process.env.NEXT_PUBLIC_UMAMI_ID}
+          ></Script>
+        )}
+      </head>
       <body
         className={cn(
           'min-h-screen bg-background font-sans antialiased',
