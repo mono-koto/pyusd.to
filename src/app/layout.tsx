@@ -23,6 +23,30 @@ export const metadata: Metadata = {
     template: '%s | PYUSD.to',
     default: 'PYUSD.to',
   },
+  description: 'Send payment to PayPal accounts using any token.',
+  applicationName: 'PYUSD.to',
+  authors: [
+    {
+      name: 'Mono Koto',
+      url: 'https://mono-koto.com/',
+    },
+    {
+      name: 'Garden Labs',
+      url: 'https://gardenlabs.xyz/',
+    },
+  ],
+  creator: 'Mono Koto',
+  keywords: [
+    'PYUSD',
+    'PayPal',
+    'Ethereum',
+    'Crypto',
+    'Web3',
+    'Payment',
+    'Uniswap',
+    'DEX',
+    'Open Source',
+  ],
 };
 
 export default function RootLayout({
