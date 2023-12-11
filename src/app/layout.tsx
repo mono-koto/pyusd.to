@@ -20,7 +20,7 @@ const fontSans = FontSans({
 
 export const metadata: Metadata = {
   title: {
-    template: 'PYUSD.to/%s',
+    template: '%s | PYUSD.to',
     default: 'PYUSD.to',
   },
 };

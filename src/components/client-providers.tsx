@@ -37,7 +37,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
 );
 
 const { connectors } = getDefaultWallets({
-  appName: 'Fluffy Clouds',
+  appName: 'PYUSD.to',
   projectId: '959d669d896f2e3489cb448068b3af3c',
   chains,
 });
