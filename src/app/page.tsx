@@ -42,7 +42,7 @@ export default function Home() {
         <div className="mx-auto max-w-2xl space-y-2">
           <h1 className="text-4xl font-bold">
             <span className="bg-semi-transparent">
-              Send payment to PayPal accounts using any tokens
+              Send payment to PayPal accounts using any token
             </span>
           </h1>
           <h2 className="text-xl text-pink-600 ">
