@@ -78,6 +78,7 @@ export function PayButton({
     onMutate: (data) => {
       toast('Initiating transaction...');
     },
+
     onSettled: (data) => {
       balance.refetch();
     },
@@ -88,22 +89,19 @@ export function PayButton({
     },
   });
 
-  const watchSend = useWaitForTransaction({
+  useWaitForTransaction({
     confirmations: 1,
     hash: send.data?.hash,
-  });
-
-  useEffect(() => {
-    if (watchSend.isSuccess) {
+    onSuccess: (data) => {
       toast.success(
-        <TransactionMessage transactionHash={watchSend.data?.blockHash}>
+        <TransactionMessage transactionHash={data.blockHash}>
           🎉 Transaction success!
         </TransactionMessage>
       );
       onSuccess();
       fireConfetti();
-    }
-  }, [fireConfetti, onSuccess, watchSend]);
+    },
+  });
 
   const executeSwap = useCallback(() => {
     if (!send.sendTransaction) {
@@ -138,6 +136,7 @@ export function PayButton({
     onMutate: (data) => {
       toast('Initiating transaction...');
     },
+
     onSettled: (data) => {
       allowance.refetch();
     },
@@ -148,22 +147,18 @@ export function PayButton({
     },
   });
 
-  const watchSetAllowance = useWaitForTransaction({
+  useWaitForTransaction({
     confirmations: 1,
     hash: setAllowance.data?.hash,
-  });
-
-  useEffect(() => {
-    if (watchSetAllowance.isSuccess) {
+    onSuccess: (data) => {
       toast.success(
-        <TransactionMessage transactionHash={watchSetAllowance.data?.blockHash}>
+        <TransactionMessage transactionHash={data.blockHash}>
           🎉 Transaction success!
         </TransactionMessage>
       );
-      onSuccess();
-      fireConfetti();
-    }
-  }, [fireConfetti, onSuccess, watchSetAllowance]);
+      allowance.refetch();
+    },
+  });
 
   const fetching =
     allowance.isFetching || balance.isFetching || sendPrepare.isFetching;

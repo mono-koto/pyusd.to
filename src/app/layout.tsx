@@ -38,6 +38,7 @@ export default function RootLayout({
             async
             src="https://us.umami.is/script.js"
             data-website-id={process.env.NEXT_PUBLIC_UMAMI_ID}
+            data-host-url="http://pyusd.to"
           ></Script>
         )}
       </head>

@@ -70,27 +70,19 @@ export function TransferButton({
     },
   });
 
-  const watchTransfer = useWaitForTransaction({
+  useWaitForTransaction({
     confirmations: 1,
     hash: transfer.data?.hash,
-  });
-
-  useEffect(() => {
-    if (watchTransfer.isSuccess) {
+    onSuccess: (data) => {
       toast.success(
-        <TransactionMessage transactionHash={watchTransfer.data?.blockHash}>
+        <TransactionMessage transactionHash={data.blockHash}>
           🎉 Sent!
         </TransactionMessage>
       );
       onSuccess();
       fireConfetti();
-    }
-  }, [
-    watchTransfer.isSuccess,
-    fireConfetti,
-    onSuccess,
-    watchTransfer.data?.blockHash,
-  ]);
+    },
+  });
 
   const executeTransfer = useCallback(() => {
     if (!transfer.write) {
