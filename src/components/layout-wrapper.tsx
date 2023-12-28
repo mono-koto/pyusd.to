@@ -11,7 +11,6 @@ import { AboutDialogLink } from './info-dialogs/about-dialog-link';
 import { SecurityDialogLink } from './info-dialogs/security-dialog-link';
 import { PayPalDialogLink } from './info-dialogs/paypal-dialog-link';
 import HomeAnimation from './home-animation';
-import { useSelectedLayoutSegment } from 'next/navigation';
 
 export default function LayoutWrapper({
   children,

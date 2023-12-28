@@ -3,12 +3,6 @@
 import { LuMoon, LuSun } from 'react-icons/lu';
 
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { useTheme } from 'next-themes';
 
 export function ThemeToggle() {
