@@ -6,11 +6,8 @@ import { ThemeToggle } from './theme-toggle';
 
 import Link from 'next/link';
 import { Suspense } from 'react';
-import Loading from './loading';
-import { AboutDialogLink } from './info-dialogs/about-dialog-link';
-import { SecurityDialogLink } from './info-dialogs/security-dialog-link';
-import { PayPalDialogLink } from './info-dialogs/paypal-dialog-link';
 import HomeAnimation from './home-animation';
+import Loading from './loading';
 
 export default function LayoutWrapper({
   children,
@@ -39,9 +36,21 @@ export default function LayoutWrapper({
         </div>
 
         <footer className="grow-0 text-center text-xs leading-5">
-          <PayPalDialogLink content="PayPal user?" /> |{' '}
-          <AboutDialogLink content="How & why?" /> |{' '}
-          <SecurityDialogLink content="Security + Safety" /> |{' '}
+          <a
+            target="_blank"
+            href="https://pyusd-garden.gitbook.io/pyusd.to/paypal-user"
+          >
+            PayPal user?
+          </a>{' '}
+          |{' '}
+          <a target="_blank" href="https://pyusd-garden.gitbook.io/pyusd.to/">
+            Docs
+          </a>{' '}
+          |{' '}
+          <a target="_blank" href="https://github.com/mono-koto/pyusd.to">
+            Source
+          </a>{' '}
+          |{' '}
           <a
             target="_blank"
             href="https://github.com/mono-koto/pyusd.to/blob/main/LICENSE"
@@ -52,8 +61,7 @@ export default function LayoutWrapper({
           <a target="_blank" href="https://github.com/mono-koto/pyusd.to">
             GitHub
           </a>{' '}
-          <br />
-          Made with 🔥💜🔥 by{' '}
+          | Made with 🔥💜🔥 by{' '}
           <a target="_blank" href="https://mono-koto.com/">
             Mono Koto
           </a>{' '}

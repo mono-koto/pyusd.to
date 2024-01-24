@@ -50,7 +50,7 @@ export default function PayForm({
   useEffect(() => {
     setFilteredToken(sellTokenDetails.data?.logoURI);
     return () => setFilteredToken(undefined);
-  }, [sellTokenDetails.data?.logoURI]);
+  }, [setFilteredToken, sellTokenDetails.data?.logoURI]);
 
   const debouncedRouteParams = useDebounce(routeParams, 1000);
 

@@ -1,20 +1,13 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { LuChevronRight, LuLoader2 } from 'react-icons/lu';
-import { Suspense, useCallback, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import HomeAnimation from '@/components/home-animation';
-import { PayPalDialogLink } from '@/components/info-dialogs/paypal-dialog-link';
+import { useCallback, useState } from 'react';
+import { LuChevronRight, LuLoader2 } from 'react-icons/lu';
 
 interface FormElements extends HTMLFormControlsCollection {
   input: HTMLInputElement;
@@ -93,7 +86,12 @@ export default function Home() {
               </div>
             </form>
             <div className="text-xl">
-              <PayPalDialogLink content="I'm a PayPal user! How do I do this?" />
+              <Link
+                href="https://pyusd-garden.gitbook.io/pyusd.to/paypal-user"
+                target="_blank"
+              >
+                I am a PayPal user! How do I do this?
+              </Link>
             </div>
           </CardContent>
         </Card>
